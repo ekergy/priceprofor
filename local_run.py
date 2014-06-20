@@ -15,7 +15,8 @@ except:
     raise
 
 from bottle import run
-from sme_hogar import application
+# from sme_hogar import application
+from priceprofor import application
 from database import DatabaseUsers
 
 # importing models to setting the db URI
