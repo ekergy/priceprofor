@@ -38,13 +38,13 @@ def mde_viz_2011_alt():
     return template('datos_mde_2011_alt')
 
 @route('/ValoresDeUnDia', method='GET')
-def valoresmde_dia():
+def valoresmde_dia_GET():
     #assume you have a login page with two fields:
     #"email" and "password" and submit button
     return template('datos_mde_2014')
 
 @route('/ValoresDeUnDia', method='POST')
-def valoresmde_dia():
+def valoresmde_dia_POST():
     #assume you have a login page with two fields:
     #"email" and "password" and submit button
     return template('datos_mde_2014')
