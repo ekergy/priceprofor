@@ -6,23 +6,6 @@ Created on 13/05/2014
 
 from bottle import route
 
-# from dbpreciosesmanager import populatePrecios
-# 
-# # main page:
-# @route('/populatePrecios')
-# def index():
-#     '''
-#     TODO: created index.html
-#     '''
-#     try:
-#         populatePrecios()
-#         #return '<strong>Put here profor index.html modificado</strong>'
-#     except:
-#         raise
-#         return 'failed'
-#     else:
-#         return 'ok'
-
 # framework:
 from bottle import default_app
 # controllers:
