@@ -115,7 +115,9 @@ Morris.Donut({
 	        <!-- <div class='input-group date' id='datetimepicker1' data-date-format="DD/MM/YYYY"> -->
 	        <div class='input-group date' id='datetimepicker1' data-date-format="DD/MM/YYYY">
    		        <input type='text' name="select" class="form-control"></input>
-       		        <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+       		        <!-- <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span> -->
+       		        <!-- <span class="input-group-addon"><span class="fa fa-calendar"></span></span> -->
+       		        <span class="input-group-addon"><span class="fa fa-calendar-o"></span></span>
             </div>
         </div>
 		<!-- <div>{{! fecha}}&nbsp;<br>{{! mensaje}}</div> -->
