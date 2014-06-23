@@ -11,6 +11,22 @@ from dbpreciosesmanager import preciosDiarios
 from time import strptime
 from datetime import datetime
 from pymongo import Connection
+from dbpreciosesmanager import populatePrecios
+
+@route('/populatePrecios')
+def index():
+    '''
+    TODO: created index.html
+    '''
+    try:
+        # listDaysUpdated = populatePrecios()
+        populatePrecios()
+        #return '<strong>Put here profor index.html modificado</strong>'
+    except:
+        raise
+        return 'fallo actualizacion'
+    else:
+        return 'actualizacion base de datos'
 
 def enable_cors(fn):
     '''
@@ -141,7 +157,7 @@ def graficaPreciosDiariosGET():
     '''
     Plantilla de edicion o creacion de contratos
     '''
-    print "esto es el get"
+    print "GET"
     ''' no se grafica nada en el GET '''
 #     noneList = []
 #     dateString = ''
@@ -168,18 +184,18 @@ def graficaPreciosDiariosPOST():
     '''
     Plantilla de edicion o creacion de contratos
     '''
-    print "esto es el post"
+    print "POST"
     dateString = request.forms.get("select")
-    print dateString
+    # print dateString
     if dateString == '':
         dic = preciosDiarios()
         minMaxTuple = ('','')
         preciosListSeries = dic['precios']
     else:
         dateTime = datetime.strptime(dateString, '%d/%m/%Y')
-        print dateTime
+        # print dateTime
         dic = preciosDiarios(dateTime)
-        print dic
+        # print dic
         if dic['precios'] == [[]]:
             minMaxTuple = ('','')
             preciosListSeries = dic['precios']

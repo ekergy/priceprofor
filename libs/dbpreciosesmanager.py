@@ -17,6 +17,19 @@ from urllib2 import urlopen
 # from urllib2 import Request, URLError
 from csv import reader
 
+# # -*- coding: utf-8 -*-
+# '''
+# Created on 05/2014
+# @author: hmarrao & david
+# '''
+
+from utilities import validafecha, omiepreciosurl, stringtofloat
+# from urllib2 import urlopen
+# from csv import reader
+# from pymongo import Connection
+# from datetime import datetime, timedelta
+
+
 # from sys import path
 # path.append('libs')
 # from datetime import datetime
@@ -36,14 +49,17 @@ def populatePrecios(startDate=None, endDate=None):
             currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
             # endDate = currentDate - timedelta(3)
             if datetime.now().hour >= 0 and datetime.now().hour < 14:
-                print 'today is the last day'
+                print 'TODAY'
+                # print 'TODAY is the last day'
                 endDate = currentDate
             elif datetime.now().hour >= 14 and datetime.now().hour <= 23:
-                print 'tomorrow is the last day'
+                print 'TOMORROW'
+                # print 'TOMORROW is the last day'
                 endDate = currentDate + timedelta(1)
     except:
         raise
     else:
+        # listDaysUpdated = list()
         listCHV = list()
         listCHI = list()
         for indi in range(endDate.year - startDate.year + 1):
@@ -54,6 +70,7 @@ def populatePrecios(startDate=None, endDate=None):
         iterDate = startDate
         while (endDate >= iterDate):
             print iterDate.date()
+            # listDaysUpdated.append(iterDate.date())
             ins = DBPreciosES()
             ins.fecha = iterDate
             priceDay = getpreciosesfromweb(ins.fecha)['PreciosES']
@@ -71,6 +88,7 @@ def populatePrecios(startDate=None, endDate=None):
                 ins.updatedbprecioses()
             del ins
             iterDate += ONEDAY
+        # return listDaysUpdated
 
 # from sys import path
 # path.append('libs')
@@ -410,8 +428,181 @@ class DBPreciosES(object):
         # return fechaypreci
         return lastday
 
-if __name__ == '__main__':
+# # -*- coding: utf-8 -*-
+# '''
+# Created on 05/2014
+# @author: hmarrao & david
+# '''
+# 
+# from utilities import validafecha, omiepreciosurl, stringtofloat
+# from urllib2 import urlopen
+# from csv import reader
+# from pymongo import Connection
+# from datetime import datetime, timedelta
+
+# def updatedbprecioses():
+#     '''
+#     desde 2011.
+#     '''
+#     startdate = datetime(2011,1,1)
+#     today = datetime.now()
+#     # 3 dias menos:
+#     enddate = None
+#     # localhost:
+#     # mongolab:
+#     # formatear los precios {'fecha':datetime,'precioes':precio}
+#     # insertar los precios:
+
+# def getpreciosesfromweb(fecha):
+#         '''
+#         This is the main method so the usage of PreciosMibelHandler is more strainfoward.
+#         '''
+#         try:
+#             validafecha(fecha)
+#             # The marginalpdbc data have the Spanish and the Portuguese prices.
+#             toparsePRECIOS = urlopen(omiepreciosurl(fecha))
+#         except:
+#             raise
+#         else:
+#             Precios = PreciosMibelHandler(toparsePRECIOS)
+#             return {"PreciosES": Precios.precioses}
+#         #finally:
+#         #    del toparsePRECIOS,Precios
+
+# from sys import path
+# path.append('libs')
+# from dbpreciosesmanager import preciosDiarios
+# preciosDiarios()
+def preciosDiarios(fechayhora=None):
     '''
-    Actualiza la base de datos de precios diarios
+    TODO: en el proyecto "profordes" dentro del script con el mismo nombre que este
+    esta implementado el metodo "populatePrecios" que actualiza esta base de datos
     '''
+    dic = dict()
+    priceList = list()
+    nameList = [ 'HORA', 'PRECIO' ]
+    hourList = ['00-01','01-02','02-03','03-04','04-05','05-06','06-07','07-08','08-09','09-10','10-11','11-12',
+                '12-13','13-14','14-15','15-16','16-17','17-18','18-19','19-20','20-21','21-22','22-23','23-24']
+    messageList = ''
+    # noneList = [None, None]
+    # noneList = [0, 0]
+    noneList = []
+
+    ''' LOCAL '''
+#     collection = Connection(host=None).mercadodiario.precioses
+    ''' SERVIDOR '''
+    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
+
+    cursor = collection.find({ "fecha": {"$in": [fechayhora]} })
+    if fechayhora == None:
+        priceList.append(noneList)
+        messageList = 'Se debe seleccionar una fecha del calendario'
+    elif  cursor.count() == 0:
+        priceList.append(noneList)
+        messageList = 'No hay datos de la fecha seleccionada'
+    else:
+        priceList.append(nameList)
+        indice = 0
+        for element in cursor:
+                vectorList = [ hourList[indice], element['PreciosES']  ]
+                priceList.append(vectorList)
+                indice = indice + 1
+    dic['fecha'] = fechayhora
+    dic['precios'] = priceList
+    dic['mensaje'] = messageList
+    return dic
+
+# class PreciosMibelHandler(object):
+#     '''
+#     Class to parse the Spanish and Portguese Electric Market Prices.
+#     Introduced the concept of Mibel Price as the market price set before market split operation.
+#     What is used here is not the concept only an aproximation. Because the split can occur in both markets and not only one.
+#     But it is a good aproximation to assume that the mibel price is the lower price from the Spanish and Portguese Electric Market Prices
+#     '''
+#     def __init__(self, thefile=None):
+#         try:
+#             self.toparsePRECIOS = reader(thefile, delimiter=';')
+#             self.precioses = list()
+#             self.preciospt = list()
+#             self.preciosmibel = list()
+#         except:
+#             raise
+#         else:
+#             for row in self.toparsePRECIOS:
+#                 if row.__len__() != 0 and row.__len__() > 3:
+#                     precioes = stringtofloat(row[5], decimalsep='.', groupsep='')
+#                     preciopt = stringtofloat(row[4], decimalsep='.', groupsep='')
+#                     self.precioses.append(precioes)
+#                     self.preciospt.append(preciopt)
+#                     self.preciosmibel.append(min(precioes, preciopt))
+
+class dbpreciosmanager(object):
+    '''
+    docstring
+    '''
+    connectiondetails = dict(host=None)
+
+    def __init__(self):
+        '''
+        SET COLLECTION NAME IN MONGO.
+        No need for user uname or coopid.
+        '''
+        self.connectiondetails['coll_name'] = 'precioses'
+
+    def getCollection(self):
+        '''
+        get mongo collection cursor.
+        '''
+
+        return self._collection
+
+    def setCollection(self, conndetails=None):
+        '''
+        sets collection to be used.
+        '''
+        self._connection = Connection(host=self.connectiondetails['host'])
+        self._db = self._connection.profor
+        self._collection = self._db[self.connectiondetails['coll_name']]
+
+    def delCollection(self):
+        '''
+        Remove cursors from mongo database and collections.
+        '''
+        self._connection.close()
+        del self._db, self._collection
+
+    Collection = property(getCollection,
+                          setCollection,
+                          delCollection,
+                          "La collection para hacer las queries")
+
+    def setprecios(fechayprecio):
+        '''
+        Ignora los dias de cambio de hora con la regla de la hora 3.
+        '''
+        try:
+            self.setCollection()
+            collection = self.getCollection()
+            collection.insert(fechayprecio)
+        except:
+            raise
+        else:
+            self.delCollection()
+
+    def getprecio(fechayhora):
+        pass
+
+    def getprecios(fechaStart, fechaEnd=None):
+        pass
+
+    def getallprecios():
+        pass
+
+    def getlastpreciodate():
+        pass
+
+# if __name__ == '__main__':
+#     '''
+#     Actualiza la base de datos de precios diarios
+#     '''
 #     populatePrecios()

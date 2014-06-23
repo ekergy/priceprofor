@@ -133,7 +133,7 @@ Morris.Donut({
 
 	<div id="chart_div" style="width: 800px; height: 400px;"></div>
 
-	% print fecha
+	% # print fecha
 	% if fecha:
 		% # hora = 8
 		% # hora = 15
