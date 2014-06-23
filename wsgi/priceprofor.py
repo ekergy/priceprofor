@@ -29,6 +29,7 @@ from bottle import default_app
 from controllers import resources
 from controllers import priceprofor_graficas
 #from controllers import sme_test
+from controllers import sme_mde_viz
 
 from bottle import TEMPLATE_PATH
 #TEMPLATE_PATH.append(os.path.join(os.environ['OPENSHIFT_HOMEDIR'], 
@@ -46,6 +47,7 @@ try:
 except:
     root_app=ospath.join(sys.path[0])
 finally:
+    TEMPLATE_PATH.append(ospath.join(root_app, 'wsgi', 'views', 'templates'))
     TEMPLATE_PATH.append(ospath.join(root_app, 'wsgi', 'views', 'templates','priceprofor_graficas'))
 
 application = default_app()
