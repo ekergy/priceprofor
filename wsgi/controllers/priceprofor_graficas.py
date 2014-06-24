@@ -121,7 +121,7 @@ def GraficaPerfilTemporada():
 #                      result = result)
 
 @route('/PerfilTemporadas2/<coopname>/<uname>', method='GET')
-def GraficaPerfilTemporada(coopname, uname):
+def GraficaPerfilTemporada2(coopname, uname):
     """
     Plantilla de edicion o creacion de contratos
     """

@@ -461,6 +461,34 @@ def esiosreeurl(fecha=None, xmlid=None):
         url = urlpart1 + urlpart2 + urlpart3 + urlpart4
         return url
 
+# def omiepreciosurl(fecha):
+#     '''
+#     doctest
+# 
+#     >>> omiepreciosurl(datetime.datetime(2012,10,10))
+#     'http://www.omie.es/datosPub/marginalpdbc/marginalpdbc_20121010.1'
+#     >>> omiepreciosurl(datetime.datetime.now() + datetime.timedelta(days=2))
+#     Traceback (most recent call last):
+#         File "<stdin>", line 1, in <module>
+#         File "webdatascraping.py", line 46, in omiepreciosesurl
+#             _validafecha(fecha)
+#         File "webdatascraping.py", line 37, in _validafecha
+#             raise Exception('La fecha selecionada es postrior de la de hoy. No tiene datos disponibles en la web.')
+#     Exception: La fecha selecionada es postrior de la de hoy. No tiene datos disponibles en la web.
+#     '''
+#     URL_OMIE_DATOSPUB = 'http://www.omie.es/datosPub'
+#     URL_OMIE_PRECIOMARGINAL = URL_OMIE_DATOSPUB + '/' + 'marginalpdbc/marginalpdbc_'
+#     URL_FIN = '.1'
+#     try:
+#         validafecha(fecha)
+#     except:
+#         raise
+#     else:
+#         # preform transformation
+#         fechaURL= fecha.strftime("%Y%m%d")
+#         # return result as a str.
+#         return URL_OMIE_PRECIOMARGINAL+fechaURL+URL_FIN
+
 def omiepreciosurl(fecha):
     '''
     doctest
@@ -480,7 +508,11 @@ def omiepreciosurl(fecha):
     URL_OMIE_PRECIOMARGINAL = URL_OMIE_DATOSPUB + '/' + 'marginalpdbc/marginalpdbc_'
     URL_FIN = '.1'
     try:
-        validafecha(fecha)
+        currentDate = datetime.datetime(datetime.datetime.now().year,datetime.datetime.now().month,datetime.datetime.now().day)
+        if fecha == currentDate + datetime.timedelta(1):
+            validafecha(fecha - datetime.timedelta(1))
+        else:
+            validafecha(fecha)
     except:
         raise
     else:
