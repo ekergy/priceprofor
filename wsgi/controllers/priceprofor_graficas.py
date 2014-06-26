@@ -7,7 +7,7 @@ Created on 05/2014
 from bottle import route,template, response, request
 from kernelCaracterizacionEnergetica import temporadaConsumoVector
 from datautilities import toGoogleDataTable
-from dbpreciosesmanager import preciosDiarios
+from dbpreciosesmanager import preciosDiarios, tecnologiasDiarias
 from time import strptime
 from datetime import datetime
 from pymongo import Connection
@@ -157,7 +157,7 @@ def graficaPreciosDiariosGET():
     '''
     Plantilla de edicion o creacion de contratos
     '''
-    print "GET"
+    print "GET priceprofor"
     ''' no se grafica nada en el GET '''
 #     noneList = []
 #     dateString = ''
@@ -184,7 +184,7 @@ def graficaPreciosDiariosPOST():
     '''
     Plantilla de edicion o creacion de contratos
     '''
-    print "POST"
+    print "POST priceprofor"
     dateString = request.forms.get("select")
     # print dateString
     if dateString == '':
@@ -209,3 +209,97 @@ def graficaPreciosDiariosPOST():
                     fecha=dateString,
                     mensaje=dic['mensaje'],
                     minMax=minMaxTuple)
+
+# from sys import path
+# path.append('libs')
+# path.append('wsgi')
+# from controllers.sme_graficas import findLastDayDocument
+# findLastDayDocument()
+def findLastDayDocumentTechnology():
+    '''
+    Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
+    '''
+    ''' LOCAL '''
+    # collection = Connection(host=None).mercadodiario.precioses
+    collection = Connection(host=None).OMIEData.OMIEStudyData
+    ''' SERVIDOR '''
+#     collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
+
+    currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
+    cursor = collection.find({"fecha": {"$lte": currentDT}})
+    for element in cursor:
+        lastelement = element
+    return lastelement['fecha']
+
+@route('/TecnologiasDiarias', method='GET')
+# @enable_cors
+def graficaTecnologiasDiariasGET():
+    '''
+    Plantilla de edicion o creacion de contratos
+    '''
+    print "GET technologyprofor"
+    ''' no se grafica nada en el GET '''
+#     noneList = []
+#     dateString = ''
+#     if dateString == '':
+#         dic = preciosDiarios()
+    ''' se grafica en el GET el ultimo dia en base de datos '''
+    dateTime = findLastDayDocumentTechnology()
+#     dic = preciosDiarios(dateTime)
+    dic = tecnologiasDiarias(dateTime)
+    dateString = str(str(dateTime.day)+'/'+str(dateTime.month)+'/'+str(dateTime.year))
+#     minMaxTuple = relativeExtremes(dic)
+#     preciosListSeries = colorChart(dateTime, minMaxTuple)
+#     preciosListSeries = dic['precios']
+    tecnologiasListSeries = dic['tecnologias']
+#     return template('sme_precios_diarios',
+#     return tecnologiasListSeries,dateString
+    return template('priceprofor_tecnologias_diarias',
+#                     preciosList=noneList,
+#                     preciosList=dic['precios'],
+#                     preciosList=preciosListSeries,
+                    tecnologiasList=tecnologiasListSeries,
+                    fecha=dateString,
+                    mensaje=dic['mensaje'],
+#                     minMax=minMaxTuple
+                    )
+
+@route('/TecnologiasDiarias', method='POST')
+# @enable_cors
+def graficaTecnologiasDiariasPOST():
+    '''
+    Plantilla de edicion o creacion de contratos
+    '''
+    print "POST technologyprofor"
+    dateString = request.forms.get("select")
+    # print dateString
+    if dateString == '':
+#         dic = preciosDiarios()
+        dic = tecnologiasDiarias()
+#         minMaxTuple = ('','')
+#         preciosListSeries = dic['precios']
+        tecnologiasListSeries = dic['tecnologias']
+    else:
+        dateTime = datetime.strptime(dateString, '%d/%m/%Y')
+        # print dateTime
+#         dic = preciosDiarios(dateTime)
+        dic = tecnologiasDiarias(dateTime)
+        # print dic
+#         if dic['precios'] == [[]]:
+        if dic['tecnologias'] == [[]]:
+#             minMaxTuple = ('','')
+#             preciosListSeries = dic['precios']
+            tecnologiasListSeries = dic['tecnologias']
+        else:
+#             minMaxTuple = relativeExtremes(dic)
+#             preciosListSeries = colorChart(dateTime, minMaxTuple)
+            tecnologiasListSeries = dic['tecnologias']
+#     return template('sme_precios_diarios',
+    return template('priceprofor_tecnologias_diarias',
+#                     preciosList=dic['precios'],
+#                     preciosList=preciosListSeries,
+                    tecnologiasList=tecnologiasListSeries,
+                    fecha=dateString,
+                    mensaje=dic['mensaje'],
+#                     minMax=minMaxTuple
+                    )

@@ -475,8 +475,8 @@ class DBPreciosES(object):
 # preciosDiarios()
 def preciosDiarios(fechayhora=None):
     '''
-    TODO: en el proyecto "profordes" dentro del script con el mismo nombre que este
-    esta implementado el metodo "populatePrecios" que actualiza esta base de datos
+    notar que en el proyecto "profordes" dentro del script con el mismo nombre que este
+    esta implementado el metodo "populatePrecios" que actualiza esta misma base de datos
     '''
     dic = dict()
     priceList = list()
@@ -510,6 +510,55 @@ def preciosDiarios(fechayhora=None):
     dic['fecha'] = fechayhora
     dic['precios'] = priceList
     dic['mensaje'] = messageList
+    return dic
+
+# from sys import path
+# path.append('libs')
+# from dbtecnologiasesmanager import tecnologiasDiarias
+# tecnologiasDiarias()
+def tecnologiasDiarias(fecha=None, hora=None):
+    '''
+    '''
+#     ''' fecha dummy '''
+#     fecha = datetime(2014,5,20)
+    dic = dict()
+    technologyList = list()
+    nameList = [ 'HORA',
+                'NUCLEAR', 'REGIMEN_ESPECIAL', 'HIDRAULICA_CONVENCIONAL',
+                'CARBON', 'CICLO_COMBINADO', 'FUEL_GAS' ]
+    hourList = ['00-01','01-02','02-03','03-04','04-05','05-06','06-07','07-08','08-09','09-10','10-11','11-12',
+                '12-13','13-14','14-15','15-16','16-17','17-18','18-19','19-20','20-21','21-22','22-23','23-24']
+    messageList = ''
+    noneList = []
+
+    collection = Connection(host=None).OMIEData.OMIEStudyData
+    ''' un dia '''
+    cursor = collection.find({ "fecha": {"$in": [fecha]} })
+    ''' una hora '''
+#     cursor = collection.find({ "fecha": {"$in": [fecha]}, "hora": {"$in": [0]} })
+
+    if fecha == None:
+        technologyList.append(noneList)
+        messageList = 'Se debe seleccionar una fecha del calendario'
+    elif  cursor.count() == 0:
+        technologyList.append(noneList)
+        messageList = 'No hay datos de la fecha seleccionada'
+    else:
+        technologyList.append(nameList)
+        indice = 0
+        for element in cursor:
+            vectorList = [ hourList[indice],
+                           element['NUCLEAR'], element['REGIMEN_ESPECIAL'], element['HIDRAULICA_CONVENCIONAL'],
+                           element['CARBON'], element['CICLO_COMBINADO'], element['FUEL_GAS']  ]
+            technologyList.append(vectorList)
+            indice = indice + 1
+    dic['fecha'] = fecha
+    dic['tecnologias'] = technologyList
+    dic['mensaje'] = messageList
+#     print dic
+#     print dic['tecnologias']
+#     print dic['tecnologias'][0]
+#     print dic['tecnologias'][1]
     return dic
 
 # class PreciosMibelHandler(object):
@@ -576,7 +625,7 @@ class dbpreciosmanager(object):
                           delCollection,
                           "La collection para hacer las queries")
 
-    def setprecios(fechayprecio):
+    def setprecios(self, fechayprecio):
         '''
         Ignora los dias de cambio de hora con la regla de la hora 3.
         '''
@@ -589,16 +638,16 @@ class dbpreciosmanager(object):
         else:
             self.delCollection()
 
-    def getprecio(fechayhora):
+    def getprecio(self, fechayhora):
         pass
 
-    def getprecios(fechaStart, fechaEnd=None):
+    def getprecios(self, fechaStart, fechaEnd=None):
         pass
 
-    def getallprecios():
+    def getallprecios(self):
         pass
 
-    def getlastpreciodate():
+    def getlastpreciodate(self):
         pass
 
 # if __name__ == '__main__':
