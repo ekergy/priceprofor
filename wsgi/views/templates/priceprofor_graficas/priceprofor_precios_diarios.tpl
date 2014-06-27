@@ -134,12 +134,13 @@ Morris.Donut({
 
 	<div id="chart_div" style="width: 800px; height: 400px;"></div>
 
-	alert({{datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')}})
+	% from datetime import datetime, timedelta
+	% from time import time
+	alert({{datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S')}})
 
 	% # print fecha
 	% if fecha:
 	    % hora = 0
-		% from datetime import datetime, timedelta
 		% fechaDT = datetime.strptime(fecha, '%d/%m/%Y')
 		% currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
 		% ONEDAY = timedelta(1)
