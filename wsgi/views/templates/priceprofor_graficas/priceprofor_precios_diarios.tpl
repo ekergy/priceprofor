@@ -24,7 +24,7 @@ google.load("visualization", "1", {packages:["corechart"]});
 		title: 'MERCADO DIARIO ELECTRICO',
 		pointSize: 6,
 		titleTextStyle:  {color: '#000000', fontName: 'Roboto', fontSize: '22', bold: 'true', italic: 'false'},
-		width: '800', 
+		width: '750', 
 		height: '400',
 		vAxis: {
 			title: 'Precio (€ / MWh)',
@@ -44,7 +44,8 @@ google.load("visualization", "1", {packages:["corechart"]});
 	  		legend: {position: 'none'},
 	  		//seriesType: "line",
 	  		seriesType: "bars",
-            //series: {3: {type: "bars"}
+            //series: {3: {type: "bars"},
+			//legend: { position: 'right'},
 	  		};
   	% if preciosList != [[]]:
   		/* var chart = new google.visualization.LineChart(document.getElementById('chart_div')); */
@@ -73,9 +74,8 @@ Morris.Donut({
   	data: [ {label: "Precio MAX", value: {{minMax[1]}} },
 			//{label: "Hora del dia", value: {{minMax[3]}} }
 		  ],
-	//colors: ['#4B610B','#4B610B']
-    colors: ['#FF0000','#FF0000']
-	//colors: ['#DF0101','#DF0101']
+    //colors: ['#FF0000','#FF0000']
+    colors: ['#dc3912','#dc3912']
 });
 });
 </script>
@@ -91,9 +91,8 @@ Morris.Donut({
   	data: [ {label: "Precio MIN", value: {{minMax[0]}} },
 			//{label: "Hora del dia", value: {{minMax[2]}} }
 		  ],
-	//colors: ['#74DF00','#74DF00']
-	//colors: ['#A5DF00','#A5DF00']
-	colors: ['#86B404','#86B404']
+	//colors: ['#86B404','#86B404']
+	colors: ['#109618','#109618']
 });
 });
 </script>
@@ -137,8 +136,6 @@ Morris.Donut({
 
 	% # print fecha
 	% if fecha:
-		% # hora = 8
-		% # hora = 15
 	    % hora = 14
 		% from datetime import datetime, timedelta
 		% fechaDT = datetime.strptime(fecha, '%d/%m/%Y')
@@ -173,12 +170,13 @@ Morris.Donut({
 				% whatTime = fechaDT - ONEDAY
 			    % indice = 1
 		    % end
-	
+
 			% if indice != 0:
 				<br>
 			    % whatString = whatTime.strftime('%d/%m/%Y')
-			    <input type="text" name="select" value={{whatString}} hidden></input>
-			    &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value={{textoboton}}>
+			    <input type="text" name="select" value={{whatString}} hidden>
+			    &nbsp;&nbsp;&nbsp;
+			    <input class="btn btn-primary" type="submit" value={{textoboton}}>
 				<br>&nbsp;&nbsp;&nbsp;&nbsp;{{textofecha}}
 			    &nbsp;&nbsp;&nbsp;&nbsp;{{ mensaje2}}
 			    </input>
@@ -188,12 +186,13 @@ Morris.Donut({
 		% end
 
 		% if fechaDT:
+			% # hay una diferencia de 100 px dependiendo de si el donut lo queremos dentro o fuera
 			% if (fechaDT == currentDate or fechaDT == currentDate + timedelta(1)) and (indice != 0):
-				<div id="donut-example" style="width:180px; margin: -570px 0 0 825px;"></div>
-				<div id="donut-example2" style="width:180px; margin: -100px 0 0 825px;"></div>
+				<div id="donut-example" style="width:180px; margin: -570px 0 0 760px;"></div>
+				<div id="donut-example2" style="width:180px; margin: -100px 0 0 760px;"></div>
 			% else:
-				<div id="donut-example" style="width:180px; margin: -490px 0 0 825px;"></div>
-				<div id="donut-example2" style="width:180px; margin: -100px 0 0 825px;"></div>
+				<div id="donut-example" style="width:180px; margin: -490px 0 0 760px;"></div>
+				<div id="donut-example2" style="width:180px; margin: -100px 0 0 760px;"></div>
 			% end
 		% end
 

@@ -57,9 +57,9 @@ def findLastDayDocument():
     Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
     '''
     ''' LOCAL '''
-    # collection = Connection(host=None).mercadodiario.precioses
+    collection = Connection(host=None).mercadodiario.precioses
     ''' SERVIDOR '''
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
+#     collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
 
     currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
     cursor = collection.find({"fecha": {"$lte": currentDT}})
@@ -138,15 +138,15 @@ def colorChart(dateTime, minMaxTuple):
             lista.append({ 'role': 'style' })
         elif lista[1] == minMaxTuple[0]:
             ''' minimo verde '''
-            # lista.append('#A5DF00')
-            lista.append('#86B404')
+            # lista.append('#86B404')
+            lista.append('#109618')
         elif lista[1] == minMaxTuple[1]:
             ''' maximo rojo '''
             # lista.append('#FF0000')
-            lista.append('#FF0000')
+            lista.append('#dc3912')
         else:
-            # lista.append('#0174DF')
-            lista.append('#0080FF')
+            # lista.append('#0080FF')
+            lista.append('#0099c6')
         preciosListSeries.append(lista)
     # print preciosListSeries
     return preciosListSeries

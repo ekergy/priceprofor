@@ -489,9 +489,9 @@ def preciosDiarios(fechayhora=None):
     noneList = []
 
     ''' LOCAL '''
-#     collection = Connection(host=None).mercadodiario.precioses
+    collection = Connection(host=None).mercadodiario.precioses
     ''' SERVIDOR '''
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
+#     collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
 
     cursor = collection.find({ "fecha": {"$in": [fechayhora]} })
     if fechayhora == None:
@@ -537,9 +537,14 @@ def tecnologiasDiarias(fecha=None, hora=None):
     ''' una hora '''
 #     cursor = collection.find({ "fecha": {"$in": [fecha]}, "hora": {"$in": [0]} })
 
+    currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
+
     if fecha == None:
         technologyList.append(noneList)
         messageList = 'Se debe seleccionar una fecha del calendario'
+    elif  fecha == currentDate:
+        technologyList.append(noneList)
+        messageList = 'Existen datos de tecnologias 3 dias atras'
     elif  cursor.count() == 0:
         technologyList.append(noneList)
         messageList = 'No hay datos de la fecha seleccionada'

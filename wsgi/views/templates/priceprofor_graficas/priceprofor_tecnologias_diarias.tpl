@@ -33,7 +33,7 @@ google.load("visualization", "1", {packages:["corechart"]});
 		title: 'MERCADO DIARIO ELECTRICO',
 		pointSize: 6,
 		titleTextStyle:  {color: '#000000', fontName: 'Roboto', fontSize: '22', bold: 'true', italic: 'false'},
-		width: '800', 
+		width: '740', 
 		height: '400',
 		vAxis: {
 			title: 'Tecnologia (MWh)',
@@ -55,8 +55,9 @@ google.load("visualization", "1", {packages:["corechart"]});
 	  		seriesType: "bars",
             //series: {3: {type: "bars"},
           	isStacked: true,
-			bar: { groupWidth: '75%' },
-          	legend: { position: 'right', maxLines: 6 },
+			//bar: { groupWidth: '75%' },
+          	//legend: { position: 'right', maxLines: 6 },
+			legend: { position: 'right'},
 	  		};
 	  	  	% if tecnologiasList != [[]]:
   		/* var chart = new google.visualization.LineChart(document.getElementById('chart_div')); */
@@ -113,8 +114,6 @@ $(function(){$('#datetimepicker1').datetimepicker({pickTime: false});});
 
 	% # print fecha
 	% if fecha:
-		% # hora = 8
-		% # hora = 15
 	    % hora = 14
 		% from datetime import datetime, timedelta
 		% fechaDT = datetime.strptime(fecha, '%d/%m/%Y')
@@ -155,8 +154,12 @@ $(function(){$('#datetimepicker1').datetimepicker({pickTime: false});});
 				<br>
 			    % whatString = whatTime.strftime('%d/%m/%Y')
 			    <input type="text" name="select" value={{whatString}} hidden></input>
-			    &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value={{textoboton}}>
-				<br>&nbsp;&nbsp;&nbsp;&nbsp;{{textofecha}}
+
+				<!-- comentar estas lineas mientras no halla datos del dia de mañana -->
+			    <!-- &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value={{textoboton}} hidden> -->
+			    &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="btn btn-primary" value={{textoboton}} hidden>
+				<!-- <br>&nbsp;&nbsp;&nbsp;&nbsp;{{textofecha}} -->
+
 			    &nbsp;&nbsp;&nbsp;&nbsp;{{ mensaje2}}
 			    </input>
 			    </form>
