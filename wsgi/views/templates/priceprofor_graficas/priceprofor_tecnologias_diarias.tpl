@@ -114,7 +114,7 @@ $(function(){$('#datetimepicker1').datetimepicker({pickTime: false});});
 
 	% from datetime import datetime, timedelta
 	% from time import time
-	//alert({{datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S')}})
+	<!-- alert({{datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S')}}) -->
 
 	% # print fecha
 	% if fecha:
