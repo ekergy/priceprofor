@@ -489,9 +489,9 @@ def preciosDiarios(fechayhora=None):
     noneList = []
 
     ''' LOCAL '''
-    collection = Connection(host=None).mercadodiario.precioses
+#     collection = Connection(host=None).mercadodiario.precioses
     ''' SERVIDOR '''
-#     collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
+    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
 
     cursor = collection.find({ "fecha": {"$in": [fechayhora]} })
     if fechayhora == None:

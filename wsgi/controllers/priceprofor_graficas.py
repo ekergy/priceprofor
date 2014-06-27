@@ -57,9 +57,9 @@ def findLastDayDocument():
     Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
     '''
     ''' LOCAL '''
-    collection = Connection(host=None).mercadodiario.precioses
+#     collection = Connection(host=None).mercadodiario.precioses
     ''' SERVIDOR '''
-#     collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
+    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
 
     currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
     cursor = collection.find({"fecha": {"$lte": currentDT}})
