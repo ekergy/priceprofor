@@ -136,11 +136,12 @@ Morris.Donut({
 
 	% from datetime import datetime, timedelta
 	% from time import time
-	alert({{datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S')}})
+	//alert({{datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S')}})
 
 	% # print fecha
 	% if fecha:
-	    % hora = 0
+		% # si la hora local son las 14:00 entonces la hora en el servidor son 6 horas menos
+	    % hora = 8
 		% fechaDT = datetime.strptime(fecha, '%d/%m/%Y')
 		% currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
 		% ONEDAY = timedelta(1)

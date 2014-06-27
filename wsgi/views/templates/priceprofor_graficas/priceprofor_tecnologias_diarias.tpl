@@ -112,9 +112,14 @@ $(function(){$('#datetimepicker1').datetimepicker({pickTime: false});});
 
 	<div id="chart_div" style="width: 800px; height: 400px;"></div>
 
+	% from datetime import datetime, timedelta
+	% from time import time
+	//alert({{datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S')}})
+
 	% # print fecha
 	% if fecha:
-	    % hora = 14
+		% # si la hora local son las 14:00 entonces la hora en el servidor son 6 horas menos
+	    % hora = 8
 		% from datetime import datetime, timedelta
 		% fechaDT = datetime.strptime(fecha, '%d/%m/%Y')
 		% currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
@@ -157,11 +162,9 @@ $(function(){$('#datetimepicker1').datetimepicker({pickTime: false});});
 
 				<!-- comentar estas lineas mientras no halla datos del dia de mañana -->
 			    <!-- &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value={{textoboton}} hidden> -->
-			    &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="btn btn-primary" value={{textoboton}} hidden>
+			    &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="btn btn-primary" value={{textoboton}} hidden></input>
 				<!-- <br>&nbsp;&nbsp;&nbsp;&nbsp;{{textofecha}} -->
-
 			    &nbsp;&nbsp;&nbsp;&nbsp;{{ mensaje2}}
-			    </input>
 			    </form>
 			% end
 
