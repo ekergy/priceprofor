@@ -136,7 +136,7 @@ Morris.Donut({
 
 	% # print fecha
 	% if fecha:
-	    % hora = 14
+	    % hora = 8
 		% from datetime import datetime, timedelta
 		% fechaDT = datetime.strptime(fecha, '%d/%m/%Y')
 		% currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
@@ -174,12 +174,11 @@ Morris.Donut({
 			% if indice != 0:
 				<br>
 			    % whatString = whatTime.strftime('%d/%m/%Y')
-			    <input type="text" name="select" value={{whatString}} hidden>
+			    <input type="text" name="select" value={{whatString}} hidden />
 			    &nbsp;&nbsp;&nbsp;
-			    <input class="btn btn-primary" type="submit" value={{textoboton}}>
+			    <input class="btn btn-primary" type="submit" value={{textoboton}} />
 				<br>&nbsp;&nbsp;&nbsp;&nbsp;{{textofecha}}
-			    &nbsp;&nbsp;&nbsp;&nbsp;{{ mensaje2}}
-			    </input>
+			    &nbsp;&nbsp;&nbsp;&nbsp;{{mensaje2}}
 			    </form>
 			% end
 
