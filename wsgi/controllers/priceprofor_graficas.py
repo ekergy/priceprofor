@@ -238,7 +238,7 @@ def findLastDayDocumentTechnology():
     ''' LOCAL '''
 #     collection = Connection(host=None).OMIEData.OMIEStudyData
     ''' SERVIDOR '''
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
+    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.tecnologiases
 
     currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
     cursor = collection.find({"fecha": {"$lte": currentDT}})

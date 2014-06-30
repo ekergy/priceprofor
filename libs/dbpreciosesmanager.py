@@ -233,7 +233,7 @@ def tecnologiasDiarias(fecha=None, hora=None):
     ''' LOCAL '''
 #     collection = Connection(host=None).OMIEData.OMIEStudyData
     ''' SERVIDOR '''
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
+    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.tecnologiases
 
     ''' un dia '''
     cursor = collection.find({ "fecha": {"$in": [fecha]} })
