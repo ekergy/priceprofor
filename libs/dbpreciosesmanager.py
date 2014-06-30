@@ -230,7 +230,11 @@ def tecnologiasDiarias(fecha=None, hora=None):
     messageList = ''
     noneList = []
 
-    collection = Connection(host=None).OMIEData.OMIEStudyData
+    ''' LOCAL '''
+#     collection = Connection(host=None).OMIEData.OMIEStudyData
+    ''' SERVIDOR '''
+    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
+
     ''' un dia '''
     cursor = collection.find({ "fecha": {"$in": [fecha]} })
     ''' una hora '''
