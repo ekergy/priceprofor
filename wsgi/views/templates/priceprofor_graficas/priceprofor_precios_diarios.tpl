@@ -123,7 +123,7 @@ Morris.Donut({
   	</div>
    	<!-- color del boton enviar -->
    	<!-- <input type="submit" class="btn btn-success"></input> -->
-   	<input type="submit" class="btn btn-primary"></input>
+   	<input type="submit" value="Enviar" class="btn btn-primary"></input>
 		<div><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{! fecha}}
 		%if mensaje:
 			&nbsp;&nbsp;&nbsp;&nbsp;{{! mensaje}}

@@ -16,7 +16,7 @@ from dbpreciosesmanager import populatePrecios
 @route('/populatePrecios')
 def index():
     '''
-    TODO: created index.html
+    created index.html
     '''
     try:
         # listDaysUpdated = populatePrecios()
@@ -46,6 +46,21 @@ def enable_cors(fn):
             #actual request; reply with the actual response
             return fn(*args, **kwargs)
     return _enable_cors
+
+
+def populatePreciosActualiza(fn):
+    '''
+    Decorator to enable jquery for a bottle route
+    '''
+    def _populatePreciosActualiza(*args, **kwargs):
+        '''
+        Decorator to enable jquery for a bottle route
+        '''
+        # set CORS headers
+        populatePrecios()
+            #actual request; reply with the actual response
+        return fn(*args, **kwargs)
+    return _populatePreciosActualiza
 
 # from sys import path
 # path.append('libs')
@@ -152,6 +167,7 @@ def colorChart(dateTime, minMaxTuple):
     return preciosListSeries
 
 @route('/PreciosDiarios', method='GET')
+@populatePreciosActualiza
 # @enable_cors
 def graficaPreciosDiariosGET():
     '''
@@ -232,6 +248,7 @@ def findLastDayDocumentTechnology():
     return lastelement['fecha']
 
 @route('/TecnologiasDiarias', method='GET')
+@populatePreciosActualiza
 # @enable_cors
 def graficaTecnologiasDiariasGET():
     '''

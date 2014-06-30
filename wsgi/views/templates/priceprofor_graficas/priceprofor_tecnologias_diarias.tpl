@@ -19,7 +19,7 @@ google.load("visualization", "1", {packages:["corechart"]});
 	google.setOnLoadCallback(drawChart);
 	function drawChart() {
 		var data = google.visualization.arrayToDataTable({{! tecnologiasList}});
-
+		
 //      var options = {
 //    	        width: 600,
 //    	        height: 400,
@@ -53,7 +53,7 @@ google.load("visualization", "1", {packages:["corechart"]});
 	  		legend: {position: 'none'},
 	  		//seriesType: "line",
 	  		seriesType: "bars",
-            //series: {3: {type: "bars"},
+            //series: {0: {type: "line"},
           	isStacked: true,
 			//bar: { groupWidth: '75%' },
           	//legend: { position: 'right', maxLines: 6 },
@@ -101,7 +101,7 @@ $(function(){$('#datetimepicker1').datetimepicker({pickTime: false});});
   	</div>
    	<!-- color del boton enviar -->
    	<!-- <input type="submit" class="btn btn-success"></input> -->
-   	<input type="submit" class="btn btn-primary"></input>
+   	<input type="submit" value="Enviar" class="btn btn-primary"></input>
 		<div><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{! fecha}}
 		%if mensaje:
 			&nbsp;&nbsp;&nbsp;&nbsp;{{! mensaje}}
