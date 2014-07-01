@@ -12,8 +12,6 @@ finally:
 
 @get("/resources/<filepath:path>")
 def serve_static(filepath):
-    filepath =str('/'+filepath)
-    print filepath
     return static_file(str('/'+filepath), root = ospath.join(root_app, 'wsgi', 'static', 'resources'))
 
 # setting the static serve files methods:
@@ -23,7 +21,6 @@ def javascripts(filename):
     '''
     docstring
     '''
-    print filename
     return static_file(filename, root=ospath.join(root_app, 'wsgi', 'static', 'resources', 'js'))
 
 @get('/css/<filename:re:.*\.css>')
@@ -31,8 +28,6 @@ def stylesheets(filename):
     '''
     docstring
     '''
-    print filename
-    print ospath.join(root_app,'wsgi','static', 'resources','css')
     return static_file(filename, root=ospath.join(root_app,'wsgi','static', 'resources','css'))
 
 @get('/img/<filename:re:.*\.(jpg|png|gif|ico)>')
@@ -40,12 +35,16 @@ def images(filename):
     '''
     docstring
     '''
-    print filename
     return static_file(filename, root=ospath.join(root_app,'wsgi','static', 'resources','img'))
 
 @get('/fonts/<filename:re:.*\.(eot|ttf|woff|svg)>')
 def fonts(filename):
     '''
     '''
-    print filename
     return static_file(filename, root=ospath.join(root_app,'wsgi','static', 'resources','fonts'))
+
+@get('/d3/<filename>')
+def getd3(filename):
+    '''
+    '''
+    return static_file(filename, root=ospath.join(root_app,'wsgi','static', 'resources','d3'))

@@ -176,7 +176,11 @@ def preciosDiarios(fechayhora=None):
     '''
     notar que en el proyecto "profordes" dentro del script con el mismo nombre que este
     esta implementado el metodo "populatePrecios" que actualiza esta misma base de datos
+
+    transformar fechayhora en un date de mongo.
+
     '''
+    fechayhora = datetime(fechayhora.year,fechayhora.month,fechayhora.day,)
     dic = dict()
     priceList = list()
     nameList = [ 'HORA', 'PRECIO' ]
@@ -299,10 +303,9 @@ def tecnologiasDiarias(fecha=None, hora=None):
 # from omelinfosys.dbpreciosesmanager import DBPreciosES
 # ins = DBPreciosES()
 class DBPreciosES(object):
-    ''' LOCAL '''
-#     connectiondetails = dict(host=None)
-    ''' SERVIDOR '''
-    connectiondetails = dict(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
+    '''
+    '''
+    connectiondetails = dict(host=None)
 
     def __init__(self):
         '''
