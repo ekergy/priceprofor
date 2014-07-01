@@ -8,6 +8,8 @@ Created on 26/06/2014
 # bottle server imports:
 from bottle import route, template
 from dbpreciosesmanager import preciosDiarios
+from datetime import datetime, timedelta
+import copy
 
 @route('/')
 def home():
@@ -16,20 +18,20 @@ def home():
     return template('home.html')
 
 @route('/uikitTemplate.html')
-def home():
+def home2():
     '''
     '''
     return template('uikitTemplate.html')
 
 @route('/multiBar.html')
-def home():
+def home3():
     '''
     '''
     return template('multiBar.html')
     
 
 @route('/pythonNVD3js.html')
-def home():
+def home4():
     """
     Examples for Python-nvd3 is a Python wrapper for NVD3 graph library.
     NVD3 is an attempt to build re-usable charts and chart components
@@ -63,10 +65,42 @@ def home():
     #---------------------------------------
 
     #close Html file
-    
 
     return chart.htmlcontent
 
+# @route('/MapaCalorPreciosMercadoDiario.html')
+# def MapaCalorPreciosMercadoDiario():
+#     '''
+#     Teste para el Mapa de calor para el Mercado Diario
+#     Vamos a enseñar los ultimos 7 dias disponibles.
+#     Inputs de la plantilla son:
+#     days = ["Lu", "Ma", "Mx", "Ju", "Vi", "Sa", "Do"],
+#     times = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"];
+#             Este puede o no ser un input
+#     var data = [{"day": 1,"hour": 1, "value": 1},{"day": 1,"hour": 2, "value": 5}]
+#     '''
+#     import datetime
+# 
+#     ONEDAY = datetime.timedelta(1)
+# 
+#     dic = preciosDiarios(datetime.datetime.now())
+# 
+#     print dic['precios'].pop(0)
+# 
+#     dataValores = [{"day": 1,"hour": i+1,"value": dic['precios'][i][1]} for i in range(24)]
+# 
+#     #dataValores = [{"day": 1,"hour": 1, "value": 1},{"day": 1,"hour": 2, "value": 5},{"day": 1,"hour": 3, "value": 5},{"day": 1,"hour": 4, "value": 5},
+#     #{"day": 1,"hour": 5, "value": 5},{"day": 1,"hour": 6, "value": 5},{"day": 1,"hour": 7, "value": 5}]
+#     print dataValores
+#     daysLabel = ["2012-1-4", "2012-1-3", "2012-1-2", "2012-1-1", "Vi", "Sa", "Do"]
+# 
+#     return template('MapaCalorPreciosMercadoDiario.html',data=dataValores,days=daysLabel)
+
+# from sys import path
+# path.append('libs')
+# path.append('wsgi')
+# from priceprofor_single_plots import MapaCalorPreciosMercadoDiario
+# MapaCalorPreciosMercadoDiario()
 @route('/MapaCalorPreciosMercadoDiario.html')
 def MapaCalorPreciosMercadoDiario():
     '''
@@ -78,23 +112,37 @@ def MapaCalorPreciosMercadoDiario():
             Este puede o no ser un input
     var data = [{"day": 1,"hour": 1, "value": 1},{"day": 1,"hour": 2, "value": 5}]
     '''
-    import datetime
+    # dic = preciosDiarios(datetime.now())
+    dic = preciosDiarios(datetime(2014,6,21))
+    dic['precios'].pop(0)
 
-    ONEDAY = datetime.timedelta(1)
+    ONEDAY = timedelta(1)
+    endDate = datetime.now()
+    startDate = endDate - timedelta(30)
+    iterDate = startDate
+    dataValue = list()
+    dataKey = list()
+    ite = 1
+    while (endDate >= iterDate):
+        print iterDate.date()
+        dataKey.append(str(iterDate.date()))
+        dic = preciosDiarios(iterDate)
+        dic['precios'].pop(0)
+        # dataValores = [{"day": 1,"hour": i+1,"value": dic['precios'][i][1]} for i in range(24)]
+        [ dataValue.append({"day": ite, "hour": i+1, "value": dic['precios'][i][1]}) for i in range(24) ]
+        iterDate += ONEDAY
+        ite += 1
 
-    dic = preciosDiarios(datetime.datetime.now())
-
-    print dic['precios'].pop(0)
-
-    dataValores = [{"day": 1,"hour": i+1,"value": dic['precios'][i][1]} for i in range(24)]
+    print dataKey
+    print dataValue
 
     #dataValores = [{"day": 1,"hour": 1, "value": 1},{"day": 1,"hour": 2, "value": 5},{"day": 1,"hour": 3, "value": 5},{"day": 1,"hour": 4, "value": 5},
-    #{"day": 1,"hour": 5, "value": 5},{"day": 1,"hour": 6, "value": 5},{"day": 1,"hour": 7, "value": 5}]
-    print dataValores
-    daysLabel = ["2012-1-4", "2012-1-3", "2012-1-2", "2012-1-1", "Vi", "Sa", "Do"]
+    # {"day": 1,"hour": 5, "value": 5},{"day": 1,"hour": 6, "value": 5},{"day": 1,"hour": 7, "value": 5}]
 
-    return template('MapaCalorPreciosMercadoDiario.html',data=dataValores,days=daysLabel)
+#     print dataValores
+    #daysLabel = ["2012-1-4", "2012-1-3", "2012-1-2", "2012-1-1", "Vi", "Sa", "Do"]
 
+<<<<<<< HEAD
 @route('/PreciosMercadoDiarioNVD3.html')
 def PreciosMercadoDiarioNVD3():
     '''
@@ -134,4 +182,9 @@ def PreciosMercadoDiarioNVD3():
 
     return chart.htmlcontent
 
+=======
+#     return template('MapaCalorPreciosMercadoDiario.html',data=dataValores,days=daysLabel)
+#     return template('MapaCalorPreciosMercadoDiario.html',data=dataValores,days=dataKey)
+    return template('MapaCalorPreciosMercadoDiario.html',data=dataValue,days=dataKey)
+>>>>>>> 13fc71e74baadceefdbf37b6964c1a3449d70b71
 
