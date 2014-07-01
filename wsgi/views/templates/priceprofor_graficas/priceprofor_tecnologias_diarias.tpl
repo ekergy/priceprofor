@@ -19,7 +19,7 @@ google.load("visualization", "1", {packages:["corechart"]});
 	google.setOnLoadCallback(drawChart);
 	function drawChart() {
 		var data = google.visualization.arrayToDataTable({{! tecnologiasList}});
-
+		
 //      var options = {
 //    	        width: 600,
 //    	        height: 400,
@@ -33,7 +33,7 @@ google.load("visualization", "1", {packages:["corechart"]});
 		title: 'MERCADO DIARIO ELECTRICO',
 		pointSize: 6,
 		titleTextStyle:  {color: '#000000', fontName: 'Roboto', fontSize: '22', bold: 'true', italic: 'false'},
-		width: '800', 
+		width: '740', 
 		height: '400',
 		vAxis: {
 			title: 'Tecnologia (MWh)',
@@ -53,10 +53,11 @@ google.load("visualization", "1", {packages:["corechart"]});
 	  		legend: {position: 'none'},
 	  		//seriesType: "line",
 	  		seriesType: "bars",
-            //series: {3: {type: "bars"},
+            //series: {0: {type: "line"},
           	isStacked: true,
-			bar: { groupWidth: '75%' },
-          	legend: { position: 'right', maxLines: 6 },
+			//bar: { groupWidth: '75%' },
+          	//legend: { position: 'right', maxLines: 6 },
+			legend: { position: 'right'},
 	  		};
 	  	  	% if tecnologiasList != [[]]:
   		/* var chart = new google.visualization.LineChart(document.getElementById('chart_div')); */
@@ -100,7 +101,7 @@ $(function(){$('#datetimepicker1').datetimepicker({pickTime: false});});
   	</div>
    	<!-- color del boton enviar -->
    	<!-- <input type="submit" class="btn btn-success"></input> -->
-   	<input type="submit" class="btn btn-primary"></input>
+   	<input type="submit" value="Enviar" class="btn btn-primary"></input>
 		<div><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{! fecha}}
 		%if mensaje:
 			&nbsp;&nbsp;&nbsp;&nbsp;{{! mensaje}}
@@ -111,11 +112,14 @@ $(function(){$('#datetimepicker1').datetimepicker({pickTime: false});});
 
 	<div id="chart_div" style="width: 800px; height: 400px;"></div>
 
+	% from datetime import datetime, timedelta
+	% from time import time
+	<!-- alert({{datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S')}}) -->
+
 	% # print fecha
 	% if fecha:
-		% # hora = 8
-		% # hora = 15
-	    % hora = 14
+		% # si la hora local son las 14:00 entonces la hora en el servidor son 6 horas menos
+	    % hora = 8
 		% from datetime import datetime, timedelta
 		% fechaDT = datetime.strptime(fecha, '%d/%m/%Y')
 		% currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
@@ -155,10 +159,12 @@ $(function(){$('#datetimepicker1').datetimepicker({pickTime: false});});
 				<br>
 			    % whatString = whatTime.strftime('%d/%m/%Y')
 			    <input type="text" name="select" value={{whatString}} hidden></input>
-			    &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value={{textoboton}}>
-				<br>&nbsp;&nbsp;&nbsp;&nbsp;{{textofecha}}
+
+				<!-- comentar estas lineas mientras no halla datos del dia de mañana -->
+			    <!-- &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value={{textoboton}} hidden> -->
+			    &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="btn btn-primary" value={{textoboton}} hidden></input>
+				<!-- <br>&nbsp;&nbsp;&nbsp;&nbsp;{{textofecha}} -->
 			    &nbsp;&nbsp;&nbsp;&nbsp;{{ mensaje2}}
-			    </input>
 			    </form>
 			% end
 

@@ -3,65 +3,65 @@
 Created on 11/11/2013
 @author: hmarrao & david
 '''
-import datetime
+from datetime import datetime, timedelta
 
-CALENDARIONOLABORAL = {'2010': [datetime.datetime(2010,  1,  1),
-                                datetime.datetime(2010,  1,  6),
-                                datetime.datetime(2010,  4,  1),
-                                datetime.datetime(2010,  4,  2),
-                                datetime.datetime(2010,  4,  5),
-                                datetime.datetime(2010,  5,  1),
-                                datetime.datetime(2010, 10, 12),
-                                datetime.datetime(2010, 11,  1),
-                                datetime.datetime(2010, 12,  6),
-                                datetime.datetime(2010, 12,  8),
-                                datetime.datetime(2010, 12, 25),
+CALENDARIONOLABORAL = {'2010': [datetime(2010,  1,  1),
+                                datetime(2010,  1,  6),
+                                datetime(2010,  4,  1),
+                                datetime(2010,  4,  2),
+                                datetime(2010,  4,  5),
+                                datetime(2010,  5,  1),
+                                datetime(2010, 10, 12),
+                                datetime(2010, 11,  1),
+                                datetime(2010, 12,  6),
+                                datetime(2010, 12,  8),
+                                datetime(2010, 12, 25),
                                 ],
-                       '2011': [datetime.datetime(2011,  1,  1),
-                                datetime.datetime(2011,  1,  6),
-                                datetime.datetime(2011,  4, 21),
-                                datetime.datetime(2011,  4, 22),
-                                datetime.datetime(2011,  4, 25),
-                                datetime.datetime(2011,  5,  1),
-                                datetime.datetime(2011, 10, 12),
-                                datetime.datetime(2011, 11,  1),
-                                datetime.datetime(2011, 12,  6),
-                                datetime.datetime(2011, 12,  8),
-                                datetime.datetime(2011, 12, 25)
+                       '2011': [datetime(2011,  1,  1),
+                                datetime(2011,  1,  6),
+                                datetime(2011,  4, 21),
+                                datetime(2011,  4, 22),
+                                datetime(2011,  4, 25),
+                                datetime(2011,  5,  1),
+                                datetime(2011, 10, 12),
+                                datetime(2011, 11,  1),
+                                datetime(2011, 12,  6),
+                                datetime(2011, 12,  8),
+                                datetime(2011, 12, 25)
                                 ],
-                       '2012': [datetime.datetime(2012,  1,  1),
-                                datetime.datetime(2012,  1,  6),
-                                datetime.datetime(2012,  4,  5),
-                                datetime.datetime(2012,  4,  6),
-                                datetime.datetime(2012,  4,  9),
-                                datetime.datetime(2012,  5,  1),
-                                datetime.datetime(2012, 10, 12),
-                                datetime.datetime(2012, 11,  1),
-                                datetime.datetime(2012, 12,  6),
-                                datetime.datetime(2012, 12,  8),
-                                datetime.datetime(2012, 12, 25)
+                       '2012': [datetime(2012,  1,  1),
+                                datetime(2012,  1,  6),
+                                datetime(2012,  4,  5),
+                                datetime(2012,  4,  6),
+                                datetime(2012,  4,  9),
+                                datetime(2012,  5,  1),
+                                datetime(2012, 10, 12),
+                                datetime(2012, 11,  1),
+                                datetime(2012, 12,  6),
+                                datetime(2012, 12,  8),
+                                datetime(2012, 12, 25)
                                 ],
-                       '2013': [datetime.datetime(2013,  1,  1),
-                                datetime.datetime(2013,  1,  7),
-                                datetime.datetime(2013,  4,  5),
-                                datetime.datetime(2013,  4,  6),
-                                datetime.datetime(2013,  4,  9),
-                                datetime.datetime(2013,  5,  1),
-                                datetime.datetime(2013, 10, 12),
-                                datetime.datetime(2013, 11,  1),
-                                datetime.datetime(2013, 12,  6),
-                                datetime.datetime(2013, 12,  8),
-                                datetime.datetime(2013, 12, 25)
+                       '2013': [datetime(2013,  1,  1),
+                                datetime(2013,  1,  7),
+                                datetime(2013,  4,  5),
+                                datetime(2013,  4,  6),
+                                datetime(2013,  4,  9),
+                                datetime(2013,  5,  1),
+                                datetime(2013, 10, 12),
+                                datetime(2013, 11,  1),
+                                datetime(2013, 12,  6),
+                                datetime(2013, 12,  8),
+                                datetime(2013, 12, 25)
                                 ],
-                       '2014': [datetime.datetime(2014,  1,  1),
-                                datetime.datetime(2014,  1,  6),
-                                datetime.datetime(2014,  4, 18),
-                                datetime.datetime(2014,  5,  1),
-                                datetime.datetime(2014,  8, 15),
-                                datetime.datetime(2014, 11,  1),
-                                datetime.datetime(2014, 12,  6),
-                                datetime.datetime(2014, 12,  8),
-                                datetime.datetime(2014, 12,  25),
+                       '2014': [datetime(2014,  1,  1),
+                                datetime(2014,  1,  6),
+                                datetime(2014,  4, 18),
+                                datetime(2014,  5,  1),
+                                datetime(2014,  8, 15),
+                                datetime(2014, 11,  1),
+                                datetime(2014, 12,  6),
+                                datetime(2014, 12,  8),
+                                datetime(2014, 12,  25),
                                 ]
                       }
 
@@ -115,13 +115,13 @@ def cambiohoraverano(anho=None):
             raise Exception('La variable de entrada no tiene el formato deseado <int> con 4 dijitos')
     except:
         raise
-    fechacandidato = datetime.datetime(anho, 3, 31)
+    fechacandidato = datetime(anho, 3, 31)
     resultdate = None
     while not resultdate:
         if fechacandidato.weekday() == 6:
             resultdate = fechacandidato
         else:
-            fechacandidato = fechacandidato - datetime.timedelta(1)
+            fechacandidato = fechacandidato - timedelta(1)
     return resultdate
 
 # from sys import path
@@ -174,13 +174,13 @@ def cambiohorainvierno(anho=None):
             raise Exception('La variable de entrada no tiene el formato deseado <int> con 4 dijitos')
     except:
         raise
-    fechacandidato = datetime.datetime(anho, 10, 31)
+    fechacandidato = datetime(anho, 10, 31)
     resultdate = None
     while not resultdate:
         if fechacandidato.weekday() == 6:
             resultdate = fechacandidato
         else:
-            fechacandidato = fechacandidato - datetime.timedelta(1)
+            fechacandidato = fechacandidato - timedelta(1)
     return resultdate
 
 def diasconcambiodehora(StartDate,EndDate):
@@ -307,12 +307,19 @@ def unicodetodecimal(ustr):
             ustr = ustr.replace(',', '')
         return float(str(Decimal(ustr)))
 
+# from sys import path
+# path.append('libs')
+# from datetime import datetime
+# fecha = datetime(2014,1,1)
+# from omelinfosys.utilities import eslaborable
+# eslaborable(fecha)
 def eslaborable(dia=None):
     '''
     Esta funcion devuelve True si el "Dia" que pasamos como parametro
     es laborable y definimos dia laborable como aquel que no es un dia
     festivo ni es un domingo.
     '''
+    dia = datetime(dia.year,dia.month,dia.day)
     if dia in CALENDARIONOLABORAL[str(dia.year)] or dia.weekday() == 6:
         # return False
         return 0
@@ -328,7 +335,7 @@ def aquetemporadapertenece(dia=None):
         1 si es temporada de verano
     '''
     try:
-        if not isinstance(dia, datetime.datetime):
+        if not isinstance(dia, datetime):
             raise Exception('Revisa el dato de entrada')
         else:
             anho = dia.year
@@ -352,14 +359,14 @@ def aqueestacionpertenece(dia=None):
         3 si es estacion de otonho
     '''
     try:
-        if not isinstance(dia, datetime.datetime):
+        if not isinstance(dia, datetime):
             raise Exception('Revisa el dato de entrada')
         else:
             anho = dia.year
-            cambioainvierno = datetime.datetime(anho, 12, 21)
-            cambioaprimavera = datetime.datetime(anho, 3, 20)
-            cambioaverano = datetime.datetime(anho, 6, 21)
-            cambioaotonho = datetime.datetime(anho, 9, 21)
+            cambioainvierno = datetime(anho, 12, 21)
+            cambioaprimavera = datetime(anho, 3, 20)
+            cambioaverano = datetime(anho, 6, 21)
+            cambioaotonho = datetime(anho, 9, 21)
     except:
         raise
     else:
@@ -392,11 +399,11 @@ def validafecha(fecha):
     
     '''
     try:
-        if not isinstance(fecha, datetime.datetime):
-            raise Exception('La fecha no es del tipo correcto')
+        if not isinstance(fecha, datetime):
+            raise Exception('El formato fecha no es del tipo correcto.')
         fecha.replace(hour = 11)
-        if datetime.datetime.now() < fecha:
-            raise Exception('La fecha selecionada es postrior de la de hoy. No tiene datos disponibles en la web.')
+        if datetime.now() < fecha:
+            raise Exception('La fecha selecionada es posterior a hoy. No hay datos disponibles en la web.')
         fecha.replace(hour = 0)
     except:
         raise
@@ -461,34 +468,6 @@ def esiosreeurl(fecha=None, xmlid=None):
         url = urlpart1 + urlpart2 + urlpart3 + urlpart4
         return url
 
-# def omiepreciosurl(fecha):
-#     '''
-#     doctest
-# 
-#     >>> omiepreciosurl(datetime.datetime(2012,10,10))
-#     'http://www.omie.es/datosPub/marginalpdbc/marginalpdbc_20121010.1'
-#     >>> omiepreciosurl(datetime.datetime.now() + datetime.timedelta(days=2))
-#     Traceback (most recent call last):
-#         File "<stdin>", line 1, in <module>
-#         File "webdatascraping.py", line 46, in omiepreciosesurl
-#             _validafecha(fecha)
-#         File "webdatascraping.py", line 37, in _validafecha
-#             raise Exception('La fecha selecionada es postrior de la de hoy. No tiene datos disponibles en la web.')
-#     Exception: La fecha selecionada es postrior de la de hoy. No tiene datos disponibles en la web.
-#     '''
-#     URL_OMIE_DATOSPUB = 'http://www.omie.es/datosPub'
-#     URL_OMIE_PRECIOMARGINAL = URL_OMIE_DATOSPUB + '/' + 'marginalpdbc/marginalpdbc_'
-#     URL_FIN = '.1'
-#     try:
-#         validafecha(fecha)
-#     except:
-#         raise
-#     else:
-#         # preform transformation
-#         fechaURL= fecha.strftime("%Y%m%d")
-#         # return result as a str.
-#         return URL_OMIE_PRECIOMARGINAL+fechaURL+URL_FIN
-
 def omiepreciosurl(fecha):
     '''
     doctest
@@ -508,11 +487,16 @@ def omiepreciosurl(fecha):
     URL_OMIE_PRECIOMARGINAL = URL_OMIE_DATOSPUB + '/' + 'marginalpdbc/marginalpdbc_'
     URL_FIN = '.1'
     try:
-        currentDate = datetime.datetime(datetime.datetime.now().year,datetime.datetime.now().month,datetime.datetime.now().day)
-        if fecha == currentDate + datetime.timedelta(1):
-            validafecha(fecha - datetime.timedelta(1))
-        else:
-            validafecha(fecha)
+        validafecha(fecha)
+#         currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
+#         tomorrow = currentDate + timedelta(1)
+#         if (fecha == tomorrow):
+#             if datetime.now().hour <= 13 and datetime.now().minute <= 14:
+#                 raise Exception('Hasta las 13:15 del dia actual no estan disponibles los precios del Day Ahead')
+#             else:
+#                 pass
+#         else:
+#             validafecha(fecha)
     except:
         raise
     else:
