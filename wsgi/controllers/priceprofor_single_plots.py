@@ -140,9 +140,10 @@ def MapaCalorPreciosMercadoDiario():
     # {"day": 1,"hour": 5, "value": 5},{"day": 1,"hour": 6, "value": 5},{"day": 1,"hour": 7, "value": 5}]
 
 #     print dataValores
-    #daysLabel = ["2012-1-4", "2012-1-3", "2012-1-2", "2012-1-1", "Vi", "Sa", "Do"]
 
-<<<<<<< HEAD
+    #daysLabel = ["2012-1-4", "2012-1-3", "2012-1-2", "2012-1-1", "Vi", "Sa", "Do"]
+    return template('MapaCalorPreciosMercadoDiario.html',data=dataValue,days=dataKey)
+
 @route('/PreciosMercadoDiarioNVD3.html')
 def PreciosMercadoDiarioNVD3():
     '''
@@ -181,10 +182,3 @@ def PreciosMercadoDiarioNVD3():
     
 
     return chart.htmlcontent
-
-=======
-#     return template('MapaCalorPreciosMercadoDiario.html',data=dataValores,days=daysLabel)
-#     return template('MapaCalorPreciosMercadoDiario.html',data=dataValores,days=dataKey)
-    return template('MapaCalorPreciosMercadoDiario.html',data=dataValue,days=dataKey)
->>>>>>> 13fc71e74baadceefdbf37b6964c1a3449d70b71
-
