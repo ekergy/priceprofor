@@ -11,7 +11,7 @@ from bottle import default_app
 # controllers:
 from controllers import resources
 from controllers import priceprofor_graficas
-#from controllers import sme_test
+from controllers import priceprofor_single_plots
 from controllers import sme_mde_viz
 
 from bottle import TEMPLATE_PATH
@@ -21,8 +21,8 @@ from bottle import TEMPLATE_PATH
 # Get APP root in system:
 from os import path as ospath
 from os import environ as osenviron
-from os import environ as osenviron
 
+# get sys to add proper template paths
 import sys
 
 try:
