@@ -124,9 +124,9 @@ Morris.Donut({
    	<!-- color del boton enviar -->
    	<!-- <input type="submit" class="btn btn-success"></input> -->
    	<input type="submit" value="Enviar" class="btn btn-primary"></input>
-		<div><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{! fecha}}
+		<div><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{fecha}}
 		%if mensaje:
-			&nbsp;&nbsp;&nbsp;&nbsp;{{! mensaje}}
+			&nbsp;&nbsp;&nbsp;&nbsp;{{mensaje}}
 		%end
 	<!-- para que la fecha quede pegada al grafico -->
 	<!-- 	</div> -->
@@ -189,9 +189,8 @@ Morris.Donut({
 		% end
 
 		% if fechaDT:
-			% # hay una diferencia de 100 px dependiendo de si el donut lo queremos dentro o fuera
 			% if (fechaDT == currentDate or fechaDT == currentDate + timedelta(1)) and (indice != 0):
-				<div id="donut-example" style="width:180px; margin: -570px 0 0 760px;"></div>
+				<div id="donut-example" style="width:180px; margin: -578px 0 0 760px;"></div>
 				<div id="donut-example2" style="width:180px; margin: -100px 0 0 760px;"></div>
 			% else:
 				<div id="donut-example" style="width:180px; margin: -490px 0 0 760px;"></div>
