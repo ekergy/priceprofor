@@ -95,4 +95,43 @@ def MapaCalorPreciosMercadoDiario():
 
     return template('MapaCalorPreciosMercadoDiario.html',data=dataValores,days=daysLabel)
 
+@route('/PreciosMercadoDiarioNVD3.html')
+def PreciosMercadoDiarioNVD3():
+    '''
+    Esta grafica usa la libreria python nvd3.
+    La anterior es un dibujo D3 casi directo. Esta libreira nos permite contruir la grafica teniendo
+    otras preocupaciones con los datos.
+
+    '''
+    
+
+    
+    from nvd3 import lineChart
+
+    chart = lineChart(name='lineChart', height=400, width=800, x_is_date=False,)
+    
+    # Relenar correctamente estos valores!
+    xdata = [1, 2, 3]
+    ydata = [-6, 5, -1]
+
+    #extra_serie = {"tooltip": {"y_start": "There is ", "y_end": " calls"},
+    #               "date_format": "%d %b %Y %H:%S"}
+    #chart.add_serie(name="Serie 1", y=ydata, x=xdata, extra=extra_serie)
+    chart.add_serie(name="Serie 1", y=ydata, x=xdata,)
+    #chart.buildhtml()
+
+
+    chart.header_css=['<link media="all" href="/css/nv.d3.css" type="text/css" rel="stylesheet" />']
+    chart.header_js=['<script src="/js/jquery.js"></script>','<script src="/d3/d3.min.js" type="text/javascript"></script>','<script src="/d3/nv.d3.js" type="text/javascript"></script>',]
+    chart.buildhtml()
+
+
+    #output_file.write(chart.htmlcontent)
+    #---------------------------------------
+
+    #close Html file
+    
+
+    return chart.htmlcontent
+
 
