@@ -180,7 +180,12 @@ def preciosDiarios(fechayhora=None):
     transformar fechayhora en un date de mongo.
 
     '''
-    fechayhora = datetime(fechayhora.year,fechayhora.month,fechayhora.day,)
+    if fechayhora is None:
+        fechayhora = None
+    else:
+        fechayhora = datetime(fechayhora.year,fechayhora.month,fechayhora.day,)
+        
+    
     dic = dict()
     priceList = list()
     nameList = [ 'HORA', 'PRECIO' ]

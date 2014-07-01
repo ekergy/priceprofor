@@ -78,11 +78,11 @@ def MapaCalorPreciosMercadoDiario():
             Este puede o no ser un input
     var data = [{"day": 1,"hour": 1, "value": 1},{"day": 1,"hour": 2, "value": 5}]
     '''
-    from datetime import datetime
+    import datetime
 
     ONEDAY = datetime.timedelta(1)
 
-    dic = preciosDiarios(datetime.now())
+    dic = preciosDiarios(datetime.datetime.now())
 
     print dic['precios'].pop(0)
 
