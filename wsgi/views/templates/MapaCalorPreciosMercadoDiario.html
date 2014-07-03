@@ -69,14 +69,12 @@
           gridSize = Math.floor(width / 24),
           legendElementWidth = gridSize*2,
           buckets = 8,
-          // colors = ["#22FF00","#22FF00",'#AEFF00','#AEFF00',"#FFEE00",'#FF5D00','#FF5D00',"#FF0000"], // alternatively colorbrewer.YlGnBu[9]
-          colors = ["#22FF00",'#AEFF00','#AEFF00',"#FFEE00",'#FF5D00','#FF5D00',"#FF0000"], // alternatively colorbrewer.YlGnBu[9]
+          colors = ["#22FF00","#FFEE00","#FF0000"], // alternatively colorbrewer.YlGnBu[9]
+          // colors = ["#109618","#ff9900","#dc3912"]
           times = ["0-1", "1-2", "2-3", "3-4", "4-5", "5-6", "6-7", "7-8", "8-9", "9-10", "10-11", "11-12", "12-13", "13-14", "14-15", "15-16", "16-17", "17-18", "18-19", "19-20", "20-21", "21-22", "22-23", "23-24"];
 
       var data = {{! data }};
       var days = {{! days}};
-
-
       var colorScale = d3.scale.quantile()
           .domain([50, buckets - 1, d3.max(data, function (d) { return d.value; })])
           .range(colors);

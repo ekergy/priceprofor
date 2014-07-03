@@ -8,10 +8,11 @@ from bottle import route,template, response, request
 from kernelCaracterizacionEnergetica import temporadaConsumoVector
 from datautilities import toGoogleDataTable
 from dbpreciosesmanager import preciosDiarios, tecnologiasDiarias
-from time import strptime
-from datetime import datetime
+# from time import strptime
+from datetime import datetime, date
 from pymongo import Connection
 from dbpreciosesmanager import populatePrecios
+from omelinfosys.dbstudydatamanager import populateStudyData
 
 @route('/populatePrecios')
 def index():
@@ -47,20 +48,32 @@ def enable_cors(fn):
             return fn(*args, **kwargs)
     return _enable_cors
 
-
 def populatePreciosActualiza(fn):
     '''
     Decorator to enable jquery for a bottle route
     '''
     def _populatePreciosActualiza(*args, **kwargs):
-        '''
-        Decorator to enable jquery for a bottle route
-        '''
         # set CORS headers
         populatePrecios()
-            #actual request; reply with the actual response
+        #actual request; reply with the actual response
         return fn(*args, **kwargs)
+
     return _populatePreciosActualiza
+
+def populateTecnologiasActualiza(fn):
+    '''
+    Decorator to enable jquery for a bottle route
+    '''
+    def _populateTecnologiasActualiza(*args, **kwargs):
+        # dateString = request.forms.get("select")
+        # dateTime = datetime.strptime(dateString, '%d/%m/%Y')
+        # populateStudyData(dateTime)
+        # set CORS headers
+        populateStudyData()
+        #actual request; reply with the actual response
+        return fn(*args, **kwargs)
+
+    return _populateTecnologiasActualiza
 
 # from sys import path
 # path.append('libs')
@@ -135,15 +148,15 @@ def GraficaPerfilTemporada():
 #     return template('sme_perfil_invierno_verano',
 #                      result = result)
 
-@route('/PerfilTemporadas2/<coopname>/<uname>', method='GET')
-def GraficaPerfilTemporada2(coopname, uname):
-    """
-    Plantilla de edicion o creacion de contratos
-    """
-    plotValues = "this is a dummy value"
-    print 'hello'
-    print ''
-    return plotValues
+# @route('/PerfilTemporadas2/<coopname>/<uname>', method='GET')
+# def GraficaPerfilTemporada2(coopname, uname):
+#     """
+#     Plantilla de edicion o creacion de contratos
+#     """
+#     plotValues = "this is a dummy value"
+#     print 'hello'
+#     print ''
+#     return plotValues
 
 def colorChart(dateTime, minMaxTuple):
     preciosListSeries = list()
@@ -167,8 +180,8 @@ def colorChart(dateTime, minMaxTuple):
     return preciosListSeries
 
 @route('/PreciosDiarios', method='GET')
-@populatePreciosActualiza
-# @enable_cors
+# @populatePreciosActualiza
+@enable_cors
 def graficaPreciosDiariosGET():
     '''
     Plantilla de edicion o creacion de contratos
@@ -195,7 +208,7 @@ def graficaPreciosDiariosGET():
                     minMax=minMaxTuple)
 
 @route('/PreciosDiarios', method='POST')
-# @enable_cors
+@enable_cors
 def graficaPreciosDiariosPOST():
     '''
     Plantilla de edicion o creacion de contratos
@@ -247,8 +260,8 @@ def findLastDayDocumentTechnology():
     return lastelement['fecha']
 
 @route('/TecnologiasDiarias', method='GET')
-@populatePreciosActualiza
-# @enable_cors
+# @populateTecnologiasActualiza
+@enable_cors
 def graficaTecnologiasDiariasGET():
     '''
     Plantilla de edicion o creacion de contratos
@@ -281,7 +294,7 @@ def graficaTecnologiasDiariasGET():
                     )
 
 @route('/TecnologiasDiarias', method='POST')
-# @enable_cors
+@enable_cors
 def graficaTecnologiasDiariasPOST():
     '''
     Plantilla de edicion o creacion de contratos
@@ -312,6 +325,60 @@ def graficaTecnologiasDiariasPOST():
             tecnologiasListSeries = dic['tecnologias']
 #     return template('sme_precios_diarios',
     return template('priceprofor_tecnologias_diarias',
+#                     preciosList=dic['precios'],
+#                     preciosList=preciosListSeries,
+                    tecnologiasList=tecnologiasListSeries,
+                    fecha=dateString,
+                    mensaje=dic['mensaje'],
+#                     minMax=minMaxTuple
+                    )
+
+@route('/ModelosPrediccion', method='GET')
+@enable_cors
+def graficaModelosPrediccionGET():
+    '''
+    Plantilla de edicion o creacion de contratos
+    '''
+    print "GET"
+    ''' no se grafica nada en el GET '''
+#     noneList = []
+#     dateString = ''
+#     if dateString == '':
+#         dic = preciosDiarios()
+    ''' se grafica en el GET el ultimo dia en base de datos '''
+    dateTime = findLastDayDocumentTechnology()
+#     dic = preciosDiarios(dateTime)
+    dic = tecnologiasDiarias(dateTime)
+    dateString = str(str(dateTime.day)+'/'+str(dateTime.month)+'/'+str(dateTime.year))
+#     minMaxTuple = relativeExtremes(dic)
+#     preciosListSeries = colorChart(dateTime, minMaxTuple)
+#     preciosListSeries = dic['precios']
+#     tecnologiasListSeries = dic['tecnologias']
+
+    collection = Connection(host=None).mercadodiario.modelosHTES
+    resultsdayahead = collection.find({ "dayahead" : {"$in": [datetime(2014,05,19)]} })
+    arrayTDT = list()
+    arrayTDT.append(['Date', 'Precio'])
+#     for element in resultsdayahead:
+#         if element['tipo'] == 'working':
+#             dt = datetime(element['fecha'].year, element['fecha'].month, element['fecha'].day, element['hora'])
+#             arrayTDT.append([str(date.strftime(dt, '%Y/%m/%d')), element['PreciosES']])
+    for element in resultsdayahead:
+        if element['tipo'] == 'working':
+            dt = datetime(element['fecha'].year, element['fecha'].month, element['fecha'].day, element['hora'])
+            arrayTDT.append([str(date.strftime(dt, '%Y/%m/%d')), element['PreciosES']])
+    tecnologiasListSeries = arrayTDT
+
+    print arrayTDT
+
+    ''' dummy '''
+#     dataFile = [['Hora', 'Working', 'Model'],[735344.0, 30.08, 28.35]]
+#     tecnologiasListSeries = dataFile
+
+#     return template('sme_precios_diarios',
+#     return tecnologiasListSeries,dateString
+    return template('priceprofor_modelos_prediccion',
+#                     preciosList=noneList,
 #                     preciosList=dic['precios'],
 #                     preciosList=preciosListSeries,
                     tecnologiasList=tecnologiasListSeries,
