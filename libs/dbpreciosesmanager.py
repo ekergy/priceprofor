@@ -257,6 +257,12 @@ def tecnologiasDiarias(fecha=None, hora=None):
     elif  fecha == currentDate:
         technologyList.append(noneList)
         messageList = 'Existen datos de tecnologias 3 dias atras'
+    elif  fecha == currentDate - timedelta(1):
+        technologyList.append(noneList)
+        messageList = 'Existen datos de tecnologias 2 dias atras'
+    elif  fecha == currentDate - timedelta(2):
+        technologyList.append(noneList)
+        messageList = 'Existen datos de tecnologias 1 dia atras'
     elif  cursor.count() == 0:
         technologyList.append(noneList)
         messageList = 'No hay datos de la fecha seleccionada'

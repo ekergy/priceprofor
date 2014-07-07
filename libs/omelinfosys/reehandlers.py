@@ -3,11 +3,9 @@
 Created on 27/02/2013
 @author: hmarrao
 '''
-# imports:
 from xml.sax import handler, make_parser
-from utilities import unicodetodecimal,validafecha,esiosreeurl
+from utilities import unicodetodecimal, validafecha, esiosreeurl
 from urllib2 import urlopen
-# Constantes:
 
 def getdemandeforcast(fecha):
     '''

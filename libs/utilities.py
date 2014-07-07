@@ -466,6 +466,7 @@ def esiosreeurl(fecha=None, xmlid=None):
         urlpart3 = fecha.strftime("%Y%m%d")
         urlpart2 = xmlid + "_"
         url = urlpart1 + urlpart2 + urlpart3 + urlpart4
+        print url
         return url
 
 def omiepreciosurl(fecha):

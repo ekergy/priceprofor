@@ -125,12 +125,11 @@ Morris.Donut({
    	<!-- <input type="submit" class="btn btn-success"></input> -->
    	<input type="submit" value="Enviar" class="btn btn-primary"></input>
 		<div><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{fecha}}
-		%if mensaje:
+ 		% if mensaje:
 			&nbsp;&nbsp;&nbsp;&nbsp;{{mensaje}}
-		%end
-	<!-- para que la fecha quede pegada al grafico -->
-	<!-- 	</div> -->
-</form>
+		% end
+		<!-- </div> -->
+	</form>
 
 	<div id="chart_div" style="width: 800px; height: 400px;"></div>
 
@@ -188,13 +187,15 @@ Morris.Donut({
 
 		% end
 
-		% if fechaDT:
-			% if (fechaDT == currentDate or fechaDT == currentDate + timedelta(1)) and (indice != 0):
-				<div id="donut-example" style="width:180px; margin: -578px 0 0 760px;"></div>
-				<div id="donut-example2" style="width:180px; margin: -100px 0 0 760px;"></div>
-			% else:
-				<div id="donut-example" style="width:180px; margin: -490px 0 0 760px;"></div>
-				<div id="donut-example2" style="width:180px; margin: -100px 0 0 760px;"></div>
+		% if not mensaje:
+			% if fechaDT:
+				% if (fechaDT == currentDate or fechaDT == currentDate + timedelta(1)) and (indice != 0):
+					<div id="donut-example" style="width:180px; margin: -578px 0 0 760px;"></div>
+					<div id="donut-example2" style="width:180px; margin: -100px 0 0 760px;"></div>
+				% else:
+					<div id="donut-example" style="width:180px; margin: -490px 0 0 760px;"></div>
+					<div id="donut-example2" style="width:180px; margin: -100px 0 0 760px;"></div>
+				% end
 			% end
 		% end
 

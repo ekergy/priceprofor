@@ -123,7 +123,6 @@ $(function(){$('#datetimepicker1').datetimepicker({pickTime: false});});
 		% from datetime import datetime, timedelta
 		% fechaDT = datetime.strptime(fecha, '%d/%m/%Y')
 		% currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
-		% ONEDAY = timedelta(1)
 	
 		% indice = 0
 		% if datetime.now().hour >= hora:
@@ -132,15 +131,21 @@ $(function(){$('#datetimepicker1').datetimepicker({pickTime: false});});
 	
 			% if fechaDT == currentDate:
 				% indice = 1
-				% fechaDT2 = fechaDT + ONEDAY
+				% fechaDT2 = fechaDT - timedelta(3)
 				% fecha2 = fechaDT2.strftime('%d/%m/%Y')
-				% textofecha = str(fecha2)
-				% textoboton = 'MAÑANA'
-				<!-- % mensaje2 = 'precios disponibles a partir de las 15:00 horas' -->
+				% textofecha =  str(fecha2)
+				% textoboton = 'HOY'
 				% mensaje2 = ''
-			% elif fechaDT == currentDate + ONEDAY:
+			% elif fechaDT == currentDate - timedelta(1):
 				% indice = 2
-				% fechaDT2 = fechaDT - ONEDAY
+				% fechaDT2 = fechaDT - timedelta(2)
+				% fecha2 = fechaDT2.strftime('%d/%m/%Y')
+				% textofecha =  str(fecha2)
+				% textoboton = 'HOY'
+				% mensaje2 = ''
+			% elif fechaDT == currentDate - timedelta(2):
+				% indice = 3
+				% fechaDT2 = fechaDT - timedelta(1)
 				% fecha2 = fechaDT2.strftime('%d/%m/%Y')
 				% textofecha =  str(fecha2)
 				% textoboton = 'HOY'
@@ -148,11 +153,11 @@ $(function(){$('#datetimepicker1').datetimepicker({pickTime: false});});
 			% end
 		
 			% if indice == 1:
-			    % whatTime = fechaDT + ONEDAY
-			    % indice = 2
+			    % whatTime = fechaDT - timedelta(3)
 			% elif indice == 2:
-				% whatTime = fechaDT - ONEDAY
-			    % indice = 1
+				% whatTime = fechaDT - timedelta(2)
+			% elif indice == 3:
+				% whatTime = fechaDT - timedelta(1)
 		    % end
 	
 			% if indice != 0:
@@ -163,7 +168,7 @@ $(function(){$('#datetimepicker1').datetimepicker({pickTime: false});});
 				<!-- comentar estas lineas mientras no halla datos del dia de mañana -->
 			    <!-- &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value={{textoboton}} hidden> -->
 			    &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="btn btn-primary" value={{textoboton}} hidden></input>
-				<!-- <br>&nbsp;&nbsp;&nbsp;&nbsp;{{textofecha}} -->
+				<br>&nbsp;&nbsp;&nbsp;&nbsp;{{textofecha}}
 			    &nbsp;&nbsp;&nbsp;&nbsp;{{ mensaje2}}
 			    </form>
 			% end

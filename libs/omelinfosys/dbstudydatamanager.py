@@ -45,7 +45,8 @@ from urllib2 import urlopen
 # from omelinfosys.dbstudydatamanager import populateStudyData
 # populateStudyData(startDate,endDate)
 # populateStudyData(startDate)
-def populateStudyData(startDate, endDate=None):
+# populateStudyData()
+def populateStudyData(startDate=None, endDate=None):
     '''
     Metodos de usabilidad con las clases definidas
     This Method will performe the following operations:data = response.read()
@@ -60,10 +61,19 @@ def populateStudyData(startDate, endDate=None):
     try:
         # ONEHOUR = timedelta(seconds=3600)
         ONEDAY = timedelta(1)
+        if startDate == None:
+            startDate = findLastStudyDocument()
         # Disponemos de los datos de la web de la "REE" con 3 dias de retraso
         currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
         if endDate == None:
-            endDate = currentDate - timedelta(3)
+            if startDate == currentDate:
+                endDate = currentDate
+            elif startDate == currentDate - timedelta(1):
+                endDate = startDate - timedelta(1)
+            elif startDate == currentDate - timedelta(2):
+                endDate = startDate - timedelta(2)
+            else:
+                endDate = currentDate - timedelta(3)
     except:
         raise
     else:
