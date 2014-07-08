@@ -36,21 +36,21 @@ def home4():
     for d3.js without taking away the power that d3.js gives you.
     Project location : https://github.com/areski/python-nvd3
     """
-    from nvd3 import stackedAreaChart
-    chart = stackedAreaChart(name='stackedAreaChart')
+    from nvd3 import linePlusBarWithFocusChart
+    chart = linePlusBarWithFocusChart(name='linePlusBarChart', x_is_date=True, x_axis_format="%d %b %Y")
 
-    xdata = [100, 101, 102, 103, 104, 105, 106]
-    ydata = [6, 11, 12, 7, 11, 10, 11]
-    ydata2 = [8, 2, 16, 10, 20, 28, 28]
-    ydata3 = [9, 54, 16, 12, 18, 20, 28]
-    ydata4 = [10, 20, 16, 12, 20, 28, 18]
+    xdata = [1365026400000000, 1365026500000000, 1365026600000000]
+    ydata = [-6, 5, -1]
+    y2data = [36, 55, 11]
+    kwargs = {}
+    kwargs['bar'] = True
+    extra_serie = {"tooltip": {"y_start": "There is ", "y_end": " calls"},
+                   "date_format": "%d %b %Y %H:%S" }
+    chart.add_serie(name="Serie 1", y=ydata, x=xdata, extra=extra_serie, **kwargs)
 
     extra_serie = {"tooltip": {"y_start": "There is ", "y_end": " min"}}
-    chart.add_serie(name="Serie 1", y=ydata, x=xdata, extra=extra_serie)
-    chart.add_serie(name="Serie 2", y=ydata2, x=xdata, extra=extra_serie)
-    chart.add_serie(name="Serie 3", y=ydata3, x=xdata, extra=extra_serie)
-    chart.add_serie(name="Serie 4", y=ydata4, x=xdata, extra=extra_serie)
-    chart.buildhtml()
+    chart.add_serie(name="Serie 2", y=y2data, x=xdata, extra=extra_serie)
+
 
     chart.header_css=['<link media="all" href="/css/nv.d3.css" type="text/css" rel="stylesheet" />']
     chart.header_js=['<script src="/js/jquery.js"></script>','<script src="/d3/d3.min.js" type="text/javascript"></script>','<script src="/d3/nv.d3.js" type="text/javascript"></script>',]
@@ -187,3 +187,11 @@ def TecnologiasMercadoDiarioNVD3(fecha=None):
     chart.buildhtml()
 
     return chart.htmlcontent
+
+@route('/priceprofor/rest/help/util.html')
+def util():
+    '''
+    '''
+    print 'GET'
+
+    return template('util.html')

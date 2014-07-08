@@ -13,7 +13,7 @@ from controllers import resources
 from controllers import priceprofor_graficas
 from controllers import priceprofor_single_plots
 from controllers import sme_mde_viz
-from controllers import priceprofor_restfulAPI
+# from controllers import priceprofor_restfulAPI
 
 from bottle import TEMPLATE_PATH
 #TEMPLATE_PATH.append(os.path.join(os.environ['OPENSHIFT_HOMEDIR'], 
