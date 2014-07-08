@@ -295,22 +295,22 @@ def priceAppli():
     def maxList(priceList):
         '''
         '''
-        minIndexList = list()
-        for index in range(len(priceList)):
-            if priceList[index] == min(priceList):
-                minValue = priceList[index]
-                minIndexList.append(index)
-        return {'precio': minValue, 'hora': minIndexList}
-
-    def minList(priceList):
-        '''
-        '''
         maxIndexList = list()
         for index in range(len(priceList)):
             if priceList[index] == max(priceList):
                 maxValue = priceList[index]
                 maxIndexList.append(index)
         return {'precio': maxValue, 'hora': maxIndexList}
+
+    def minList(priceList):
+        '''
+        '''
+        minIndexList = list()
+        for index in range(len(priceList)):
+            if priceList[index] == min(priceList):
+                minValue = priceList[index]
+                minIndexList.append(index)
+        return {'precio': minValue, 'hora': minIndexList}
 
     priceDic = dict()
     # currentDate = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
