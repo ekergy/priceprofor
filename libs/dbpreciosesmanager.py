@@ -391,7 +391,12 @@ class DBPreciosES(object):
         SET COLLECTION NAME IN MONGO.
         No need for user uname or coopid.
         '''
-        # self.connectiondetails['db_name'] = 'preciosmercadodiario'
+
+        ''' LOCAL '''
+#         self.connectiondetails['host'] = None
+        ''' SERVIDOR '''
+        self.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
+
         self.connectiondetails['db_name'] = 'mercadodiario'
         self.connectiondetails['coll_name'] = 'precioses'
         self.setCollection()
