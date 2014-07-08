@@ -338,23 +338,12 @@ def graficaTecnologiasDiariasPOST():
 @enable_cors
 def graficaModelosPrediccionGET():
     '''
-    Plantilla de edicion o creacion de contratos
     '''
     print "GET"
-    ''' no se grafica nada en el GET '''
-#     noneList = []
-#     dateString = ''
-#     if dateString == '':
-#         dic = preciosDiarios()
-    ''' se grafica en el GET el ultimo dia en base de datos '''
+
     dateTime = findLastDayDocumentTechnology()
-#     dic = preciosDiarios(dateTime)
     dic = tecnologiasDiarias(dateTime)
     dateString = str(str(dateTime.day)+'/'+str(dateTime.month)+'/'+str(dateTime.year))
-#     minMaxTuple = relativeExtremes(dic)
-#     preciosListSeries = colorChart(dateTime, minMaxTuple)
-#     preciosListSeries = dic['precios']
-#     tecnologiasListSeries = dic['tecnologias']
 
     collection = Connection(host=None).mercadodiario.modelosHTES
     dayahead = datetime(2014,05,19)
@@ -391,102 +380,91 @@ def graficaModelosPrediccionGET():
     VAR3 = list()
     VAR4 = list()
     VAR5 = list()
+#     VAR6 = list()
+#     VAR7 = list()
     arrayTDT = list()
-#     emptyValue = -100
+#     emptyValue = 'null'
     emptyValue = -100
 
-#     arrayTDT.append( ['Date', 'Working', 'Model'] )
-#     arrayTDT.append( ['Date', 'Working', 'Model'] )
-#     arrayTDT.append( ['Date', 'Working', { 'role': 'style' }, 'Model', 'Teste'] )
-#     arrayTDT.append( ['Date', 'Working', { 'role': 'style' }] )
-#     arrayTDT.append( ['Date', 'Working', 'Model', 'Teste', { 'role': 'style' }] )
-#     arrayTDT.append( ['Date', 'Working', 'Model', {'role': 'style'}] )
-#     arrayTDT.append( ['Date', 'Working', 'Model', 'Teste'] )
-#     arrayTDT.append( ['Date', 'Working', 'Model', 'Teste', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}] )
     arrayTDT.append( ['Date', 'Working', 'Model', 'Teste', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, 'Dayahead'] )
+#     arrayTDT.append( ['DateTime', 'Data', 'Model', 'Prediction', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, 'Dayahead'] )
     for element in resultsdayahead:
-        if element['fecha'] <= dayahead + timedelta(3):
-    #         if element['tipo'] == 'working':
+        if element['fecha'] <= dayahead + timedelta(2):
+#         if element['fecha'] >= datetime(2014,4,19) and element['fecha'] <= datetime(2014,5,21):
+            # print element['fecha']
             if element['tipo'] == 'working' or element['tipo'] == 'teste':
-    #             dt = datetime(element['fecha'].year, element['fecha'].month, element['fecha'].day, element['hora'])
-    #             VAR0.append(str(date.strftime(dt, '%Y/%m/%d %H:%M:%S')))
-    #         if element['tipo'] == 'working':
                 dt = datetime(element['fecha'].year, element['fecha'].month, element['fecha'].day, element['hora'])
                 VAR0.append(str(date.strftime(dt, '%Y/%m/%d %H:%M:%S')))
-    #             VAR4.append('black')
-    #         if element['tipo'] == 'working':
-    #             VAR1.append(element['PreciosES'])
+
             if element['tipo'] == 'working':
                 VAR1.append(element['PreciosES'])
             elif element['tipo'] == 'teste':
                 VAR1.append(emptyValue)
-    #         if element['tipo'] == 'model':
-    #             VAR2.append(element['PreciosES'])
             if element['tipo'] == 'model':
                 VAR2.append(element['PreciosES'])
             elif element['tipo'] == 'teste':
                 VAR2.append(emptyValue)
-    #         if element['tipo'] == 'teste':
-    #             VAR1.append(element['PreciosES'])
-    #             VAR2.append(element['PreciosES'])
+
             if element['tipo'] == 'teste':
                 VAR3.append(element['PreciosES'])
             elif element['tipo'] == 'working':
                 VAR3.append(emptyValue)
-
-            if element['tipo'] == 'upper80':
+            if element['tipo'] == 'lower80':
                 VAR4.append(element['PreciosES'])
             elif element['tipo'] == 'working':
                 VAR4.append(emptyValue)
-            if element['tipo'] == 'lower80':
+            if element['tipo'] == 'upper80':
                 VAR5.append(element['PreciosES'])
             elif element['tipo'] == 'working':
                 VAR5.append(emptyValue)
 
-    #         if element['tipo'] == 'working':
-    #             VAR4.append('black')
+#             if element['tipo'] == 'lower95':
+#                 VAR6.append(element['PreciosES'])
+#             elif element['tipo'] == 'working':
+#                 VAR6.append(emptyValue)
+#             if element['tipo'] == 'upper95':
+#                 VAR7.append(element['PreciosES'])
+#             elif element['tipo'] == 'working':
+#                 VAR7.append(emptyValue)
 
     for index in range(len(VAR0)):
-#     for index in range(len(VAR3)):
-#         arrayTDT.append([ VAR0[index], VAR1[index], VAR2[index] ])
-#         arrayTDT.append([ VAR0[index], VAR1[index], VAR2[index], VAR3[index] ])
-#         arrayTDT.append([ VAR0[index], VAR1[index], VAR4[index] ])
-#         arrayTDT.append([ VAR0[index], VAR1[index], VAR2[index], VAR3[index] ])
-#         arrayTDT.append([ VAR0[index], VAR1[index], VAR2[index], VAR3[index], VAR4[index], VAR5[index] ])
         arrayTDT.append([ VAR0[index], VAR1[index], VAR2[index], VAR3[index], VAR4[index], VAR5[index], -100 ])
-    tecnologiasListSeries = arrayTDT
+#         arrayTDT.append([ VAR0[index], VAR1[index], VAR2[index], VAR3[index], VAR4[index], VAR5[index], VAR6[index], VAR7[index], -100 ])
 
-#     arrayTDT.append(['2014/05/19 00:00:00', 0, 0, 0, 0, 0, 150])
+    arrayTDTda = list()
     for index in range(len(arrayTDT)):
-        arrayTDT[index][0]
-        if arrayTDT[index][0] == '2014/05/19 00:00:00':
-            print 'hello'
-            arrayTDT[index][6] = 150
+#         if arrayTDT[index][0] == '2014/05/19 00:00:00':
+        if arrayTDT[index][0] == date.strftime(dayahead, '%Y/%m/%d %H:%M:%S'):
+            daList = list()
+            for element in arrayTDT[index]:
+                daList.append(element)
+            daList.pop(6)
+            daList.insert(6,100)
+            arrayTDTda.append(daList)
+        arrayTDTda.append(arrayTDT[index])
+
+    for index in range(len(arrayTDTda)):
+        if arrayTDTda[index][0] > '2014/05/18 00:00:00' and arrayTDTda[index][0] < '2014/05/19 01:00:00':
+            print arrayTDTda[index]
 
     print ''
-#     print arrayTDT
+
+    tecnologiasListSeries = arrayTDTda
+
+    print arrayTDT
+    print ''
+
+    print dayahead
+    print ''
+
+#     print len(VAR0)
+#     print len(VAR1)
+#     print len(VAR2)
+#     print len(VAR3)
 #     print ''
-#     print arrayTDT[5][0]
-    print ''
-    print len(VAR0)
-    print len(VAR1)
-    print len(VAR2)
-    print len(VAR3)
-    print ''
 
-#     print arrayTDT
-#     ''' dummy '''
-#     dataFile = [['Hora', 'Working', 'Model'],[735344.0, 30.08, 28.35]]
-#     tecnologiasListSeries = dataFile
-
-#     return template('sme_precios_diarios',
-#     return tecnologiasListSeries,dateString
     return template('priceprofor_modelos_prediccion',
-#                     preciosList=noneList,
-#                     preciosList=dic['precios'],
-#                     preciosList=preciosListSeries,
                     tecnologiasList=tecnologiasListSeries,
                     fecha=dateString,
                     mensaje=dic['mensaje'],
-#                     minMax=minMaxTuple
                     )

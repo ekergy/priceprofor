@@ -26,7 +26,7 @@ from omelinfosys.omelhandlers import PreciosMibelHandler
 # # from datetime import datetime
 # # startDT = datetime(2014,1,1)
 # # endDT = datetime(2014,2,1)
-# from omelinfosys.dbpreciosesmanager import populatePrecios
+# from dbpreciosesmanager import populatePrecios
 # populatePrecios()
 # # populatePrecios(startDT,endDT)
 def populatePrecios(startDate=None, endDate=None):
