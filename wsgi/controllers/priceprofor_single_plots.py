@@ -97,6 +97,7 @@ def MapaCalorPreciosMercadoDiario():
 
     return template('MapaCalorPreciosMercadoDiario.html',data=orList,days=absList)
 
+
 @route('/PreciosMercadoDiarioNVD3.html')
 def PreciosMercadoDiarioNVD3(fecha=None):
     '''
