@@ -187,3 +187,11 @@ def TecnologiasMercadoDiarioNVD3(fecha=None):
     chart.buildhtml()
 
     return chart.htmlcontent
+
+@route('/priceprofor/rest/help/util.html')
+def util():
+    '''
+    '''
+    print 'GET'
+
+    return template('util.html')
