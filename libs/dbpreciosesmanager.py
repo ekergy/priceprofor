@@ -13,7 +13,7 @@ direc = path.abspath(__file__)
 machine = direc[direc.find("e")+2:direc.find("w")-1]
 
 from pymongo import Connection
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 # from utilities import validafecha, omiepreciosurl, stringtofloat, cambiohoraverano, cambiohorainvierno
 from utilities import omiepreciosurl, cambiohoraverano, cambiohorainvierno
 # from utilities import stringtofloat
@@ -78,7 +78,7 @@ def populatePrecios(startDate=None, endDate=None):
 
 # from sys import path
 # path.append('libs')
-# from omelinfosys.dbpreciosesmanager import findLastPriceDocument
+# from dbpreciosesmanager import findLastPriceDocument
 # findLastPriceDocument()
 def findLastPriceDocument():
     '''
@@ -184,8 +184,7 @@ def preciosDiarios(fechayhora=None):
         fechayhora = None
     else:
         fechayhora = datetime(fechayhora.year,fechayhora.month,fechayhora.day,)
-        
-    
+
     dic = dict()
     priceList = list()
     nameList = [ 'HORA', 'PRECIO' ]
@@ -283,6 +282,75 @@ def tecnologiasDiarias(fecha=None, hora=None):
 #     print dic['tecnologias'][0]
 #     print dic['tecnologias'][1]
     return dic
+
+# from sys import path
+# path.append('libs')
+# from dbpreciosesmanager import priceAppli
+# priceAppli()
+def priceAppli():
+    '''
+    Proporciona un json con vector precios y horas precio maximo/minimo (3 ultimos dias)
+    '''
+
+    def maxList(priceList):
+        '''
+        '''
+        minIndexList = list()
+        for index in range(len(priceList)):
+            if priceList[index] == min(priceList):
+                minValue = priceList[index]
+                minIndexList.append(index)
+        return {'precio': minValue, 'hora': minIndexList}
+
+    def minList(priceList):
+        '''
+        '''
+        maxIndexList = list()
+        for index in range(len(priceList)):
+            if priceList[index] == max(priceList):
+                maxValue = priceList[index]
+                maxIndexList.append(index)
+        return {'precio': maxValue, 'hora': maxIndexList}
+
+    priceDic = dict()
+    # currentDate = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
+
+    ''' LOCAL '''
+#     collection = Connection(host=None).mercadodiario.precioses
+    ''' SERVIDOR '''
+    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
+
+    fecha = findLastPriceDocument()
+    fecha2 = fecha - timedelta(1)
+    fecha3 = fecha - timedelta(2)
+
+    cursor = collection.find({ "fecha": {"$in": [fecha]} })
+    priceList = list()
+    for element in cursor:
+        priceList.append(element['PreciosES'])
+    priceDic[date.strftime(fecha, '%Y-%m-%d')] = {'mercado': priceList,
+                                                  'horamax': maxList(priceList),
+                                                  'horamin': minList(priceList) }
+
+    cursor = collection.find({ "fecha": {"$in": [fecha2]} })
+    priceList = list()
+    for element in cursor:
+        priceList.append(element['PreciosES'])
+    priceDic[date.strftime(fecha2, '%Y-%m-%d')] = {'mercado': priceList,
+                                                   'horamax': maxList(priceList),
+                                                   'horamin': minList(priceList) }
+
+    cursor = collection.find({ "fecha": {"$in": [fecha3]} })
+    priceList = list()
+    for element in cursor:
+        priceList.append(element['PreciosES'])
+    priceDic[date.strftime(fecha3, '%Y-%m-%d')] = {'mercado': priceList,
+                                                   'horamax': maxList(priceList),
+                                                   'horamin': minList(priceList) }
+
+    return priceDic
+
+
 
 ''' PROFOR necesitaba esta clase para que funcionara de manera independiente al resto de codigo '''
 # class PreciosMibelHandler(object):
