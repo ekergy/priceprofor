@@ -34,6 +34,7 @@ def maininfo():
                             horamax = {hora: [0-23], precio: float},
                             horamin = {precio: [0-23], precio: float} )
     '''
+    print 'GET'
 
 #     valores = dict()
 #     valores['2014-07-07'] = {}

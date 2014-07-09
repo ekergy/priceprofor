@@ -13,6 +13,7 @@ from datetime import datetime, timedelta, date
 from pymongo import Connection
 from dbpreciosesmanager import populatePrecios
 from omelinfosys.dbstudydatamanager import populateStudyData
+from json import dumps
 
 @route('/populatePrecios')
 def index():
@@ -384,12 +385,16 @@ def graficaModelosPrediccionGET():
 #     VAR7 = list()
     arrayTDT = list()
 #     emptyValue = 'null'
-    emptyValue = -100
+#     emptyValue = -100
+    emptyValue = None
 
-    arrayTDT.append( ['Date', 'Working', 'Model', 'Teste', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, 'Dayahead'] )
+#     arrayTDT.append( ['Date', 'Working', 'Model', 'Teste', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, 'Dayahead'] )
+    arrayTDT.append( ['Date', 'Working', 'Model', 'Teste', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}] )
 #     arrayTDT.append( ['DateTime', 'Data', 'Model', 'Prediction', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, 'Dayahead'] )
     for element in resultsdayahead:
-        if element['fecha'] <= dayahead + timedelta(2):
+#         if element['fecha'] <= dayahead + timedelta(2):
+#         if element['fecha'] <= dayahead:
+        if element['fecha'] <= dayahead + timedelta(1) and element['fecha'] >= dayahead - timedelta(7):
 #         if element['fecha'] >= datetime(2014,4,19) and element['fecha'] <= datetime(2014,5,21):
             # print element['fecha']
             if element['tipo'] == 'working' or element['tipo'] == 'teste':
@@ -428,31 +433,32 @@ def graficaModelosPrediccionGET():
 #                 VAR7.append(emptyValue)
 
     for index in range(len(VAR0)):
-        arrayTDT.append([ VAR0[index], VAR1[index], VAR2[index], VAR3[index], VAR4[index], VAR5[index], -100 ])
+#         arrayTDT.append([ VAR0[index], VAR1[index], VAR2[index], VAR3[index], VAR4[index], VAR5[index], -100 ])
+        arrayTDT.append([ VAR0[index], VAR1[index], VAR2[index], VAR3[index], VAR4[index], VAR5[index]])
 #         arrayTDT.append([ VAR0[index], VAR1[index], VAR2[index], VAR3[index], VAR4[index], VAR5[index], VAR6[index], VAR7[index], -100 ])
 
-    arrayTDTda = list()
-    for index in range(len(arrayTDT)):
-#         if arrayTDT[index][0] == '2014/05/19 00:00:00':
-        if arrayTDT[index][0] == date.strftime(dayahead, '%Y/%m/%d %H:%M:%S'):
-            daList = list()
-            for element in arrayTDT[index]:
-                daList.append(element)
-            daList.pop(6)
-            daList.insert(6,100)
-            arrayTDTda.append(daList)
-        arrayTDTda.append(arrayTDT[index])
-
-    for index in range(len(arrayTDTda)):
-        if arrayTDTda[index][0] > '2014/05/18 00:00:00' and arrayTDTda[index][0] < '2014/05/19 01:00:00':
-            print arrayTDTda[index]
+#     arrayTDTda = list()
+#     for index in range(len(arrayTDT)):
+#         if arrayTDT[index][0] == date.strftime(dayahead, '%Y/%m/%d %H:%M:%S'):
+#             daList = list()
+#             for element in arrayTDT[index]:
+#                 daList.append(element)
+#             daList.pop(6)
+#             daList.insert(6,100)
+#             arrayTDTda.append(daList)
+#         arrayTDTda.append(arrayTDT[index])
+# 
+#     for index in range(len(arrayTDTda)):
+#         if arrayTDTda[index][0] > '2014/05/18 00:00:00' and arrayTDTda[index][0] < '2014/05/19 01:00:00':
+#             print arrayTDTda[index]
 
     print ''
 
-    tecnologiasListSeries = arrayTDTda
+#     tecnologiasListSeries = arrayTDTda
+    tecnologiasListSeries = arrayTDT
 
-    print arrayTDT
-    print ''
+#     print arrayTDT
+#     print ''
 
     print dayahead
     print ''
@@ -463,8 +469,10 @@ def graficaModelosPrediccionGET():
 #     print len(VAR3)
 #     print ''
 
+    # "json.dumps" interpreta los None de python como null para google
     return template('priceprofor_modelos_prediccion',
-                    tecnologiasList=tecnologiasListSeries,
+#                     tecnologiasList=tecnologiasListSeries,
+                    tecnologiasList=dumps(tecnologiasListSeries),
                     fecha=dateString,
                     mensaje=dic['mensaje'],
                     )
