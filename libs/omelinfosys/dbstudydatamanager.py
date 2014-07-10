@@ -38,10 +38,6 @@ from urllib2 import urlopen
 # startDate = datetime(2011,1,1)
 # endDate = datetime(2013,12,31)
 
-# from omelinfosys.dbrawdatamanager import populateRawData
-# populateRawData(startDate,endDate)
-# populateRawData(startDate)
-
 # from omelinfosys.dbstudydatamanager import populateStudyData
 # populateStudyData(startDate,endDate)
 # populateStudyData(startDate)
