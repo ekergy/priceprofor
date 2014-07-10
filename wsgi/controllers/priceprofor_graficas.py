@@ -339,15 +339,17 @@ def graficaTecnologiasDiariasPOST():
 @enable_cors
 def graficaModelosPrediccionGET():
     '''
+    Callback de '/ModelosPrediccion'.
+    Este callback tiene que Buscar el ultimo documento dsiponible en la collection de Previsiones.
     '''
-    print "GET"
-
+    # Necesitamos de saber la fecha del ultimo dato disponible de precios.
     dateTime = findLastDayDocumentTechnology()
     dic = tecnologiasDiarias(dateTime)
     dateString = str(str(dateTime.day)+'/'+str(dateTime.month)+'/'+str(dateTime.year))
 
     collection = Connection(host=None).mercadodiario.modelosHTES
-    dayahead = datetime(2014,05,19)
+#     dayahead = datetime(2014,5,19)
+    dayahead = datetime(2014,5,19)
     resultsdayahead = collection.find({ "dayahead" : {"$in": [dayahead]} })
 
 #     arrayTDT = list()
@@ -389,17 +391,17 @@ def graficaModelosPrediccionGET():
     emptyValue = None
 
 #     arrayTDT.append( ['Date', 'Working', 'Model', 'Teste', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, 'Dayahead'] )
-    arrayTDT.append( ['Date', 'Working', 'Model', 'Teste', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}] )
+    arrayTDT.append( ['Fechayhora', 'Datos', 'Modelo', 'Prediccion', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}] )
 #     arrayTDT.append( ['DateTime', 'Data', 'Model', 'Prediction', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, 'Dayahead'] )
     for element in resultsdayahead:
-#         if element['fecha'] <= dayahead + timedelta(2):
-#         if element['fecha'] <= dayahead:
-        if element['fecha'] <= dayahead + timedelta(1) and element['fecha'] >= dayahead - timedelta(7):
+        if element['fecha'] <= dayahead + timedelta(2) and element['fecha'] >= dayahead - timedelta(7):
+#         if element['fecha'] <= dayahead + timedelta(1) and element['fecha'] >= dayahead - timedelta(7):
 #         if element['fecha'] >= datetime(2014,4,19) and element['fecha'] <= datetime(2014,5,21):
             # print element['fecha']
             if element['tipo'] == 'working' or element['tipo'] == 'teste':
                 dt = datetime(element['fecha'].year, element['fecha'].month, element['fecha'].day, element['hora'])
-                VAR0.append(str(date.strftime(dt, '%Y/%m/%d %H:%M:%S')))
+#                 VAR0.append(str(date.strftime(dt, '%Y/%m/%d %H:%M:%S')))
+                VAR0.append(str(date.strftime(dt, '%Y/%m/%d %H:%M')))
 
             if element['tipo'] == 'working':
                 VAR1.append(element['PreciosES'])

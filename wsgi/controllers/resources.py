@@ -48,3 +48,10 @@ def getd3(filename):
     '''
     '''
     return static_file(filename, root=ospath.join(root_app,'wsgi','static', 'resources','d3'))
+
+@get("/uikit/<filepath:path>")
+def uikitresources(filepath):
+    """
+    Controller for the uikit framework.
+    """
+    return static_file(str('/'+filepath), root = ospath.join(root_app, 'wsgi', 'static', 'resources','uikit'))

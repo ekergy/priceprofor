@@ -35,6 +35,9 @@ finally:
     TEMPLATE_PATH.append(ospath.join(root_app, 'wsgi', 'views', 'templates','priceprofor_graficas'))
     TEMPLATE_PATH.append(ospath.join(root_app, 'wsgi', 'views', 'templates','priceprofor_restfulAPI'))
 
+CONN_URI=None
+
 application = default_app()
+
 
 

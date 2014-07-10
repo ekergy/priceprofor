@@ -1,32 +1,78 @@
-<!DOCTYPE html>
-<html>
-    <head>
-
+<html lang="en-gb" dir="ltr" class="uk-notouch"><head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Price Profor rest API for the mobile app.</title>
+        <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+        <link rel="apple-touch-icon-precomposed" href="images/apple-touch-icon.png">
+        <link rel="stylesheet" href="/uikit/css/uikit.almost-flat.css">
+        <script src="/js/jquery.js"></script>
+        <script src="/uikit/js/uikit.min.js"></script>
+        <script src="/uikit/js/addons/sticky.js"></script>
     </head>
-    <body>
 
-	<div>
-Definición:<br>
-HTTP Method 	URI 	Action<br>
-GET 	[host]/priceprofor/rest/help 	get help page to use the service<br>
-GET 	[host]/priceprofor/rest/main 	return the main info as json<br>
-<br>
-Descripción:<br>
-    [host]/priceprofor/rest/help: Devuelve una pagina html con información util el uri de priceprofor/rest.<br>
-    [host]/priceprofor/rest/main: Devuelve un json con la información necesária para hacer los calculos. Ejemplo de respuesta:<br>
-<br>
-{"2014-07-08": ... ,<br>
- "2014-07-07": {"mercado": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],<br>
-                "horamax": {"hora": [15,17] , "precio": 20.0},<br>
-                "horamin": {"hora": [3,6],  "precio": 10.0}},<br>
- "2014-07-09": ... ,}<br>
-<br>
+    <body style="">
 
-Notación:<br>
-Las horas del dia van de 0 a 23
-<br>
-	</div>
+        <div class="uk-container uk-container-center uk-margin-top uk-margin-large-bottom">
 
-    </body>
+            <nav class="uk-navbar uk-margin-large-bottom">
+                <a class="uk-navbar-brand uk-hidden-small" href="layouts_frontpage.html">priceprofor</a>
+                <ul class="uk-navbar-nav uk-hidden-small">
+                    <li>
+                        <a href="/PreciosDiarios">Precios</a>
+                    </li>
+                    <li>
+                        <a href="/TecnologiasDiarias">Tecnologias</a>
+                    </li>
+                    <li>
+                        <a href="/ModelosPrediccion">Prediccion</a>
+                    </li>
+                </ul>
+                <a href="#offcanvas" class="uk-navbar-toggle uk-visible-small" data-uk-offcanvas=""></a>
+                <div class="uk-navbar-brand uk-navbar-center uk-visible-small">priceprofor</div>
+            </nav>
 
-</html>
+            <div class="uk-grid" data-uk-grid-margin="">
+                <div class="uk-width-1-1">
+                    <h1 class="uk-heading-large">Definicion del rest API para Mobile</h1>
+                </div>
+            </div>
+<article class="uk-article">
+<h2 class="uk-article-title">Definición:</h2>
+<table class="uk-table">
+<thead>
+<tr>
+<th>HTTP Method</th>
+<th>URI</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td>[host]/priceprofor/rest/help</td>
+<td>get help page to use the service</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>[host]/priceprofor/rest/main</td>
+<td>return the main info as json</td>
+</tr>
+</tbody>
+</table>
+<h2 class="uk-article-title">Descripción:</h2>
+<ol>
+<li>[host]/priceprofor/rest/help: Devuelve una pagina html con información util el uri de priceprofor/rest.</li>
+<li>[host]/priceprofor/rest/main: Devuelve un json con la información necesária para hacer los calculos. Ejemplo de respuesta:</li>
+</ol>
+<div class="codehilite"><pre><span class="p">{</span><span class="s2">"2014-07-07"</span><span class="o">:</span><span class="w"> </span><span class="o">...</span><span class="w"> </span><span class="p">,</span>
+<span class="w"> </span><span class="s2">"2014-07-08"</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">"mercado"</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="il">0</span><span class="p">,</span><span class="w"> </span><span class="il">0</span><span class="p">,</span><span class="w"> </span><span class="il">0</span><span class="p">,</span><span class="w"> </span><span class="il">0</span><span class="p">,</span><span class="w"> </span><span class="il">0</span><span class="p">,</span><span class="w"> </span><span class="il">0</span><span class="p">,</span><span class="w"> </span><span class="il">0</span><span class="p">,</span><span class="w"> </span><span class="il">0</span><span class="p">,</span><span class="w"> </span><span class="il">0</span><span class="p">,</span><span class="w"> </span><span class="il">0</span><span class="p">,</span><span class="w"> </span><span class="il">0</span><span class="p">,</span><span class="w"> </span><span class="il">0</span><span class="p">,</span><span class="w"> </span><span class="il">0</span><span class="p">,</span><span class="w"> </span><span class="il">0</span><span class="p">,</span><span class="w"> </span><span class="il">0</span><span class="p">,</span><span class="w"> </span><span class="il">0</span><span class="p">,</span><span class="w"> </span><span class="il">0</span><span class="p">,</span><span class="w"> </span><span class="il">0</span><span class="p">,</span><span class="w"> </span><span class="il">0</span><span class="p">,</span><span class="w"> </span><span class="il">0</span><span class="p">,</span><span class="w"> </span><span class="il">0</span><span class="p">,</span><span class="w"> </span><span class="il">0</span><span class="p">,</span><span class="w"> </span><span class="il">0</span><span class="p">,</span><span class="w"> </span><span class="il">0</span><span class="p">],</span>
+<span class="w">                </span><span class="s2">"horamax"</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">"hora"</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="il">15</span><span class="p">,</span><span class="il">17</span><span class="p">]</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="s2">"precio"</span><span class="o">:</span><span class="w"> </span><span class="mf">20.0</span><span class="p">},</span><span class="w"> </span>
+<span class="w">                </span><span class="s2">"horamin"</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">"hora"</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="il">3</span><span class="p">,</span><span class="il">6</span><span class="p">],</span><span class="w">  </span><span class="s2">"precio"</span><span class="o">:</span><span class="w"> </span><span class="mf">10.0</span><span class="p">}},</span>
+<span class="w"> </span><span class="s2">"2014-07-09"</span><span class="o">:</span><span class="w"> </span><span class="o">...</span><span class="w"> </span><span class="p">,}</span>
+</pre></div>
+
+
+<h4>Observación:</h4>
+<p>Las horas del dia van de 0 a 23</p>
+</article>
+</body></html>

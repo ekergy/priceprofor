@@ -395,7 +395,7 @@ class DBStudyData():
             # if results.count() > 1:
             #     raise Exception('La base de datos tiene mas de un registro para la dada fecha.')
             for result in results:
-                print result
+                # print result
                 self.fecha = result["fecha"]
                 self.hora = result["hora"]
 

@@ -83,6 +83,7 @@ def populatePrecios(startDate=None, endDate=None):
 def findLastPriceDocument():
     '''
     Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
+    TODO: Hacer la query sin la fecha como input.
     '''
     ins = DBPreciosES()
     collection = ins.get_connection()
@@ -290,6 +291,9 @@ def tecnologiasDiarias(fecha=None, hora=None):
 def priceAppli():
     '''
     Proporciona un json con vector precios y horas precio maximo/minimo (3 ultimos dias)
+    TODO: Intenta sacar los ultimos 3 dias disponibles SIN USAR FECHAR como input a la query.
+    o sea busca todas as fechas ordenalas y quedate con los ultimos 3 registros que por cierto ya vienen
+    ordenados y no hay que comprobar nada, si garantizamos que la base de datos esta siempre actualizada.
     '''
 
     def maxList(priceList):
@@ -395,7 +399,7 @@ class DBPreciosES(object):
         ''' LOCAL '''
 #         self.connectiondetails['host'] = None
         ''' SERVIDOR '''
-        self.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
+        # self.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
 
         self.connectiondetails['db_name'] = 'mercadodiario'
         self.connectiondetails['coll_name'] = 'precioses'
@@ -491,21 +495,21 @@ class DBPreciosES(object):
             dic = dict()
             self.setCollection()
             collection = self.getCollection()
-            print fecha
-            print hora
+            # print fecha
+            # print hora
             # print fechayhora
             # print fechayhora.hour
             results = collection.find({ "fecha": {"$in" : [fecha]}, "hora": {"$in": [hora]} })
             # results = collection.find({ "fecha": {"$in" : [fechayhora]}, "hora": {"$in": [fechayhora.hour]} })
             for result in results:
-                print result
+                # print result
                 dic = result
         except:
             raise
         else:
             self.delCollection()
             # print dic
-            print dic['PreciosES']
+            # print dic['PreciosES']
             return dic['PreciosES']
 
     def getprecios(self, fechaStart, fechaEnd=None):
@@ -532,6 +536,10 @@ class DBPreciosES(object):
         # return [fechayprecio]
 
     def getlastpreciodate(self):
+        '''
+        Esto tiene que devolver la ultima fecha disponible en base de datos.
+        O sea esto tiene que devolver un datetime.datetime 
+        '''
         try:
             self.setCollection()
 #             collection = self.getCollection()
