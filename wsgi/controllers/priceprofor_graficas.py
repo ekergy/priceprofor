@@ -349,7 +349,8 @@ def graficaModelosPrediccionGET():
 
     collection = Connection(host=None).mercadodiario.modelosHTES
 #     dayahead = datetime(2014,5,19)
-    dayahead = datetime(2014,5,19)
+#     dayahead = datetime(2014,5,19)
+    dayahead = datetime(2014,7,14)
     resultsdayahead = collection.find({ "dayahead" : {"$in": [dayahead]} })
 
 #     arrayTDT = list()
@@ -394,8 +395,8 @@ def graficaModelosPrediccionGET():
     arrayTDT.append( ['Fechayhora', 'Datos', 'Modelo', 'Prediccion', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}] )
 #     arrayTDT.append( ['DateTime', 'Data', 'Model', 'Prediction', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, 'Dayahead'] )
     for element in resultsdayahead:
-        if element['fecha'] <= dayahead + timedelta(2) and element['fecha'] >= dayahead - timedelta(7):
-#         if element['fecha'] <= dayahead + timedelta(1) and element['fecha'] >= dayahead - timedelta(7):
+#         if element['fecha'] <= dayahead + timedelta(2) and element['fecha'] >= dayahead - timedelta(7):
+        if element['fecha'] <= dayahead + timedelta(1) and element['fecha'] >= dayahead - timedelta(7):
 #         if element['fecha'] >= datetime(2014,4,19) and element['fecha'] <= datetime(2014,5,21):
             # print element['fecha']
             if element['tipo'] == 'working' or element['tipo'] == 'teste':

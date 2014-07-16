@@ -97,11 +97,22 @@ class DBRawData():
         '''
         '''
         try:
-            self.connection = Connection()
-            self.db = self.connection.OMIEData
+#             self.connection = Connection()
+#             self.db = self.connection.OMIEData
+#             self.collection = self.db.OMIERawData
+
+            ''' LOCAL '''
+#             self.connection = Connection(host=None)
+
+            ''' SERVIDOR '''
+            self.connection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
+
+            # self.db = self.connection.OMIEData
+            self.db = self.connection.mercadodiario
             ''' NOMBRE DOCUMENTO (O TABLA) '''
-            self.collection = self.db.OMIERawData
-            # self.collection = self.db.OMIEWebData
+            # self.collection = self.db.OMIEStudyData
+            self.collection = self.db.tecnologiases
+
             if fecha is not None:
                 self.fecha = fecha
                 results = self.collection.find({ "fecha": {"$in": [self.fecha]} })
