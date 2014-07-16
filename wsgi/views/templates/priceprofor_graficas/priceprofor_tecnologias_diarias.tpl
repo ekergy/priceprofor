@@ -175,20 +175,6 @@ $(function(){$('#datetimepicker1').datetimepicker({pickTime: false});});
 
 		% end
 
-		% if fechaDT:
-			% if (fechaDT == currentDate or fechaDT == currentDate + timedelta(1)) and (indice != 0):
- 				% if tecnologiasList != [[]]:
-				<div id="donut-example" style="width:180px; margin: -570px 0 0 825px;"></div>
-				<div id="donut-example2" style="width:180px; margin: -100px 0 0 825px;"></div>
-				% end
-			% else:
-				% if tecnologiasList != [[]]:
-				<div id="donut-example" style="width:180px; margin: -490px 0 0 825px;"></div>
-				<div id="donut-example2" style="width:180px; margin: -100px 0 0 825px;"></div>
-				% end
-			% end
-		% end
-
 	% end
 
 </body>
