@@ -180,14 +180,32 @@ def colorChart(dateTime, minMaxTuple):
     # print preciosListSeries
     return preciosListSeries
 
+def averageList(lista):
+    suma=0.0
+    for i in range(0,len(lista)):
+        suma=suma+lista[i]
+    media = suma/len(lista)
+    return round(media, 2)
+
+def lineChart(dateTime, preciosList, meanList):
+    meanType = list()
+    palabraType = list()
+    meanType.append(meanList)
+    palabraType.append('PRECIO MEDIO')
+    for index in range(len(preciosList)):
+        if preciosList[index][0] == 'HORA':
+            preciosList[index] = preciosList[index]+palabraType
+        else:
+            preciosList[index] = preciosList[index]+meanType
+    return preciosList
+
 @route('/PreciosDiarios', method='GET')
-# @populatePreciosActualiza
-@enable_cors
+# @enable_cors
 def graficaPreciosDiariosGET():
     '''
     Plantilla de edicion o creacion de contratos
     '''
-    print "GET priceprofor"
+    print "GET smehogar"
     ''' no se grafica nada en el GET '''
 #     noneList = []
 #     dateString = ''
@@ -197,31 +215,40 @@ def graficaPreciosDiariosGET():
     dateTime = findLastDayDocument()
     dic = preciosDiarios(dateTime)
     dateString = str(str(dateTime.day)+'/'+str(dateTime.month)+'/'+str(dateTime.year))
+
     minMaxTuple = relativeExtremes(dic)
-    preciosListSeries = colorChart(dateTime, minMaxTuple)
-    print preciosListSeries
+    preciosList = colorChart(dateTime, minMaxTuple)
+
+    vector = list()
+    for element in range(1,len(dic['precios'])):
+        vector.append(dic['precios'][element][1])
+    meanList = averageList(vector)
+    preciosList = lineChart(dateTime, preciosList, meanList)
+
 #     return template('sme_precios_diarios',
     return template('priceprofor_precios_diarios',
 #                     preciosList=noneList,
 #                     preciosList=dic['precios'],
-                    preciosList=preciosListSeries,
+                    preciosList=preciosList,
                     fecha=dateString,
                     mensaje=dic['mensaje'],
-                    minMax=minMaxTuple)
+                    minMax=minMaxTuple,
+                    meanList=meanList)
 
 @route('/PreciosDiarios', method='POST')
-@enable_cors
+# @enable_cors
 def graficaPreciosDiariosPOST():
     '''
     Plantilla de edicion o creacion de contratos
     '''
-    print "POST priceprofor"
+    print "POST smehogar"
     dateString = request.forms.get("select")
     # print dateString
     if dateString == '':
         dic = preciosDiarios()
         minMaxTuple = ('','')
-        preciosListSeries = dic['precios']
+        preciosList = dic['precios']
+        meanList = None
     else:
         dateTime = datetime.strptime(dateString, '%d/%m/%Y')
         # print dateTime
@@ -229,17 +256,25 @@ def graficaPreciosDiariosPOST():
         # print dic
         if dic['precios'] == [[]]:
             minMaxTuple = ('','')
-            preciosListSeries = dic['precios']
+            preciosList = dic['precios']
+            meanList = None
         else:
             minMaxTuple = relativeExtremes(dic)
-            preciosListSeries = colorChart(dateTime, minMaxTuple)
+            preciosList = colorChart(dateTime, minMaxTuple)
+            vector = list()
+            for element in range(1,len(dic['precios'])):
+                vector.append(dic['precios'][element][1])
+            meanList = averageList(vector)
+            preciosList = lineChart(dateTime, preciosList, meanList)
+
 #     return template('sme_precios_diarios',
     return template('priceprofor_precios_diarios',
 #                     preciosList=dic['precios'],
-                    preciosList=preciosListSeries,
+                    preciosList=preciosList,
                     fecha=dateString,
                     mensaje=dic['mensaje'],
-                    minMax=minMaxTuple)
+                    minMax=minMaxTuple,
+                    meanList=meanList)
 
 # from sys import path
 # path.append('libs')
@@ -294,7 +329,7 @@ def graficaTecnologiasDiariasGET():
                     mensaje=dic['mensaje'],
 #                     minMax=minMaxTuple
                     )
-
+ 
 @route('/TecnologiasDiarias', method='POST')
 @enable_cors
 def graficaTecnologiasDiariasPOST():
@@ -342,41 +377,13 @@ def graficaModelosPrediccionGET():
     Callback de '/ModelosPrediccion'.
     Este callback tiene que Buscar el ultimo documento dsiponible en la collection de Previsiones.
     '''
-    # Necesitamos de saber la fecha del ultimo dato disponible de precios.
     dateTime = findLastDayDocumentTechnology()
     dic = tecnologiasDiarias(dateTime)
     dateString = str(str(dateTime.day)+'/'+str(dateTime.month)+'/'+str(dateTime.year))
 
     collection = Connection(host=None).mercadodiario.modelosHTES
-#     dayahead = datetime(2014,5,19)
-#     dayahead = datetime(2014,5,19)
     dayahead = datetime(2014,7,14)
     resultsdayahead = collection.find({ "dayahead" : {"$in": [dayahead]} })
-
-#     arrayTDT = list()
-#     arrayTDT.append(['Date', 'Precio'])
-#     for element in resultsdayahead:
-#         if element['tipo'] == 'working':
-#             dt = datetime(element['fecha'].year, element['fecha'].month, element['fecha'].day, element['hora'])
-#             arrayTDT.append([str(date.strftime(dt, '%Y/%m/%d %H:%M:%S')), element['PreciosES']])
-#     tecnologiasListSeries = arrayTDT
-
-#     VAR0 = list()
-#     VAR1 = list()
-#     VAR2 = list()
-#     arrayTDT = list()
-#     arrayTDT.append(['Date', 'Working','Model'])
-#     for element in resultsdayahead:
-#         if element['tipo'] == 'working':
-#             dt = datetime(element['fecha'].year, element['fecha'].month, element['fecha'].day, element['hora'])
-#             VAR0.append(str(date.strftime(dt, '%Y/%m/%d %H:%M:%S')))
-#         if element['tipo'] == 'working':
-#             VAR1.append(element['PreciosES'])
-#         if element['tipo'] == 'model':
-#             VAR2.append(element['PreciosES'])
-#     for index in range(len(VAR0)):
-#         arrayTDT.append([ VAR0[index], VAR1[index], VAR2[index] ])
-#     tecnologiasListSeries = arrayTDT
 
     VAR0 = list()
     VAR1 = list()
@@ -387,21 +394,15 @@ def graficaModelosPrediccionGET():
 #     VAR6 = list()
 #     VAR7 = list()
     arrayTDT = list()
-#     emptyValue = 'null'
-#     emptyValue = -100
     emptyValue = None
 
-#     arrayTDT.append( ['Date', 'Working', 'Model', 'Teste', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, 'Dayahead'] )
     arrayTDT.append( ['Fechayhora', 'Datos', 'Modelo', 'Prediccion', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}] )
-#     arrayTDT.append( ['DateTime', 'Data', 'Model', 'Prediction', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, 'Dayahead'] )
     for element in resultsdayahead:
-#         if element['fecha'] <= dayahead + timedelta(2) and element['fecha'] >= dayahead - timedelta(7):
         if element['fecha'] <= dayahead + timedelta(1) and element['fecha'] >= dayahead - timedelta(7):
-#         if element['fecha'] >= datetime(2014,4,19) and element['fecha'] <= datetime(2014,5,21):
             # print element['fecha']
             if element['tipo'] == 'working' or element['tipo'] == 'teste':
                 dt = datetime(element['fecha'].year, element['fecha'].month, element['fecha'].day, element['hora'])
-#                 VAR0.append(str(date.strftime(dt, '%Y/%m/%d %H:%M:%S')))
+                # VAR0.append(str(date.strftime(dt, '%Y/%m/%d %H:%M:%S')))
                 VAR0.append(str(date.strftime(dt, '%Y/%m/%d %H:%M')))
 
             if element['tipo'] == 'working':
@@ -436,9 +437,7 @@ def graficaModelosPrediccionGET():
 #                 VAR7.append(emptyValue)
 
     for index in range(len(VAR0)):
-#         arrayTDT.append([ VAR0[index], VAR1[index], VAR2[index], VAR3[index], VAR4[index], VAR5[index], -100 ])
         arrayTDT.append([ VAR0[index], VAR1[index], VAR2[index], VAR3[index], VAR4[index], VAR5[index]])
-#         arrayTDT.append([ VAR0[index], VAR1[index], VAR2[index], VAR3[index], VAR4[index], VAR5[index], VAR6[index], VAR7[index], -100 ])
 
 #     arrayTDTda = list()
 #     for index in range(len(arrayTDT)):
@@ -450,31 +449,20 @@ def graficaModelosPrediccionGET():
 #             daList.insert(6,100)
 #             arrayTDTda.append(daList)
 #         arrayTDTda.append(arrayTDT[index])
-# 
 #     for index in range(len(arrayTDTda)):
 #         if arrayTDTda[index][0] > '2014/05/18 00:00:00' and arrayTDTda[index][0] < '2014/05/19 01:00:00':
 #             print arrayTDTda[index]
 
     print ''
 
-#     tecnologiasListSeries = arrayTDTda
     tecnologiasListSeries = arrayTDT
-
-#     print arrayTDT
-#     print ''
+    # tecnologiasListSeries = arrayTDTda
 
     print dayahead
     print ''
 
-#     print len(VAR0)
-#     print len(VAR1)
-#     print len(VAR2)
-#     print len(VAR3)
-#     print ''
-
-    # "json.dumps" interpreta los None de python como null para google
+    ''' json.dumps interpreta "None" de python como "null" para google '''
     return template('priceprofor_modelos_prediccion',
-#                     tecnologiasList=tecnologiasListSeries,
                     tecnologiasList=dumps(tecnologiasListSeries),
                     fecha=dateString,
                     mensaje=dic['mensaje'],

@@ -22,30 +22,34 @@ google.load("visualization", "1", {packages:["corechart"]});
 		var options = {
 		//'is3D':true,
 		title: 'MERCADO DIARIO ELECTRICO',
-		pointSize: 6,
+		//pointSize: 6,
 		titleTextStyle:  {color: '#000000', fontName: 'Roboto', fontSize: '22', bold: 'true', italic: 'false'},
-		width: '750', 
+		width: '750',
 		height: '400',
 		vAxis: {
 			title: 'Precio (€ / MWh)',
 			textStyle:{color: '#000000', fontName: 'Roboto', fontSize: '14', bold: 'false', italic: 'true'},
-	  	    titleTextStyle: {/*color:'#8253E8',*/color: '#000000', fontName: 'Roboto', fontSize: '18', bold: 'false', italic: 'false'}, /*gridlines: {color: '#00ff00', count: 6},*/
-	  	    viewWindow: {min: 0}},
+	  	    titleTextStyle: {/*color:'#8253E8',*/color: '#000000', fontName: 'Roboto', fontSize: '18', bold: 'false', italic: 'false'},
+	  	    /*gridlines: {color: '#00ff00', count: 6},*/
+	  	    viewWindow: {min: 0},
+	  	    },
 	 	hAxis: {
 			title: 'Hora del dia (h)',
 			//slantedTextAngle: 90,
 		    //slantedText: false,
 			textStyle: {color: '#000000', fontName: 'Roboto', fontSize: '14', bold: 'false', italic: 'true'},
-	    	titleTextStyle: {/*color: '#8253E8',*/color: '#000000', fontName: 'Roboto', fontSize: '18', bold: 'false', italic: 'false'}, gridlines: {color: '#00ff00', count: 6}, viewWindowMode: 'pretty'},
+	    	titleTextStyle: {/*color: '#8253E8',*/color: '#000000', fontName: 'Roboto', fontSize: '18', bold: 'false', italic: 'false'},
+	    	gridlines: {color: '#00ff00', count: 6},
+	    	viewWindowMode: 'pretty'
+	    	},
 	  		curveType: 'function',
 	  		//colors: ['#8253E8'],
 	  		//colors: ['blue'],
 	  		backgroundColor: {stroke: '#000000', strokeWidth: '2', /*fill: '#D1FFC6'*/},
-	  		legend: {position: 'none'},
-	  		//seriesType: "line",
-	  		seriesType: "bars",
-            //series: {3: {type: "bars"},
 			//legend: { position: 'right'},
+	  		legend: {position: 'none'},
+	  		seriesType: "bars",
+	        series: {1: {type: "line", color: '#f1ca3a'}}
 	  		};
   	% if preciosList != [[]]:
   		/* var chart = new google.visualization.LineChart(document.getElementById('chart_div')); */
@@ -124,12 +128,13 @@ Morris.Donut({
    	<!-- color del boton enviar -->
    	<!-- <input type="submit" class="btn btn-success"></input> -->
    	<input type="submit" value="Enviar" class="btn btn-primary"></input>
-		<div><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{fecha}}
- 		% if mensaje:
-			&nbsp;&nbsp;&nbsp;&nbsp;{{mensaje}}
-		% end
-		<!-- </div> -->
-	</form>
+		<div><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{! fecha}}
+		%if mensaje:
+			&nbsp;&nbsp;&nbsp;&nbsp;{{! mensaje}}
+		%end
+	<!-- para que la fecha quede pegada al grafico -->
+	<!-- 	</div> -->
+</form>
 
 	<div id="chart_div" style="width: 800px; height: 400px;"></div>
 
@@ -187,16 +192,26 @@ Morris.Donut({
 
 		% end
 
-		% if not mensaje:
-			% if fechaDT:
-				% if (fechaDT == currentDate or fechaDT == currentDate + timedelta(1)) and (indice != 0):
-					<div id="donut-example" style="width:180px; margin: -578px 0 0 760px;"></div>
-					<div id="donut-example2" style="width:180px; margin: -100px 0 0 760px;"></div>
-				% else:
-					<div id="donut-example" style="width:180px; margin: -490px 0 0 760px;"></div>
-					<div id="donut-example2" style="width:180px; margin: -100px 0 0 760px;"></div>
+		% if fechaDT:
+			% # hay una diferencia de 100 px dependiendo de si el donut lo queremos dentro o fuera
+			% if (fechaDT == currentDate or fechaDT == currentDate + timedelta(1)) and (indice != 0):
+				% if preciosList != [[]]:
+				<div id="donut-example" style="width:180px; margin: -575px 0 0 760px;"></div>
+				<div id="donut-example2" style="width:180px; margin: -100px 0 0 760px;"></div>
+				% end
+			% else:
+				% if preciosList != [[]]:
+				<div id="donut-example" style="width:180px; margin: -490px 0 0 760px;"></div>
+				<div id="donut-example2" style="width:180px; margin: -100px 0 0 760px;"></div>
 				% end
 			% end
+
+			% if meanList:
+			<div style="width:180px; margin: -310px 0 0 795px;"><p style="font-size:17px; line-height: 14px; color:#f1ca3a;"><b>Precio MEDIO </b></p>
+			<p style="font-size:15px; line-height: 14px; color:#f1ca3a;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{meanList}}</p></div>
+			<div style="width:180px; margin: -265px 0 0 785px;"><p style="font-size:17px; line-height: 14px;"><b>Precio (€/MWh) </b></p>
+			% end
+
 		% end
 
 	% end
