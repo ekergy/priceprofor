@@ -99,11 +99,16 @@ def findLastDayDocument():
 # from sys import path
 # path.append('libs')
 # path.append('wsgi')
-# from controllers.sme_graficas import relativeExtremes
-# relativeExtremes()
+# from controllers.priceprofor_graficas import relativeExtremes, preciosDiarios
+# from datetime import datetime
+# dateTime = datetime(2014,7,9)
+# dic = preciosDiarios(dateTime)
+# relativeExtremes(dic)
 def relativeExtremes(dic):
-    '''
-    '''
+    """
+    Esta funcion devuelve el par maximo y el par minimo de una lista en que los elementos es un par de valores.
+    return a list/tuple  (minPrice, maxPrice, posMinPrice, posMaxPrice, posMinPriceSig, posMaxPriceSig)
+    """
     # dic = preciosDiarios(datetime(2014,6,16))
 
     def dosDigitos(num):
@@ -119,19 +124,20 @@ def relativeExtremes(dic):
             pricesList.append(element[1])
         pricesList.pop(0)
         minPrice = min(pricesList)
+        maxPrice = max(pricesList)
         posMinPrice = dosDigitos(pricesList.index(min(pricesList)))
         posMinPriceSig = dosDigitos(pricesList.index(min(pricesList))+1)
-        maxPrice = max(pricesList)
         posMaxPrice = dosDigitos(pricesList.index(max(pricesList)))
         posMaxPriceSig = dosDigitos(pricesList.index(max(pricesList))+1)
     else:
         minPrice = ''
-        posMinPrice =''
         maxPrice = ''
+        posMinPrice =''
         posMaxPrice = ''
         posMinPriceSig = ''
         posMaxPriceSig = ''
     return minPrice, maxPrice, posMinPrice, posMaxPrice, posMinPriceSig, posMaxPriceSig
+#     return minPrice, maxPrice
 
 @route('/CProfileTemporadas', method=['OPTIONS','POST','GET'])
 @enable_cors
@@ -174,8 +180,9 @@ def colorChart(dateTime, minMaxTuple):
             # lista.append('#FF0000')
             lista.append('#dc3912')
         else:
-            # lista.append('#0080FF')
-            lista.append('#0099c6')
+            ''' estandar azul '''
+            # lista.append('#0099c6')
+            lista.append('#3366cc')
         preciosListSeries.append(lista)
     # print preciosListSeries
     return preciosListSeries
@@ -205,7 +212,7 @@ def graficaPreciosDiariosGET():
     '''
     Plantilla de edicion o creacion de contratos
     '''
-    print "GET smehogar"
+    print "GET"
     ''' no se grafica nada en el GET '''
 #     noneList = []
 #     dateString = ''
@@ -241,7 +248,7 @@ def graficaPreciosDiariosPOST():
     '''
     Plantilla de edicion o creacion de contratos
     '''
-    print "POST smehogar"
+    print "POST"
     dateString = request.forms.get("select")
     # print dateString
     if dateString == '':
@@ -382,7 +389,9 @@ def graficaModelosPrediccionGET():
     dateString = str(str(dateTime.day)+'/'+str(dateTime.month)+'/'+str(dateTime.year))
 
     collection = Connection(host=None).mercadodiario.modelosHTES
-    dayahead = datetime(2014,7,14)
+#     dayahead = datetime(2014,7,14)
+#     dayahead = datetime(2014,6,1)
+    dayahead = datetime(2014,6,6)
     resultsdayahead = collection.find({ "dayahead" : {"$in": [dayahead]} })
 
     VAR0 = list()
@@ -453,17 +462,15 @@ def graficaModelosPrediccionGET():
 #         if arrayTDTda[index][0] > '2014/05/18 00:00:00' and arrayTDTda[index][0] < '2014/05/19 01:00:00':
 #             print arrayTDTda[index]
 
+    print 'DAYAHEAD'
+    print dayahead.date()
     print ''
-
-    tecnologiasListSeries = arrayTDT
-    # tecnologiasListSeries = arrayTDTda
-
-    print dayahead
+    print arrayTDT
     print ''
 
     ''' json.dumps interpreta "None" de python como "null" para google '''
     return template('priceprofor_modelos_prediccion',
-                    tecnologiasList=dumps(tecnologiasListSeries),
+                    modelosPrediccionList=dumps(arrayTDT),
                     fecha=dateString,
                     mensaje=dic['mensaje'],
                     )

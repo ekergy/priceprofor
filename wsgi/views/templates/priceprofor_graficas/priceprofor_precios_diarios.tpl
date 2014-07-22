@@ -46,12 +46,12 @@ google.load("visualization", "1", {packages:["corechart"]});
 	  		//colors: ['#8253E8'],
 	  		//colors: ['blue'],
 	  		backgroundColor: {stroke: '#000000', strokeWidth: '2', /*fill: '#D1FFC6'*/},
-			//legend: { position: 'right'},
-	  		legend: {position: 'none'},
+	  		//legend: {position: 'none'},
+			legend: { position: 'right'},
 	  		seriesType: "bars",
 	        series: {1: {type: "line", color: '#f1ca3a'}}
 	  		};
-  	% if preciosList != [[]]:
+	% if preciosList != [[]]:
   		/* var chart = new google.visualization.LineChart(document.getElementById('chart_div')); */
   		var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
 		chart.draw(data, options);
@@ -76,7 +76,7 @@ $(document).ready(function() {
 Morris.Donut({
 	element: 'donut-example',
   	data: [ {label: "Precio MAX", value: {{minMax[1]}} },
-			//{label: "Hora del dia", value: {{minMax[3]}} }
+			//{label: "Hora del dia", value: #{{minMax[3]}} }
 		  ],
     //colors: ['#FF0000','#FF0000']
     colors: ['#dc3912','#dc3912']
@@ -93,7 +93,7 @@ $(document).ready(function() {
 Morris.Donut({
 	element: 'donut-example2',
   	data: [ {label: "Precio MIN", value: {{minMax[0]}} },
-			//{label: "Hora del dia", value: {{minMax[2]}} }
+			//{label: "Hora del dia", value: #{{minMax[2]}} }
 		  ],
 	//colors: ['#86B404','#86B404']
 	colors: ['#109618','#109618']

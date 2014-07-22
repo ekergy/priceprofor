@@ -13,8 +13,8 @@
 
 <script type="text/javascript">
 google.load("visualization", "1", {packages:["corechart"]});
-//alert(JSON.stringify({{! tecnologiasList}}));
-% if tecnologiasList != []:
+//alert(JSON.stringify({{! modelosPrediccionList}}));
+% if modelosPrediccionList != []:
 	//alert("if");
 	google.setOnLoadCallback(drawChart);
 	function drawChart() {
@@ -27,7 +27,7 @@ google.load("visualization", "1", {packages:["corechart"]});
  */		
 		//dateFormatter.format(data,0);
 		
-		var data = google.visualization.arrayToDataTable({{! tecnologiasList}});
+		var data = google.visualization.arrayToDataTable({{! modelosPrediccionList}});
 		
 //      var options = {
 //    	        width: 600,
@@ -95,7 +95,7 @@ google.load("visualization", "1", {packages:["corechart"]});
  			};
 
  		//interpolateNulls = true;
-	  	  	% if tecnologiasList != [[]]:
+	  	  	% if modelosPrediccionList != [[]]:
 		  		//var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
 		  		var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
 				chart.draw(data, options);
