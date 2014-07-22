@@ -8,6 +8,7 @@ from bottle import route
 
 # framework:
 from bottle import default_app
+
 # controllers:
 from controllers import resources
 from controllers import priceprofor_graficas

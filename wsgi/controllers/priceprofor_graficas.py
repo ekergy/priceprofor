@@ -415,33 +415,33 @@ def graficaModelosPrediccionGET():
                 VAR0.append(str(date.strftime(dt, '%Y/%m/%d %H:%M')))
 
             if element['tipo'] == 'working':
-                VAR1.append(element['PreciosES'])
+                VAR1.append(round(element['PreciosES'],2))
             elif element['tipo'] == 'teste':
                 VAR1.append(emptyValue)
             if element['tipo'] == 'model':
-                VAR2.append(element['PreciosES'])
+                VAR2.append(round(element['PreciosES'],2))
             elif element['tipo'] == 'teste':
                 VAR2.append(emptyValue)
 
             if element['tipo'] == 'teste':
-                VAR3.append(element['PreciosES'])
+                VAR3.append(round(element['PreciosES'],2))
             elif element['tipo'] == 'working':
                 VAR3.append(emptyValue)
             if element['tipo'] == 'lower80':
-                VAR4.append(element['PreciosES'])
+                VAR4.append(round(element['PreciosES'],2))
             elif element['tipo'] == 'working':
                 VAR4.append(emptyValue)
             if element['tipo'] == 'upper80':
-                VAR5.append(element['PreciosES'])
+                VAR5.append(round(element['PreciosES'],2))
             elif element['tipo'] == 'working':
                 VAR5.append(emptyValue)
 
 #             if element['tipo'] == 'lower95':
-#                 VAR6.append(element['PreciosES'])
+#                 VAR6.append(round(element['PreciosES'],2))
 #             elif element['tipo'] == 'working':
 #                 VAR6.append(emptyValue)
 #             if element['tipo'] == 'upper95':
-#                 VAR7.append(element['PreciosES'])
+#                 VAR7.append(round(element['PreciosES'],2))
 #             elif element['tipo'] == 'working':
 #                 VAR7.append(emptyValue)
 
