@@ -99,6 +99,26 @@ def findLastDayDocument():
 # from sys import path
 # path.append('libs')
 # path.append('wsgi')
+# from controllers.sme_graficas import findLastDayDocument
+# findLastDayDocument()
+def findLastDayDocumentTechnology():
+    '''
+    Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
+    '''
+    ''' LOCAL '''
+#     collection = Connection(host=None).OMIEData.OMIEStudyData
+    ''' SERVIDOR '''
+    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.tecnologiases
+
+    currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
+    cursor = collection.find({"fecha": {"$lte": currentDT}})
+    for element in cursor:
+        lastelement = element
+    return lastelement['fecha']
+
+# from sys import path
+# path.append('libs')
+# path.append('wsgi')
 # from controllers.priceprofor_graficas import relativeExtremes, preciosDiarios
 # from datetime import datetime
 # dateTime = datetime(2014,7,9)
@@ -282,26 +302,6 @@ def graficaPreciosDiariosPOST():
                     mensaje=dic['mensaje'],
                     minMax=minMaxTuple,
                     meanList=meanList)
-
-# from sys import path
-# path.append('libs')
-# path.append('wsgi')
-# from controllers.sme_graficas import findLastDayDocument
-# findLastDayDocument()
-def findLastDayDocumentTechnology():
-    '''
-    Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
-    '''
-    ''' LOCAL '''
-#     collection = Connection(host=None).OMIEData.OMIEStudyData
-    ''' SERVIDOR '''
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.tecnologiases
-
-    currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
-    cursor = collection.find({"fecha": {"$lte": currentDT}})
-    for element in cursor:
-        lastelement = element
-    return lastelement['fecha']
 
 @route('/TecnologiasDiarias', method='GET')
 # @populateTecnologiasActualiza
