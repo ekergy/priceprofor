@@ -50,10 +50,12 @@ google.load("visualization", "1", {packages:["corechart"]});
 			title: 'Precio (€ / MWh)',
 			textStyle:{color: '#000000', fontName: 'Roboto', fontSize: '14', bold: 'false', italic: 'true'},
 	  	    titleTextStyle: {/*color:'#8253E8',*/color: '#000000', fontName: 'Roboto', fontSize: '18', bold: 'false', italic: 'false'}, /*gridlines: {color: '#00ff00', count: 6},*/
-	  	    viewWindow: {min: 0},
+	  	    //viewWindow: {min: 0},
 	  	  },
 	 	hAxis: {
-			title: 'Dias (precision en horas)',
+			//title: 'Dias (precision en horas)',
+			//title: 'Dias (de 0 a 23 horas)',
+			title: 'Dias (0 - 23 h)',
 			showTextEvery: 24,
 			//slantedText:true,
 			//slantedTextAngle: 30,
@@ -64,6 +66,7 @@ google.load("visualization", "1", {packages:["corechart"]});
 	    	titleTextStyle: {/*color: '#8253E8',*/color: '#000000', fontName: 'Roboto', fontSize: '18', bold: 'false', italic: 'false'}, gridlines: {color: '#00ff00', count: 6}, viewWindowMode: 'pretty'},
 	  		curveType: 'function',
 	  		backgroundColor: {stroke: '#000000', strokeWidth: '2', /*fill: '#D1FFC6'*/},
+			//ticks: [new Date(2014,6,6), new Date(2013,6,7)],
     	    //backgroundColor: "transparent",
           	//isStacked: true,
 			//bar: { groupWidth: '75%' },
