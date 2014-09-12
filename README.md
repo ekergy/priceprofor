@@ -28,6 +28,14 @@ git remote set-url origin https://djuan26@bitbucket.org/ekergy/priceprofor.git
 ```
 
 
-## Merojas introducidas al proyecto:
+## La Maquina principal para los calculos del kernelMarketPredictions es cygnus(192.168.1.154).
+
+TBD or TODO ... Añadir aqui como gestionar esta maquina:
+
+ssh 
+ruta proyecto
+otras configuraciontes especiales
+y software (y paquetes python) que hay que instalar para que el kernel funcione.
+
 
 
