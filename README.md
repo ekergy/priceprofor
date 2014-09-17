@@ -26,13 +26,3 @@ git remote set-url origin ssh://53a812b8e0b8cd8a67000159@priceprofor-ekergydavid
 
 git remote set-url origin https://djuan26@bitbucket.org/ekergy/priceprofor.git
 ```
-
-
-## La Maquina principal para los calculos del kernelMarketPredictions es cygnus(usuario@192.168.1.154).
-
-TBD or TODO ... Añadir aqui como gestionar esta maquina:
-
-ssh 
-ruta proyecto
-otras configuraciontes especiales
-y software (y paquetes python) que hay que instalar para que el kernel funcione.
