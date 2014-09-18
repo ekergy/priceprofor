@@ -56,7 +56,8 @@ google.load("visualization", "1", {packages:["corechart"]});
 			title: 'Dias (precision en horas)',
 			showTextEvery: 24,
 			slantedText:true,
-			slantedTextAngle: 30,
+			//slantedTextAngle: 30,
+			slantedTextAngle: 22.5,
 			//format = 'yyyy/MM/dd HH:mm',
 			//slantedTextAngle: 90,
 		    //slantedText: false,
@@ -67,23 +68,22 @@ google.load("visualization", "1", {packages:["corechart"]});
     	    //backgroundColor: "transparent",
           	//isStacked: true,
 			//bar: { groupWidth: '75%' },
-    	    //legend: {position: 'none'},
-			//legend: { position: 'right', maxLines: 6 },
-			//legend: { position: 'right'},
 
-			//series: {0: {type: "line"}},
+			//legend: {position: 'none'},
+			//legend: { position: 'right'},
+    	    //legend: { position: 'right', maxLines: 6 },
+
+    	    //series: {0: {type: "line"}},
     	    //series: {1: {type: "line"}},
     	    //series: {2: {type: "line"}},
-
     	    //series: {2: {type: "line"}, interpolateNulls: false},
- 			//'colors' : ["#194D86","#699A36"],
- 			//'colors' : ["black"],
-    	    //'colors' : ["black","red"],
-    	    //'colors' : ["black","red","blue"],
-    	    //'colors' : ["black","red","grey"],
-	  		//seriesType: "bars",
+
+    	    //seriesType: "bars",
 	  		//seriesType: "line",
 			//seriesType: "bars", series: {0: {type: "line", color: "red"}}
+
+    	    //'colors' : ["#194D86","#699A36"],
+    	    //'colors' : ["black","red","blue"],
  /*
 			annotation: {
                 // index here is the index of the DataTable column providing the annotation

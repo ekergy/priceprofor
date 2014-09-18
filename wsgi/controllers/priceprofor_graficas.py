@@ -30,19 +30,19 @@ def index():
     else:
         return 'actualizacion base de datos'
 
-@route('/machineCygnus')
-def machinecygnusCONNECTION():
-    '''
-    created index.html
-    '''
-    try:
-        print 'ssh'
-        # ssh indizen@192.168.1.154
-    except:
-        raise
-        return 'yes'
-    else:
-        return 'no'
+# @route('/machineCygnus')
+# def machinecygnusCONNECTION():
+#     '''
+#     created index.html
+#     '''
+#     try:
+#         print 'ssh'
+#         # ssh indizen@192.168.1.154
+#     except:
+#         raise
+#         return 'yes'
+#     else:
+#         return 'no'
 
 def enable_cors(fn):
     '''
