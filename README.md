@@ -26,8 +26,3 @@ git remote set-url origin ssh://53a812b8e0b8cd8a67000159@priceprofor-ekergydavid
 
 git remote set-url origin https://djuan26@bitbucket.org/ekergy/priceprofor.git
 ```
-
-
-## Merojas introducidas al proyecto:
-
-
