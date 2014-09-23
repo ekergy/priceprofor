@@ -27,10 +27,13 @@ from omelinfosys.omelhandlers import PreciosMibelHandler
 # # startDT = datetime(2014,1,1)
 # # endDT = datetime(2014,2,1)
 # from dbpreciosesmanager import populatePrecios
-# populatePrecios()
 # # populatePrecios(startDT,endDT)
+# populatePrecios()
 def populatePrecios(startDate=None, endDate=None):
     '''
+    PRECIOS actualiza la base de datos de PRECIOS del servidor
+    recordar que el metodo populatePrecios esta gobernado por una clase (cofirmar la conexion)
+
     populatePrecios por si solo gestiona la actualizacion de base de datos en LOCAL o SERVIDOR
     '''
     try:
@@ -82,7 +85,8 @@ def populatePrecios(startDate=None, endDate=None):
 # findLastPriceDocument()
 def findLastPriceDocument():
     '''
-    Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
+    Extraemos de la base de datos el ultimo documento
+    (en funcion de la fecha interna del propio documento)
     Hacer la query sin la fecha como input
     '''
     ins = DBPreciosES()
@@ -97,7 +101,7 @@ def findLastPriceDocument():
 # path.append('libs')
 # from datetime import datetime
 # fecha = datetime(2014,1,1)
-# from omelinfosys.dbpreciosesmanager import getpreciosesfromweb
+# from dbpreciosesmanager import getpreciosesfromweb
 # getpreciosesfromweb(fecha)
 def getpreciosesfromweb(fecha):
         '''
@@ -220,6 +224,42 @@ def preciosDiarios(fechayhora=None):
     dic['mensaje'] = messageList
     return dic
 
+####################################################################################################
+
+''' el metodo siguiente esta en desarrollo '''
+
+# # from sys import path
+# # path.append('libs')
+# # from dbpreciosesmanager import preciosSemanales
+# # preciosSemanales()
+# def preciosSemanales(fechayhora=None):
+#     '''
+#     '''
+#     dataHourList = list()
+#     dataDayList = list()
+#     dataWeekList = list()
+#     # from pymongo import Connection
+#     collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
+#     # from datetime import datetime
+#     fechayhora = datetime(2014,7,19)
+#     cursor = collection.find({ "fecha": {"$in": [fechayhora]} })
+# #     from datetime import timedelta
+#     for element in cursor:
+# #         dataDayList = [ element['fecha'], element['hora'], element['PreciosES'] ]
+#         dataHourList = [ element['fecha'] + timedelta(hours=element['hora']), element['PreciosES'] ]
+#         dataDayList.append(dataHourList)
+#     print dataDayList
+#     dataWeekList.append(dataDayList)
+
+'''
+dividir todo entre la prevision demanda
+buscar fechas distintas de verano, donde la energia gestionada supere a la prevision demanda
+ya que esto suele significar que el precio es muy bajo porque se ha cubierto toda la demanda
+leer priceprofor
+'''
+
+####################################################################################################
+
 # from sys import path
 # path.append('libs')
 # from dbtecnologiasesmanager import tecnologiasDiarias
@@ -291,11 +331,12 @@ def tecnologiasDiarias(fecha=None, hora=None):
 def priceAppli():
     '''
     Proporciona un json con vector precios y horas precio maximo/minimo (3 ultimos dias)
-    Intenta sacar los ultimos 3 dias disponibles SIN USAR FECHAR como input a la query.
-    o sea busca todas as fechas ordenalas y quedate con los ultimos 3 registros que por cierto ya vienen
-    ordenados y no hay que comprobar nada, si garantizamos que la base de datos esta siempre actualizada.
+    Intenta sacar los ultimos 3 dias disponibles SIN USAR FECHA como input a la query
+
+    O sea busca todas las fechas ordenalas y quedate con los ultimos 3 registros que por cierto ya vienen
+    ordenados y no hay que comprobar nada, si garantizamos que la base de datos esta siempre actualizada
     Hay que actualizar este metodo. No esta usando bien la configuracion de base de datos y esto invalida
-    el cambio de db a la hora desarrollar en "full local".
+    el cambio de db a la hora desarrollar en "full local"
     '''
 
     def maxList(priceList):
@@ -326,37 +367,163 @@ def priceAppli():
     ''' SERVIDOR '''
     collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
 
-    fecha = findLastPriceDocument()
-    fecha2 = fecha - timedelta(1)
-    fecha3 = fecha - timedelta(2)
+    today = findLastPriceDocument()
+    yesterday = today - timedelta(1)
+    beforeyesterday = today - timedelta(2)
 
-    cursor = collection.find({ "fecha": {"$in": [fecha]} })
+    cursor = collection.find({ "fecha": {"$in": [today]} })
     priceList = list()
     for element in cursor:
         priceList.append(element['PreciosES'])
-    priceDic[date.strftime(fecha, '%Y-%m-%d')] = {'mercado': priceList,
+    priceDic[date.strftime(today, '%Y-%m-%d')] = {'mercado': priceList,
                                                   'horamax': maxList(priceList),
                                                   'horamin': minList(priceList) }
 
-    cursor = collection.find({ "fecha": {"$in": [fecha2]} })
+    cursor = collection.find({ "fecha": {"$in": [yesterday]} })
     priceList = list()
     for element in cursor:
         priceList.append(element['PreciosES'])
-    priceDic[date.strftime(fecha2, '%Y-%m-%d')] = {'mercado': priceList,
+    priceDic[date.strftime(yesterday, '%Y-%m-%d')] = {'mercado': priceList,
                                                    'horamax': maxList(priceList),
                                                    'horamin': minList(priceList) }
 
-    cursor = collection.find({ "fecha": {"$in": [fecha3]} })
+    cursor = collection.find({ "fecha": {"$in": [beforeyesterday]} })
     priceList = list()
     for element in cursor:
         priceList.append(element['PreciosES'])
-    priceDic[date.strftime(fecha3, '%Y-%m-%d')] = {'mercado': priceList,
+    priceDic[date.strftime(beforeyesterday, '%Y-%m-%d')] = {'mercado': priceList,
                                                    'horamax': maxList(priceList),
                                                    'horamin': minList(priceList) }
 
     return priceDic
 
+####################################################################################################
 
+# from sys import path
+# path.append('libs')
+# from dbpreciosesmanager import forecastAppli
+# forecastAppli()
+def forecastAppli():
+    '''
+    Proporciona un json con vector precios de previsiones y confianzas (2 dias siguientes)
+    Intenta sacar los siguientes 2 dias disponibles SIN USAR FECHA como input a la query
+
+    O sea busca todas as fechas ordenalas y quedate con los ultimos 3 registros que por cierto ya vienen
+    ordenados y no hay que comprobar nada, si garantizamos que la base de datos esta siempre actualizada
+    Hay que actualizar este metodo. No esta usando bien la configuracion de base de datos y esto invalida
+    el cambio de db a la hora desarrollar en "full local"
+    '''
+
+    '''
+    {"2014-07-21": ... ,
+     "2014-07-22": {"prevision": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    "confianza": [[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0],
+                                  [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]]}
+     "2014-07-23": ... ,}
+    '''
+
+    forecastDic = dict()
+    # currentDate = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
+
+    ''' LOCAL '''
+#     collection = Connection(host=None).mercadodiario.modelosHTES
+    ''' SERVIDOR '''
+    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHTES
+
+    dayahead = findLastForecastDocument()
+    twodayahead = dayahead + timedelta(1)
+
+    ''' dayahead '''
+    cursor = collection.find({ "dayahead": {"$in": [dayahead]},
+                               "fecha": {"$in": [dayahead]},
+                               "tipo": {"$in": ["teste"]} })
+    forecastList = list()
+    for element in cursor:
+#         forecastList.append(element['PreciosES'])
+        forecastList.append(round(element['PreciosES'],2))
+
+    ''' upper80 dayahead '''
+    cursor = collection.find({ "dayahead": {"$in": [dayahead]},
+                               "fecha": {"$in": [dayahead]},
+                               "tipo": {"$in": ["upper80"]} })
+    upper80List = list()
+    for element in cursor:
+        upper80List.append(element['PreciosES'])
+
+    ''' lower80 dayahead '''
+    cursor = collection.find({ "dayahead": {"$in": [dayahead]},
+                               "fecha": {"$in": [dayahead]},
+                               "tipo": {"$in": ["lower80"]} })
+    lower80List = list()
+    for element in cursor:
+        lower80List.append(element['PreciosES'])
+
+    confidenceList = list()
+    for index in range(len(forecastList)):
+        confidenceList.append([ lower80List[index], upper80List[index] ])
+
+    forecastDic[date.strftime(dayahead, '%Y-%m-%d')] = {'prevision': forecastList,
+                                                        'confianza': confidenceList }
+
+    ''' twodayahead '''
+    cursor = collection.find({ "dayahead": {"$in": [dayahead]},
+                               "fecha": {"$in": [twodayahead]},
+                               "tipo": {"$in": ["teste"]} })
+    forecastList = list()
+    for element in cursor:
+        forecastList.append(round(element['PreciosES'],2))
+
+    ''' upper80 twodayahead '''
+    cursor = collection.find({ "dayahead": {"$in": [dayahead]},
+                               "fecha": {"$in": [twodayahead]},
+                               "tipo": {"$in": ["upper80"]} })
+    upper80List = list()
+    for element in cursor:
+        upper80List.append(element['PreciosES'])
+
+    ''' lower80 twodayahead '''
+    cursor = collection.find({ "dayahead": {"$in": [dayahead]},
+                               "fecha": {"$in": [twodayahead]},
+                               "tipo": {"$in": ["lower80"]} })
+    lower80List = list()
+    for element in cursor:
+        lower80List.append(element['PreciosES'])
+
+    confidenceList = list()
+    for index in range(len(forecastList)):
+        confidenceList.append([ lower80List[index], upper80List[index] ])
+
+    forecastDic[date.strftime(twodayahead, '%Y-%m-%d')] = {'prevision': forecastList,
+                                                           'confianza': confidenceList }
+
+    return forecastDic
+
+# from sys import path
+# path.append('libs')
+# from dbpreciosesmanager import findLastForecastDocument
+# findLastForecastDocument()
+def findLastForecastDocument():
+    '''
+    Extraemos de la base de datos el ultimo documento
+    (en funcion de la fecha interna del propio documento)
+    Hacer la query sin la fecha como input
+    '''
+
+    ''' LOCAL '''
+#     collection = Connection(host=None).mercadodiario.modelosHTES
+    ''' SERVIDOR '''
+    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHTES
+
+#     ins = DBPreciosES()
+#     collection = ins.get_connection()
+
+    currentDT = datetime.now() + timedelta(1)
+    cursor = collection.find({"dayahead": {"$lte": currentDT}})
+    for element in cursor:
+        lastelement = element
+    return lastelement['dayahead']
+
+####################################################################################################
 
 ''' PROFOR necesitaba esta clase para que funcionara de manera independiente al resto de codigo '''
 # class PreciosMibelHandler(object):
@@ -401,7 +568,7 @@ class DBPreciosES(object):
         ''' LOCAL '''
 #         self.connectiondetails['host'] = None
         ''' SERVIDOR '''
-        # self.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
+        self.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
 
         self.connectiondetails['db_name'] = 'mercadodiario'
         self.connectiondetails['coll_name'] = 'precioses'
@@ -410,7 +577,7 @@ class DBPreciosES(object):
     def updatedbprecioses(self):
         '''
         # insert or update
-        # no olvidar de poner un sort por fecha y luego por hora.
+        # no olvidar de poner un sort por fecha y luego por hora
         '''
         try:
             self.setCollection()
@@ -428,7 +595,7 @@ class DBPreciosES(object):
             if results.count() == 1:
                 collection.update({"fecha": {"$in": [self.fecha]} , "hora" : {"$in" : [self.hora]} }, {"$set": jsontoinsert})
             if results.count() > 1:
-                raise Exception('La base de datos tiene mas de un registro para la dada fecha.')
+                raise Exception('La base de datos tiene mas de un registro para la fecha dada')
         except:
             raise
         else:
