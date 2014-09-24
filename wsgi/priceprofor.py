@@ -14,7 +14,7 @@ from controllers import resources
 from controllers import priceprofor_graficas
 from controllers import priceprofor_single_plots
 from controllers import sme_mde_viz
-from controllers import priceprofor_restfullAPI
+from controllers import priceprofor_RESTful_API
 
 ''' subir script al servidor '''
 from controllers import priceprofor_precioshorarios
@@ -37,7 +37,7 @@ except:
 finally:
     TEMPLATE_PATH.append(ospath.join(root_app, 'wsgi', 'views', 'templates'))
     TEMPLATE_PATH.append(ospath.join(root_app, 'wsgi', 'views', 'templates','priceprofor_graficas'))
-    TEMPLATE_PATH.append(ospath.join(root_app, 'wsgi', 'views', 'templates','priceprofor_restfullAPI'))
+    TEMPLATE_PATH.append(ospath.join(root_app, 'wsgi', 'views', 'templates','priceprofor_RESTful_API'))
 
 CONN_URI=None
 

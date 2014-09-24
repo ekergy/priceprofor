@@ -642,7 +642,7 @@ def graphicpredictionmodelsGET():
 # from sys import path
 # path.append('libs')
 # path.append('wsgi')
-# from controllers.priceprofor_restfulAPI import forecastArrayTDT
+# from controllers.priceprofor_RESTful_API import forecastArrayTDT
 # forecastArrayTDT()
 def forecastArrayTDT():
     '''
