@@ -24,5 +24,5 @@ git remote set-url origin ssh://542bc3bb4382ec4e520010a0@priceprofor-ekergy.rhcl
 ```
 #!git
 
-git remote set-url origin https://djuan26@bitbucket.org/ekergy/priceprofor.git
+git remote set-url origin https://****usarioBitbucket***@bitbucket.org/ekergy/priceprofor.git
 ```
