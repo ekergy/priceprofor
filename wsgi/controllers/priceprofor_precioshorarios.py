@@ -8,7 +8,7 @@ from bottle import route, template
 # LOCAL
 from datetime import datetime
 from priceprofor_graficas import preciosDiarios, tecnologiasDiarias
-from priceprofor_graficas import findLastDayDocument, findLastDayDocumentTechnology
+from priceprofor_graficas import findLastDayDocument, findLastDayDocumentTechnology, findLastDayDocumentThree
 from priceprofor_graficas import relativeExtremes, colorChart, averageList, lineChart
 from priceprofor_graficas import lineChartMulti, lineChartMultiPrice
 from omelinfosys.reehandlers import getdemandeforcast, getpreveoldd
@@ -203,7 +203,8 @@ def energiagestionadavalores():
     """
 
     ''' DATETIME '''
-    pricesDT = findLastDayDocument()
+#     pricesDT = findLastDayDocument()
+    pricesDT = findLastDayDocumentThree()
     technologyDT = findLastDayDocumentTechnology()
 #     pricesDT = datetime(2014,7,12)
 
@@ -252,7 +253,8 @@ def energiagestionadacoeficientes():
     """
 
     ''' DATETIME '''
-    pricesDT = findLastDayDocument()
+#     pricesDT = findLastDayDocument()
+    pricesDT = findLastDayDocumentThree()
 #     pricesDT = datetime(2014,7,12)
 
     technologyDT = findLastDayDocumentTechnology()
