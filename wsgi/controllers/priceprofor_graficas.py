@@ -121,6 +121,29 @@ def findLastDayDocument():
     cursor = collection.find({"fecha": {"$lte": currentDT}})
     for element in cursor:
         lastelement = element
+        print element
+    return lastelement['fecha']
+
+# from sys import path
+# path.append('libs')
+# path.append('wsgi')
+# from controllers.priceprofor_graficas import findLastDayDocumentThree
+# findLastDayDocumentThree()
+def findLastDayDocumentThree():
+    '''
+    Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
+    '''
+    ''' LOCAL '''
+#     collection = Connection(host=None).mercadodiario.precioses
+    ''' SERVIDOR '''
+    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
+
+    currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
+    fecha = currentDT - timedelta(3)
+    cursor = collection.find({"fecha": {"$lte": fecha}})
+    for element in cursor:
+        lastelement = element
+        print element
     return lastelement['fecha']
 
 # from sys import path
@@ -251,10 +274,10 @@ def lineChart(dateTime, preciosList, meanList):
             preciosList[index] = preciosList[index]+palabraType
         else:
             preciosList[index] = preciosList[index]+meanType
-    print ''
-    print 'preciosList'
-    print preciosList
-    print ''
+#     print ''
+#     print 'preciosList'
+#     print preciosList
+#     print ''
     return preciosList
 
 def lineChartMulti(dateTime, preciosList, meanList, previsionEolicaList, previsionDemandaList, energiaGestionadaList):
@@ -282,10 +305,10 @@ def lineChartMulti(dateTime, preciosList, meanList, previsionEolicaList, previsi
             preciosList[index] = preciosList[index] + [previsionEolicaList[index-1]] + [previsionDemandaList[index-1]] + [energiaGestionadaList[index-1]]
 
     ''' si no queremos representar el precio ni su color, dada el diferente orden de magnitud '''
-    for element in preciosList:
-        del element[1]
-    for element in preciosList:
-        del element[1]
+#     for element in preciosList:
+#         del element[1]
+#     for element in preciosList:
+#         del element[1]
 
 #     print ''
 #     print preciosList
@@ -372,9 +395,9 @@ def lineChartMultiPrice(dateTime, preciosList, meanList, previsionEolicaList, pr
 #     for element in preciosList:
 #         del element[1]
 
-    print ''
-    print preciosList
-    print ''
+#     print ''
+#     print preciosList
+#     print ''
 
     return preciosList
 
@@ -634,6 +657,118 @@ def graphicpredictionmodelsGET():
 
     ''' json.dumps interpreta "None" de python como "null" para google '''
     return template('priceprofor_modelo_prediccion',
+                    modelosPrediccionList=dumps(arrayTDT),
+                    fecha=dateString,
+                    mensaje=dic['mensaje'],
+                    )
+
+@route('/PredictionModelsARNN', method='GET')
+@enable_cors
+def graphicpredictionmodelsarnnGET():
+    '''
+    Callback de '/PredictionModels'.
+    Este callback tiene que Buscar el ultimo documento dsiponible en la collection de Previsiones.
+
+    Este codigo incluye tanto modelo (working, model) como prediccion (teste, intervals)
+    '''
+    dateTime = findLastDayDocumentTechnology()
+    dic = tecnologiasDiarias(dateTime)
+    dateString = str(str(dateTime.day)+'/'+str(dateTime.month)+'/'+str(dateTime.year))
+
+    ''' LOCAL '''
+    collection = Connection(host=None).mercadodiario.modelosARNN
+    ''' SERVIDOR '''
+#     collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosARNN
+
+    ''' el dia relevante a graficar es el dayahead y sus predicciones de precio '''
+    # dayahead = datetime(2014,6,1)
+    currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
+    dayahead = currentDate + timedelta(1)
+#     DAYAHEAD = datetime(2014,10,7)
+
+    ''' a partir de las 15:00 se podria ejecutar esta linea de codigo '''
+#     dayahead = currentDate + timedelta(2)
+
+#     resultsdayahead = collection.find({ "dayahead" : {"$in": [dayahead]} })
+    resultsdayahead = collection.find({ "dayaheadNN" : {"$in": [dayahead]} })
+
+    VAR0 = list()
+    VAR1 = list()
+    VAR2 = list()
+    VAR3 = list()
+    VAR4 = list()
+    VAR5 = list()
+#     VAR6 = list()
+#     VAR7 = list()
+    arrayTDT = list()
+    emptyValue = None
+
+    arrayTDT.append( ['Fechayhora', 'Datos', 'Modelo', 'Prediccion', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}] )
+    for element in resultsdayahead:
+        if element['fecha'] <= dayahead + timedelta(1) and element['fecha'] >= dayahead - timedelta(7):
+            # print element['fecha']
+            if element['tipo'] == 'working' or element['tipo'] == 'teste':
+                dt = datetime(element['fecha'].year, element['fecha'].month, element['fecha'].day, element['hora'])
+                # VAR0.append(str(date.strftime(dt, '%Y/%m/%d %H:%M:%S')))
+                # VAR0.append(str(date.strftime(dt, '%Y/%m/%d %H:%M')))
+                VAR0.append(str(date.strftime(dt, '%d/%m/%Y %H:%M')))
+
+            if element['tipo'] == 'working':
+                VAR1.append(round(element['PreciosES'],2))
+            elif element['tipo'] == 'teste':
+                VAR1.append(emptyValue)
+            if element['tipo'] == 'model':
+                VAR2.append(round(element['PreciosES'],2))
+            elif element['tipo'] == 'teste':
+                VAR2.append(emptyValue)
+
+            if element['tipo'] == 'teste':
+                VAR3.append(round(element['PreciosES'],2))
+            elif element['tipo'] == 'working':
+                VAR3.append(emptyValue)
+            if element['tipo'] == 'lower80':
+                VAR4.append(round(element['PreciosES'],2))
+            elif element['tipo'] == 'working':
+                VAR4.append(emptyValue)
+            if element['tipo'] == 'upper80':
+                VAR5.append(round(element['PreciosES'],2))
+            elif element['tipo'] == 'working':
+                VAR5.append(emptyValue)
+
+#             if element['tipo'] == 'lower95':
+#                 VAR6.append(round(element['PreciosES'],2))
+#             elif element['tipo'] == 'working':
+#                 VAR6.append(emptyValue)
+#             if element['tipo'] == 'upper95':
+#                 VAR7.append(round(element['PreciosES'],2))
+#             elif element['tipo'] == 'working':
+#                 VAR7.append(emptyValue)
+
+    for index in range(len(VAR0)):
+        arrayTDT.append([ VAR0[index], VAR1[index], VAR2[index], VAR3[index], VAR4[index], VAR5[index]])
+
+#     arrayTDTda = list()
+#     for index in range(len(arrayTDT)):
+#         if arrayTDT[index][0] == date.strftime(dayahead, '%Y/%m/%d %H:%M:%S'):
+#             daList = list()
+#             for element in arrayTDT[index]:
+#                 daList.append(element)
+#             daList.pop(6)
+#             daList.insert(6,100)
+#             arrayTDTda.append(daList)
+#         arrayTDTda.append(arrayTDT[index])
+#     for index in range(len(arrayTDTda)):
+#         if arrayTDTda[index][0] > '2014/05/18 00:00:00' and arrayTDTda[index][0] < '2014/05/19 01:00:00':
+#             print arrayTDTda[index]
+
+    print 'DAYAHEAD'
+    print dayahead.date()
+    print ''
+    # print arrayTDT
+    # print ''
+
+    ''' json.dumps interpreta "None" de python como "null" para google '''
+    return template('priceprofor_modelo_prediccion_ARNN',
                     modelosPrediccionList=dumps(arrayTDT),
                     fecha=dateString,
                     mensaje=dic['mensaje'],
