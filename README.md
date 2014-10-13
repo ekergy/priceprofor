@@ -17,12 +17,12 @@ git remote -v
 ```
 #!git
 
-git remote set-url origin ssh://53a812b8e0b8cd8a67000159@priceprofor-ekergydavid.rhcloud.com/~/git/priceprofor.git/
+git remote set-url origin ssh://542bc3bb4382ec4e520010a0@priceprofor-ekergy.rhcloud.com/~/git/priceprofor.git/
 ```
 * Ahora ya podemos hacer commit y push para publicar los cambios en el servidor
 * Si queremos volver a fijar el repositorio de bitbucket usamos el comando:
 ```
 #!git
 
-git remote set-url origin https://djuan26@bitbucket.org/ekergy/priceprofor.git
+git remote set-url origin https://****usarioBitbucket***@bitbucket.org/ekergy/priceprofor.git
 ```
