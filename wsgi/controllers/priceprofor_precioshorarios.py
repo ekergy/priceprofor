@@ -10,6 +10,7 @@ from datetime import datetime
 from priceprofor_graficas import preciosDiarios, tecnologiasDiarias
 from priceprofor_graficas import findLastDayDocument, findLastDayDocumentTechnology
 from priceprofor_graficas import relativeExtremes, colorChart, averageList, lineChart
+from priceprofor_graficas import lineChartMulti, lineChartMultiPrice
 from omelinfosys.reehandlers import getdemandeforcast, getpreveoldd
 from omelinfosys.dbstudydatamanager import DBRawData
 
@@ -66,7 +67,6 @@ def precioshorarios():
     """
 
     '''
-    @TODO:
     dejar la tabla sola y la pantalla de dos graficas y tabla igual ambas que la del ultimo dia en html
     corregir la precision a dos decimales de los precios en la grafica de modelos de prediccion
     ha de haber 2 metodos de find last document dependiendo de si son precios o tecnologias
@@ -195,3 +195,109 @@ def energiagestionada():
                     preciosList=preciosList, meanList=meanList,
                     energiaGestionadaList=energiaGestionadaList,
                     previsionEolicaList=previsionEolicaList, previsionDemandaList=previsionDemandaList)
+
+@route('/EnergiaGestionadaValores', method='GET')
+def energiagestionadavalores():
+    """
+    son los valores de energia absolutos de tecnologias
+    """
+
+    ''' DATETIME '''
+    pricesDT = findLastDayDocument()
+    technologyDT = findLastDayDocumentTechnology()
+#     pricesDT = datetime(2014,7,12)
+
+    ''' PRICES '''
+    dic = preciosDiarios(pricesDT)
+    minmax = relativeExtremes(dic)
+
+    precios = list()
+    for element in dic['precios']:
+        precios.append(element[1])
+    precios.pop(0)
+
+    preciosList = colorChart(pricesDT, minmax)
+    vector = list()
+    for element in range(1,len(dic['precios'])):
+        vector.append(dic['precios'][element][1])
+
+    ''' FORECASTS '''
+    previsionEolicaList = getpreveoldd(technologyDT)
+    previsionDemandaList = getdemandeforcast(technologyDT)
+
+    ins = DBRawData()
+    ins.set_fecha(technologyDT)
+    ins.getDataFromWeb()
+    energiaGestionadaList = ins.ProduccionyDemandaES['TOTAL_DEMANDA']
+
+    meanList = averageList(vector)
+    # preciosList = lineChartMulti(pricesDT, preciosList, meanList, previsionEolicaList, previsionDemandaList, energiaGestionadaList)
+    preciosList = lineChartMulti(technologyDT, preciosList, meanList, previsionEolicaList, previsionDemandaList, energiaGestionadaList)
+
+#     priceMIN=minList(precios)['precio']
+#     priceMAX=maxList(precios)['precio']
+#     hoursMIN=minList(precios)['hora']
+#     hoursMAX=maxList(precios)['hora']
+
+    return template('priceprofor_energia_gestionada_valores', pricesDT=pricesDT, technologyDT=technologyDT,
+                    # minmax=minmax, priceMIN=priceMIN, priceMAX=priceMAX, hoursMIN=hoursMIN, hoursMAX=hoursMAX,
+                    preciosList=preciosList, meanList=meanList
+                    )
+
+@route('/EnergiaGestionadaCoeficientes', method='GET')
+def energiagestionadacoeficientes():
+    """
+    son los valores de energia relativos de tecnologias
+    al final se ha mantenido el periodo dia (no semana)
+    """
+
+    ''' DATETIME '''
+    pricesDT = findLastDayDocument()
+#     pricesDT = datetime(2014,7,12)
+
+    technologyDT = findLastDayDocumentTechnology()
+#     technologyDT = datetime(2014,1,5)
+
+    ''' demanda > gestionada '''
+#     technologyDT = datetime(2014,1,1)
+    ''' demanda = gestionada '''
+#     technologyDT = datetime(2014,3,1)
+    ''' demanda < gestionada '''
+#     technologyDT = datetime(2014,4,1)
+
+    ''' PRICES '''
+    dic = preciosDiarios(pricesDT)
+    minmax = relativeExtremes(dic)
+
+    precios = list()
+    for element in dic['precios']:
+        precios.append(element[1])
+    precios.pop(0)
+
+    preciosList = colorChart(pricesDT, minmax)
+    vector = list()
+    for element in range(1,len(dic['precios'])):
+        vector.append(dic['precios'][element][1])
+
+    ''' FORECASTS '''
+    previsionEolicaList = getpreveoldd(technologyDT)
+    previsionDemandaList = getdemandeforcast(technologyDT)
+
+    ins = DBRawData()
+    ins.set_fecha(technologyDT)
+    ins.getDataFromWeb()
+    energiaGestionadaList = ins.ProduccionyDemandaES['TOTAL_DEMANDA']
+
+    meanList = averageList(vector)
+    # preciosList = lineChartMulti(pricesDT, preciosList, meanList, previsionEolicaList, previsionDemandaList, energiaGestionadaList)
+    preciosList = lineChartMultiPrice(technologyDT, preciosList, meanList, previsionEolicaList, previsionDemandaList, energiaGestionadaList)
+
+#     priceMIN=minList(precios)['precio']
+#     priceMAX=maxList(precios)['precio']
+#     hoursMIN=minList(precios)['hora']
+#     hoursMAX=maxList(precios)['hora']
+
+    return template('priceprofor_energia_gestionada_coeficientes', pricesDT=pricesDT, technologyDT=technologyDT,
+                    # minmax=minmax, priceMIN=priceMIN, priceMAX=priceMAX, hoursMIN=hoursMIN, hoursMAX=hoursMAX,
+                    preciosList=preciosList, meanList=meanList
+                    )

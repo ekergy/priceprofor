@@ -138,15 +138,57 @@ google.load("visualization", "1", {packages:["corechart"]});
         titleTextStyle:  {color: '#000000', fontName: 'Roboto', fontSize: '22', bold: 'true', italic: 'false'},
         //width: '750',
 		//height: '400',
-        vAxis: {
+
+		//vAxes: { 0: {format: '#,###'}, 1: {format: '#%'}, 2: {format: '#%'} }​,
+		//vAxis:{format: '#%'},
+		vAxes: {
+
+		0: {
+        	// options for left y-axis
+	    	//title: 'Left y-axis title'
+        	//title: 'Subtotales Energia (MWh)',
+        	title: 'Precios (€/MWh)',
+        	textStyle:{color: '#000000', fontName: 'Roboto', fontSize: '14', bold: 'false', italic: 'true'},
+        	titleTextStyle: {/*color:'#8253E8',*/color: '#000000', fontName: 'Roboto', fontSize: '18', bold: 'false', italic: 'false'},
+        	/*gridlines: {color: '#00ff00', count: 6},*/
+        	viewWindow: {min: 0},
+	    	},
+
+	    1: {
+        	// options for right y-axis
+        	//title: 'Right y-axis title'
         	//title: 'Subtotales Energia (MWh)',
         	title: 'Tecnologias (MWh)',
         	textStyle:{color: '#000000', fontName: 'Roboto', fontSize: '14', bold: 'false', italic: 'true'},
         	titleTextStyle: {/*color:'#8253E8',*/color: '#000000', fontName: 'Roboto', fontSize: '18', bold: 'false', italic: 'false'},
         	/*gridlines: {color: '#00ff00', count: 6},*/
         	viewWindow: {min: 0},
-        	},
-        hAxis: {
+    		}
+		},
+
+		series: {
+            // el color el la serie BARS va definido en el propio vector de datos y no se puede redefinir
+			//0: { type: "bars", targetAxisIndex: 0},
+            // #3366cc azul
+            0: { type: "bars", targetAxisIndex: 0},
+	        // #ff9900 amarillo
+            1: { type: "line", targetAxisIndex: 1, color: '#ff9900'},
+            // #109618 verde
+            2: { type: "line", targetAxisIndex: 1, color: '#109618'},
+	        // #990099 morado
+            3: { type: "line", targetAxisIndex: 1, color: '#990099'},
+        },
+
+//		vAxis: {
+//        	//title: 'Subtotales Energia (MWh)',
+//        	title: 'Tecnologias (MWh)',
+//        	textStyle:{color: '#000000', fontName: 'Roboto', fontSize: '14', bold: 'false', italic: 'true'},
+//        	titleTextStyle: {/*color:'#8253E8',*/color: '#000000', fontName: 'Roboto', fontSize: '18', bold: 'false', italic: 'false'},
+//        	/*gridlines: {color: '#00ff00', count: 6},*/
+//        	viewWindow: {min: 0},
+//        	},
+
+		hAxis: {
         	title: 'Hora del dia (h)',
             //slantedTextAngle: 90,
             //slantedText: false,
