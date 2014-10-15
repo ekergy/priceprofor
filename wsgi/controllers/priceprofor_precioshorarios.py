@@ -331,8 +331,6 @@ def estadisticastecnologias():
                     previsionEolicaList=previsionEolicaList, previsionDemandaList=previsionDemandaList,
                     periodoDesde=periodoDesde, periodoHasta=periodoHasta, periodoTemporal=periodoTemporal, promediosTecnologias=promediosTecnologias)
 
-=======
->>>>>>> cff9831602d1b2bbe1bac8186a6d6d467dc96a7e
 @route('/EnergiaGestionadaValores', method='GET')
 def energiagestionadavalores():
     """
