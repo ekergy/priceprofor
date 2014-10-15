@@ -14,7 +14,8 @@ from priceprofor_graficas import relativeExtremes, colorChart, averageList, line
 from priceprofor_graficas import lineChartMulti, lineChartMultiPrice
 from omelinfosys.reehandlers import getdemandeforcast, getpreveoldd
 from omelinfosys.dbstudydatamanager import DBRawData
-from priceprofor_estadisticas import estadisticasPrecios, estadisticasTecnologias
+from priceprofor_estadisticas import estadisticasTecnologias
+from estadisticasgenericas import estadisticasPrecios
 
 # from sys import exit
 # exit(0)
