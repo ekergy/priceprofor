@@ -7,7 +7,7 @@ Created on 15/07/2014
 from bottle import route, template
 
 # LOCAL
-from datetime import datetime
+# from datetime import datetime
 from priceprofor_graficas import preciosDiarios, tecnologiasDiarias
 from priceprofor_graficas import findLastDayDocument, findLastDayDocumentTechnology, findLastDayDocumentThree
 from priceprofor_graficas import relativeExtremes, colorChart, averageList, lineChart
