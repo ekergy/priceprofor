@@ -4,14 +4,17 @@ Created on 05/2014
 @author: hmarrao & david
 '''
 
-from bottle import route,template, response, request
+from pymongo import Connection
+from dbpreciosesmanager import populatePrecios
+from pymongo import MongoClient
+from dateutil import parser
+
+from bottle import route, template, response, request
 from kernelCaracterizacionEnergetica import temporadaConsumoVector
 from datautilities import toGoogleDataTable
 from dbpreciosesmanager import preciosDiarios, tecnologiasDiarias
-# from time import strptime
+from time import strptime
 from datetime import datetime, timedelta, date
-from pymongo import Connection
-from dbpreciosesmanager import populatePrecios
 from omelinfosys.dbstudydatamanager import populateStudyData
 from json import dumps
 
@@ -124,10 +127,6 @@ def estadisticasPrecios():
     '''
     CODIGO PYMONGO
     '''
-
-    from pymongo import MongoClient
-    from dateutil import parser
-    # from datetime import datetime, timedelta
 
 #     db = MongoClient().mercadodiario
 
@@ -341,10 +340,6 @@ def estadisticasPrecios():
 def estadisticasTecnologias():
     '''
     '''
-
-    from pymongo import MongoClient
-    from dateutil import parser
-    # from datetime import datetime, timedelta
 
     promediosNuclear = list()
     promediosRegimenEspecial = list()
