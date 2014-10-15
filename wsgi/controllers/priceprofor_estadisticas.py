@@ -7,8 +7,8 @@ Created on 05/2014
 from pymongo import Connection
 from dbpreciosesmanager import populatePrecios
 from pymongo import MongoClient
-from dateutil import parser
 
+# from dateutil import parser
 from bottle import route, template, response, request
 from kernelCaracterizacionEnergetica import temporadaConsumoVector
 from datautilities import toGoogleDataTable
@@ -153,10 +153,13 @@ def estadisticasPrecios():
     promediosDesde = list()
     promediosHasta = list()
 
+    fecha_aux = datetime.now()
+
     ''' Promedio dia actual '''
     db = MongoClient().mercadodiario
-    my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
-    fecha2 = parser.parse(my_date_str)
+#     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
+#     fecha2 = parser.parse(my_date_str)
+    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
     fecha = fecha2
     query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(0, round(query,2))
@@ -165,8 +168,9 @@ def estadisticasPrecios():
 
     ''' Promedio dia anterior '''
     db = MongoClient().mercadodiario
-    my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
-    fecha3 = parser.parse(my_date_str)
+#     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
+#     fecha3 = parser.parse(my_date_str)
+    fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
     fecha2 = fecha3 - timedelta(days=1)
     fecha = fecha3 - timedelta(days=1)
     query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
@@ -200,9 +204,10 @@ def estadisticasPrecios():
 
     ''' Promedio semana actual '''
     db = MongoClient().mercadodiario
-    my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
-    fecha2 = parser.parse(my_date_str)
-    fecha = fecha2 - timedelta(weeks=1)
+#     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
+#     fecha2 = parser.parse(my_date_str)
+    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
+    fecha = fecha2 - timedelta(weeks=1) + timedelta(days=1)
     query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(2, round(query,2))
     promediosDesde.insert(2, fecha)
@@ -210,10 +215,11 @@ def estadisticasPrecios():
 
     ''' Promedio semana anterior '''
     db = MongoClient().mercadodiario
-    my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
-    fecha3 = parser.parse(my_date_str)
+#     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
+#     fecha3 = parser.parse(my_date_str)
+    fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
     fecha2 = fecha3 - timedelta(weeks=1)
-    fecha = fecha3 - timedelta(weeks=2)
+    fecha = fecha3 - timedelta(weeks=2) + timedelta(days=1)
     query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(3, round(query,2))
     promediosDesde.insert(3, fecha)
@@ -221,10 +227,11 @@ def estadisticasPrecios():
 
     ''' Promedio mes actual '''
     db = MongoClient().mercadodiario
-    my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
-    fecha2 = parser.parse(my_date_str)
+#     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
+#     fecha2 = parser.parse(my_date_str)
+    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
 #     fecha = fecha2.replace(month=fecha2.month - 1)
-    fecha = (fecha2 - timedelta(weeks=4) - timedelta(days=2)).replace(day=fecha2.day)
+    fecha = (fecha2 - timedelta(weeks=4) - timedelta(days=2)).replace(day=fecha2.day) + timedelta(days=1)
     query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(4, round(query,2))
     promediosDesde.insert(4, fecha)
@@ -232,12 +239,13 @@ def estadisticasPrecios():
 
     ''' Promedio mes anterior '''
     db = MongoClient().mercadodiario
-    my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
-    fecha3 = parser.parse(my_date_str)
+#     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
+#     fecha3 = parser.parse(my_date_str)
+    fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
 #     fecha2 = fecha3.replace(month=fecha3.month - 1)
     fecha2 = (fecha3 - timedelta(weeks=4) - timedelta(days=2)).replace(day=fecha3.day)
 #     fecha = fecha2.replace(month=fecha2.month - 1)
-    fecha = (fecha3 - timedelta(weeks=8) - timedelta(days=4)).replace(day=fecha3.day)
+    fecha = (fecha3 - timedelta(weeks=8) - timedelta(days=4)).replace(day=fecha3.day) + timedelta(days=1)
     query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(5, round(query,2))
     promediosDesde.insert(5, fecha)
@@ -245,10 +253,11 @@ def estadisticasPrecios():
 
     ''' Promedio estacion actual '''
     db = MongoClient().mercadodiario
-    my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
-    fecha2 = parser.parse(my_date_str)
+#     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
+#     fecha2 = parser.parse(my_date_str)
+    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
 #     fecha = fecha2.replace(month=fecha2.month - 3)
-    fecha = (fecha2 - timedelta(weeks=13)).replace(day=fecha2.day)
+    fecha = (fecha2 - timedelta(weeks=13)).replace(day=fecha2.day) + timedelta(days=1)
     query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(6, round(query,2))
     promediosDesde.insert(6, fecha)
@@ -256,12 +265,13 @@ def estadisticasPrecios():
 
     ''' Promedio estacion anterior '''
     db = MongoClient().mercadodiario
-    my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
-    fecha3 = parser.parse(my_date_str)
+#     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
+#     fecha3 = parser.parse(my_date_str)
+    fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
 #     fecha2 = fecha3.replace(month=fecha3.month - 1)
     fecha2 = (fecha3 - timedelta(weeks=13)).replace(day=fecha3.day)
 #     fecha = fecha2.replace(month=fecha2.month - 3)
-    fecha = (fecha3 - timedelta(weeks=26)).replace(day=fecha3.day)
+    fecha = (fecha3 - timedelta(weeks=26)).replace(day=fecha3.day) + timedelta(days=1)
     query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(7, round(query,2))
     promediosDesde.insert(7, fecha)
@@ -269,10 +279,11 @@ def estadisticasPrecios():
 
     ''' Promedio año actual '''
     db = MongoClient().mercadodiario
-    my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
-    fecha2 = parser.parse(my_date_str)
+#     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
+#     fecha2 = parser.parse(my_date_str)
+    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
 #     fecha = fecha2.replace(year=fecha2.year - 1)
-    fecha = (fecha2 - timedelta(weeks=52)).replace(day=fecha2.day)
+    fecha = (fecha2 - timedelta(weeks=52)).replace(day=fecha2.day) + timedelta(days=1)
     query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(8, round(query,2))
     promediosDesde.insert(8, fecha)
@@ -280,12 +291,13 @@ def estadisticasPrecios():
 
     ''' Promedio año anterior '''
     db = MongoClient().mercadodiario
-    my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
-    fecha3 = parser.parse(my_date_str)
+#     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
+#     fecha3 = parser.parse(my_date_str)
+    fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
 #     fecha2 = fecha3.replace(year=fecha3.year - 1)
     fecha2 = (fecha3 - timedelta(weeks=52)).replace(day=fecha3.day)
 #     fecha = fecha2.replace(year=fecha2.year - 1)
-    fecha = (fecha3 - timedelta(weeks=104)).replace(day=fecha3.day)
+    fecha = (fecha3 - timedelta(weeks=104)).replace(day=fecha3.day) + timedelta(days=1)
     query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(9, round(query,2))
     promediosDesde.insert(9, fecha)
@@ -351,10 +363,13 @@ def estadisticasTecnologias():
     promediosDesde = list()
     promediosHasta = list()
 
+    fecha_aux = datetime.now()
+
     ''' Promedio dia actual '''
     db = MongoClient().mercadodiario
-    my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
-    fecha2 = parser.parse(my_date_str) - timedelta(3)
+#     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
+#     fecha2 = parser.parse(my_date_str) - timedelta(3)
+    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
     fecha = fecha2
     indice = 0
     query = db.tecnologiases.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$NUCLEAR"}}}])["result"][0]["avg"]
@@ -374,8 +389,9 @@ def estadisticasTecnologias():
 
     ''' Promedio dia anterior '''
     db = MongoClient().mercadodiario
-    my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
-    fecha3 = parser.parse(my_date_str) - timedelta(3)
+#     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
+#     fecha3 = parser.parse(my_date_str) - timedelta(3)
+    fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
     fecha2 = fecha3 - timedelta(days=1)
     fecha = fecha3 - timedelta(days=1)
     indice = 1
@@ -396,9 +412,10 @@ def estadisticasTecnologias():
 
     ''' Promedio semana actual '''
     db = MongoClient().mercadodiario
-    my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
-    fecha2 = parser.parse(my_date_str) - timedelta(3)
-    fecha = fecha2 - timedelta(weeks=1)
+#     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
+#     fecha2 = parser.parse(my_date_str) - timedelta(3)
+    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
+    fecha = fecha2 - timedelta(weeks=1) + timedelta(days=1)
     indice = 2
     query = db.tecnologiases.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$NUCLEAR"}}}])["result"][0]["avg"]
     promediosNuclear.insert(indice, round(query,2))
@@ -417,10 +434,11 @@ def estadisticasTecnologias():
 
     ''' Promedio semana anterior '''
     db = MongoClient().mercadodiario
-    my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
-    fecha3 = parser.parse(my_date_str) - timedelta(3)
+#     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
+#     fecha3 = parser.parse(my_date_str) - timedelta(3)
+    fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
     fecha2 = fecha3 - timedelta(weeks=1)
-    fecha = fecha3 - timedelta(weeks=2)
+    fecha = fecha3 - timedelta(weeks=2) + timedelta(days=1)
     indice = 3
     query = db.tecnologiases.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$NUCLEAR"}}}])["result"][0]["avg"]
     promediosNuclear.insert(indice, round(query,2))
@@ -439,10 +457,11 @@ def estadisticasTecnologias():
 
     ''' Promedio mes actual '''
     db = MongoClient().mercadodiario
-    my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
-    fecha2 = parser.parse(my_date_str) - timedelta(3)
+#     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
+#     fecha2 = parser.parse(my_date_str) - timedelta(3)
+    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
 #     fecha = fecha2.replace(month=fecha2.month - 1)
-    fecha = (fecha2 - timedelta(weeks=4) - timedelta(days=2)).replace(day=fecha2.day)
+    fecha = (fecha2 - timedelta(weeks=4) - timedelta(days=2)).replace(day=fecha2.day) + timedelta(days=1)
     indice = 4
     query = db.tecnologiases.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$NUCLEAR"}}}])["result"][0]["avg"]
     promediosNuclear.insert(indice, round(query,2))
@@ -461,12 +480,13 @@ def estadisticasTecnologias():
 
     ''' Promedio mes anterior '''
     db = MongoClient().mercadodiario
-    my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
-    fecha3 = parser.parse(my_date_str) - timedelta(3)
+#     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
+#     fecha3 = parser.parse(my_date_str) - timedelta(3)
+    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
 #     fecha2 = fecha3.replace(month=fecha3.month - 1)
     fecha2 = (fecha3 - timedelta(weeks=4) - timedelta(days=2)).replace(day=fecha3.day)
 #     fecha = fecha2.replace(month=fecha2.month - 1)
-    fecha = (fecha3 - timedelta(weeks=8) - timedelta(days=4)).replace(day=fecha3.day)
+    fecha = (fecha3 - timedelta(weeks=8) - timedelta(days=4)).replace(day=fecha3.day) + timedelta(days=1)
     indice = 5
     query = db.tecnologiases.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$NUCLEAR"}}}])["result"][0]["avg"]
     promediosNuclear.insert(indice, round(query,2))
@@ -485,10 +505,11 @@ def estadisticasTecnologias():
 
     ''' Promedio estacion actual '''
     db = MongoClient().mercadodiario
-    my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
-    fecha2 = parser.parse(my_date_str) - timedelta(3)
+#     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
+#     fecha2 = parser.parse(my_date_str) - timedelta(3)
+    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
 #     fecha = fecha2.replace(month=fecha2.month - 3)
-    fecha = (fecha2 - timedelta(weeks=13)).replace(day=fecha2.day)
+    fecha = (fecha2 - timedelta(weeks=13)).replace(day=fecha2.day) + timedelta(days=1)
     indice = 6
     query = db.tecnologiases.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$NUCLEAR"}}}])["result"][0]["avg"]
     promediosNuclear.insert(indice, round(query,2))
@@ -507,12 +528,13 @@ def estadisticasTecnologias():
 
     ''' Promedio estacion anterior '''
     db = MongoClient().mercadodiario
-    my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
-    fecha3 = parser.parse(my_date_str) - timedelta(3)
+#     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
+#     fecha3 = parser.parse(my_date_str) - timedelta(3)
+    fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
 #     fecha2 = fecha3.replace(month=fecha3.month - 1)
     fecha2 = (fecha3 - timedelta(weeks=13)).replace(day=fecha3.day)
 #     fecha = fecha2.replace(month=fecha2.month - 3)
-    fecha = (fecha3 - timedelta(weeks=26)).replace(day=fecha3.day)
+    fecha = (fecha3 - timedelta(weeks=26)).replace(day=fecha3.day) + timedelta(days=1)
     indice = 7
     query = db.tecnologiases.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$NUCLEAR"}}}])["result"][0]["avg"]
     promediosNuclear.insert(indice, round(query,2))
@@ -531,10 +553,11 @@ def estadisticasTecnologias():
 
     ''' Promedio año actual '''
     db = MongoClient().mercadodiario
-    my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
-    fecha2 = parser.parse(my_date_str) - timedelta(3)
+#     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
+#     fecha2 = parser.parse(my_date_str) - timedelta(3)
+    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
 #     fecha = fecha2.replace(year=fecha2.year - 1)
-    fecha = (fecha2 - timedelta(weeks=52)).replace(day=fecha2.day)
+    fecha = (fecha2 - timedelta(weeks=52)).replace(day=fecha2.day) + timedelta(days=1)
     indice = 8
     query = db.tecnologiases.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$NUCLEAR"}}}])["result"][0]["avg"]
     promediosNuclear.insert(indice, round(query,2))
@@ -553,12 +576,13 @@ def estadisticasTecnologias():
 
     ''' Promedio año anterior '''
     db = MongoClient().mercadodiario
-    my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
-    fecha3 = parser.parse(my_date_str) - timedelta(3)
+#     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
+#     fecha3 = parser.parse(my_date_str) - timedelta(3)
+    fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
 #     fecha2 = fecha3.replace(year=fecha3.year - 1)
     fecha2 = (fecha3 - timedelta(weeks=52)).replace(day=fecha3.day)
 #     fecha = fecha2.replace(year=fecha2.year - 1)
-    fecha = (fecha3 - timedelta(weeks=104)).replace(day=fecha3.day)
+    fecha = (fecha3 - timedelta(weeks=104)).replace(day=fecha3.day) + timedelta(days=1)
     indice = 9
     query = db.tecnologiases.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$NUCLEAR"}}}])["result"][0]["avg"]
     promediosNuclear.insert(indice, round(query,2))
