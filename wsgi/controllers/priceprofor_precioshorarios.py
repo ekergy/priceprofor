@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
 Created on 15/07/2014
 @author: hmarrao & david
@@ -13,6 +14,7 @@ from priceprofor_graficas import relativeExtremes, colorChart, averageList, line
 from priceprofor_graficas import lineChartMulti, lineChartMultiPrice
 from omelinfosys.reehandlers import getdemandeforcast, getpreveoldd
 from omelinfosys.dbstudydatamanager import DBRawData
+from priceprofor_estadisticas import estadisticasPrecios, estadisticasTecnologias
 
 # from sys import exit
 # exit(0)
@@ -196,6 +198,142 @@ def energiagestionada():
                     energiaGestionadaList=energiaGestionadaList,
                     previsionEolicaList=previsionEolicaList, previsionDemandaList=previsionDemandaList)
 
+<<<<<<< HEAD
+''' este error significa que no reconoce la letra del abecedario que va despues de la "n" '''
+# SyntaxError: Non-ASCII character '\xc3' in file wsgi/controllers/priceprofor_precioshorarios.py on line 240, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+
+@route('/EstadisticasPrecios', method='GET')
+def estadisticasprecios():
+    """
+    """
+
+    ''' DATETIME '''
+    technologyDT = findLastDayDocumentTechnology()
+#     technologyDT = datetime(2014,7,12)
+
+    ''' PRICES '''
+    dic = preciosDiarios(technologyDT)
+    minmax = relativeExtremes(dic)
+
+    precios = list()
+    for element in dic['precios']:
+        precios.append(element[1])
+    precios.pop(0)
+
+    preciosList = colorChart(technologyDT, minmax)
+    vector = list()
+    for element in range(1,len(dic['precios'])):
+        vector.append(dic['precios'][element][1])
+    meanList = averageList(vector)
+    preciosList = lineChart(technologyDT, preciosList, meanList)
+
+#     priceMIN=minList(precios)['precio']
+#     priceMAX=maxList(precios)['precio']
+#     hoursMIN=minList(precios)['hora']
+#     hoursMAX=maxList(precios)['hora']
+
+    ''' FORECASTS '''
+    previsionEolicaList = getpreveoldd(technologyDT)
+    previsionDemandaList = getdemandeforcast(technologyDT)
+
+    ins = DBRawData()
+    ins.set_fecha(technologyDT)
+    ins.getDataFromWeb()
+    energiaGestionadaList = ins.ProduccionyDemandaES['TOTAL_DEMANDA']
+
+#     periodoOrdinal = ["A", "B", "C", "C",
+#                       "D", "D", "E", "E"]
+
+    periodoTemporal = ["Dia actual", "Dia anterior", "Semana actual", "Semana anterior", "Mes actual", "Mes anterior",
+                       "Estacion actual", "Estacion anterior", "Año actual", "Año anterior"]
+
+    promediosDesde = estadisticasPrecios()[1]
+    promediosHasta = estadisticasPrecios()[2]
+
+    periodoDesde = [promediosDesde[0].date(), promediosDesde[1].date(), promediosDesde[2].date(), promediosDesde[3].date(), promediosDesde[4].date(),
+                    promediosDesde[5].date(), promediosDesde[6].date(), promediosDesde[7].date(), promediosDesde[8].date(), promediosDesde[9].date()]
+
+    periodoHasta = [promediosHasta[0].date(), promediosHasta[1].date(), promediosHasta[2].date(), promediosHasta[3].date(), promediosHasta[4].date(),
+                    promediosHasta[5].date(), promediosHasta[6].date(), promediosHasta[7].date(), promediosHasta[8].date(), promediosHasta[9].date()]
+
+    promediosPrecios = estadisticasPrecios()[0]
+
+#     print periodoTemporal
+#     print promediosPrecios
+
+    return template('priceprofor_estadisticas_precios', technologyDT=technologyDT,
+                    preciosList=preciosList, meanList=meanList,
+                    energiaGestionadaList=energiaGestionadaList,
+                    previsionEolicaList=previsionEolicaList, previsionDemandaList=previsionDemandaList,
+                    periodoDesde=periodoDesde, periodoHasta=periodoHasta, periodoTemporal=periodoTemporal, promediosPrecios=promediosPrecios)
+
+@route('/EstadisticasTecnologias', method='GET')
+def estadisticastecnologias():
+    """
+    """
+
+    ''' DATETIME '''
+    technologyDT = findLastDayDocumentTechnology()
+#     technologyDT = datetime(2014,7,12)
+
+    ''' PRICES '''
+    dic = preciosDiarios(technologyDT)
+    minmax = relativeExtremes(dic)
+
+    precios = list()
+    for element in dic['precios']:
+        precios.append(element[1])
+    precios.pop(0)
+
+    preciosList = colorChart(technologyDT, minmax)
+    vector = list()
+    for element in range(1,len(dic['precios'])):
+        vector.append(dic['precios'][element][1])
+    meanList = averageList(vector)
+    preciosList = lineChart(technologyDT, preciosList, meanList)
+
+#     priceMIN=minList(precios)['precio']
+#     priceMAX=maxList(precios)['precio']
+#     hoursMIN=minList(precios)['hora']
+#     hoursMAX=maxList(precios)['hora']
+
+    ''' FORECASTS '''
+    previsionEolicaList = getpreveoldd(technologyDT)
+    previsionDemandaList = getdemandeforcast(technologyDT)
+
+    ins = DBRawData()
+    ins.set_fecha(technologyDT)
+    ins.getDataFromWeb()
+    energiaGestionadaList = ins.ProduccionyDemandaES['TOTAL_DEMANDA']
+
+#     periodoOrdinal = ["A", "B", "C", "C",
+#                       "D", "D", "E", "E"]
+
+    periodoTemporal = ["Dia actual", "Dia anterior", "Semana actual", "Semana anterior", "Mes actual", "Mes anterior",
+                       "Estacion actual", "Estacion anterior", "Año actual", "Año anterior"]
+
+    promediosDesde = estadisticasTecnologias()[6]
+    promediosHasta = estadisticasTecnologias()[7]
+
+    periodoDesde = [promediosDesde[0].date(), promediosDesde[1].date(), promediosDesde[2].date(), promediosDesde[3].date(), promediosDesde[4].date(),
+                    promediosDesde[5].date(), promediosDesde[6].date(), promediosDesde[7].date(), promediosDesde[8].date(), promediosDesde[9].date()]
+
+    periodoHasta = [promediosHasta[0].date(), promediosHasta[1].date(), promediosHasta[2].date(), promediosHasta[3].date(), promediosHasta[4].date(),
+                    promediosHasta[5].date(), promediosHasta[6].date(), promediosHasta[7].date(), promediosHasta[8].date(), promediosHasta[9].date()]
+
+    promediosTecnologias = estadisticasTecnologias()[0:6]
+
+#     print periodoTemporal
+#     print promediosPrecios
+
+    return template('priceprofor_estadisticas_tecnologias', technologyDT=technologyDT,
+                    preciosList=preciosList, meanList=meanList,
+                    energiaGestionadaList=energiaGestionadaList,
+                    previsionEolicaList=previsionEolicaList, previsionDemandaList=previsionDemandaList,
+                    periodoDesde=periodoDesde, periodoHasta=periodoHasta, periodoTemporal=periodoTemporal, promediosTecnologias=promediosTecnologias)
+
+=======
+>>>>>>> cff9831602d1b2bbe1bac8186a6d6d467dc96a7e
 @route('/EnergiaGestionadaValores', method='GET')
 def energiagestionadavalores():
     """
