@@ -2,7 +2,7 @@
 from datetime import datetime, timedelta
 from pymongo import MongoClient
 
-CONN_HOST = None
+CONN_HOST = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
 
 def estadisticasPrecios():
     '''
