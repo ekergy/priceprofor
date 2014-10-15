@@ -198,7 +198,7 @@ def energiagestionada():
                     energiaGestionadaList=energiaGestionadaList,
                     previsionEolicaList=previsionEolicaList, previsionDemandaList=previsionDemandaList)
 
-''' este error significa que no reconoce la letra del abecedario que va despues de la "n" '''
+''' este error significa que no reconoce la letra del abecedario que va justo despues de la "n" '''
 # SyntaxError: Non-ASCII character '\xc3' in file wsgi/controllers/priceprofor_precioshorarios.py on line 240, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
 
 @route('/EstadisticasPrecios', method='GET')
