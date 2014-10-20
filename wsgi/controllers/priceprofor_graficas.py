@@ -11,24 +11,33 @@ from dbpreciosesmanager import preciosDiarios, tecnologiasDiarias
 # from time import strptime
 from datetime import datetime, timedelta, date
 from pymongo import Connection
+from json import dumps
 from dbpreciosesmanager import populatePrecios
 from omelinfosys.dbstudydatamanager import populateStudyData
-from json import dumps
 
 @route('/populatePrecios')
-def index():
+def indexprecios():
     '''
-    created index.html
     '''
     try:
-        # listDaysUpdated = populatePrecios()
         populatePrecios()
-        #return '<strong>Put here profor index.html modificado</strong>'
     except:
         raise
-        return 'fallo actualizacion'
+        return 'fallo en la actualizacion de precios'
     else:
-        return 'actualizacion base de datos'
+        return 'precios actualizados'
+
+@route('/populateTecnologias')
+def indextecnologias():
+    '''
+    '''
+    try:
+        populateStudyData()
+    except:
+        raise
+        return 'fallo en la actualizacion de tecnologias'
+    else:
+        return 'tecnologias actualizadas'
 
 # @route('/machineCygnus')
 # def machinecygnusCONNECTION():
@@ -402,6 +411,7 @@ def lineChartMultiPrice(dateTime, preciosList, meanList, previsionEolicaList, pr
     return preciosList
 
 @route('/PreciosDiarios', method='GET')
+# @populatePreciosActualiza
 # @enable_cors
 def graficaPreciosDiariosGET():
     '''
