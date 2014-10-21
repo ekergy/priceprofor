@@ -50,8 +50,8 @@ LOCAL /home/david/workspace/priceprofor/.openshift/cron
 
 # MicroApp para visualizar los precios del Mercado Diario de la electricidad
 
+https://play.google.com/store/apps/details?id=com.latteandcode.ekergy
+
 1. Visualizar los precios
 2. Hora y precio maximo
 3. Hora y precio minimo
-
-https://play.google.com/store/apps/details?id=com.latteandcode.ekergy
