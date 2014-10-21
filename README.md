@@ -26,9 +26,7 @@ Esta pagina contiene la documentacion para instalar en OpenShift un modulo Cron 
 
 https://www.openshift.com/blogs/getting-started-with-cron-jobs-on-openshift
 
-A tener en cuenta, es que el servidor de openshift va 6 horas por detras de la hora actual
-
-Resumen del proceso de ejecucion Cron desde una url con el codigo en el servidor rhc
+Resumen del proceso de ejecucion Cron desde una url con el codigo en el servidor rhc. Hay que tener en cuenta que el servidor de OpenShift va 6 horas por detras de la hora actual en local
 
 La aplicacion Cron tiene que estar instalada en la ruta 
 ```
@@ -55,3 +53,5 @@ LOCAL /home/david/workspace/priceprofor/.openshift/cron
 1. Visualizar los precios
 2. Hora y precio maximo
 3. Hora y precio minimo
+
+https://play.google.com/store/apps/details?id=com.latteandcode.ekergy
