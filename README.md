@@ -26,7 +26,7 @@ Esta pagina contiene la documentacion para instalar en OpenShift un modulo Cron 
 
 https://www.openshift.com/blogs/getting-started-with-cron-jobs-on-openshift
 
-Resumen del proceso de ejecucion Cron desde una url con el codigo en el servidor rhc. Hay que tener en cuenta que el servidor de OpenShift va 6 horas por detras de la hora actual en local
+Se resume del proceso de ejecucion Cron desde una url con el codigo en el servidor rhc. Hay que tener en cuenta que el servidor OpenShift va 6 horas por detras de la hora actual en local
 
 La aplicacion Cron tiene que estar instalada en la ruta 
 ```
