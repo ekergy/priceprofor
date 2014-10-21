@@ -12,13 +12,13 @@ Si queremos fijar como repositorio OpenShift lo haremos con el comando
 git remote set-url origin ssh://542bc3bb4382ec4e520010a0@priceprofor-ekergy.rhcloud.com/~/git/priceprofor.git/
 ```
 
-Ahora ya podemos hacer commit, pull y push para subir los cambios al servidor
-
 Si preferimos fijar como repositorio BitBucket usaremos el comando
 ```
 #!git
 git remote set-url origin https://****usarioBitbucket***@bitbucket.org/ekergy/priceprofor.git
 ```
+
+Ahora ya podemos hacer commit, pull y push para subir los cambios al servidor
 
 # Cron en servidor OpenShift
 
