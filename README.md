@@ -31,19 +31,19 @@ Se resume del proceso de ejecucion Cron desde una url con el codigo en el servid
 La aplicacion Cron tiene que estar instalada en la ruta 
 ```
 #!
-/var/lib/openshift/53a812b8e0b8cd8a67000159/cron
+$OPENSHIFT_CRON_DIR
 ```
 
 Los ficheros Log que recopilan el historico estan en la ruta 
 ```
 #!
-/var/lib/openshift/53a812b8e0b8cd8a67000159/app-root/logs
+$OPENSHIFT_LOG_DIR
 ```
 
 Los ejecutables se encuentran en esta ruta oculta ".openshift" accesible con "ls -la"
 ```
 #!
-SERVIDOR /var/lib/openshift/53a812b8e0b8cd8a67000159/app-root/runtime/repo/.openshift/cron
+SERVIDOR $OPENSHIFT_REPO_DIR/.openshift/cron
 
 LOCAL /home/david/workspace/priceprofor/.openshift/cron
 ```
