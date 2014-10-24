@@ -50,21 +50,14 @@ google.load("visualization", "1", {packages:["corechart"]});
 			title: 'Precio (€ / MWh)',
 			textStyle:{color: '#000000', fontName: 'Roboto', fontSize: '14', bold: 'false', italic: 'true'},
 	  	    titleTextStyle: {/*color:'#8253E8',*/color: '#000000', fontName: 'Roboto', fontSize: '18', bold: 'false', italic: 'false'}, /*gridlines: {color: '#00ff00', count: 6},*/
-	  	    //viewWindow: {min: 0},
+	  	    viewWindow: {min: 0},
 	  	  },
-	  	//chxl=0:|0|50|100|150|200|250|300|350|400|450|500|1:|16/01/2009|26/01/2009|6/02/2009,
 	 	hAxis: {
-	 		//isStacked: false,
-	 		//ticks: [new Date(2014,6,6), new Date(2013,6,7)],
-		  	//ticks: [{v:32, f:'thirty two'}, {v:64, f:'sixty four'}],
-			//title: 'Dias (precision en horas)',
-			//title: 'Dias (de 0 a 23 horas)',
-			title: 'Dias (0 - 23 h)',
+			title: 'Dias (precision en horas)',
 			showTextEvery: 24,
-			//gridlines: {count: 48},
-	 		//baseline: 20,
-			//slantedText:true,
+			slantedText:true,
 			//slantedTextAngle: 30,
+			slantedTextAngle: 22.5,
 			//format = 'yyyy/MM/dd HH:mm',
 			//slantedTextAngle: 90,
 		    //slantedText: false,
@@ -72,28 +65,25 @@ google.load("visualization", "1", {packages:["corechart"]});
 	    	titleTextStyle: {/*color: '#8253E8',*/color: '#000000', fontName: 'Roboto', fontSize: '18', bold: 'false', italic: 'false'}, gridlines: {color: '#00ff00', count: 6}, viewWindowMode: 'pretty'},
 	  		curveType: 'function',
 	  		backgroundColor: {stroke: '#000000', strokeWidth: '2', /*fill: '#D1FFC6'*/},
-			//annotation: { style: 'default' },
-	  		//ticks: [new Date(2014,6,6), new Date(2013,6,7)],
-			//ticks: [{v:new Date(2014,6,6), f:"3-4"},{v:new Date(2014,6,7), f:"5-9"}],
     	    //backgroundColor: "transparent",
+          	//isStacked: true,
 			//bar: { groupWidth: '75%' },
-    	    //legend: {position: 'none'},
-			//legend: { position: 'right', maxLines: 6 },
-			//legend: { position: 'right'},
 
-			//series: {0: {type: "line"}},
+			//legend: {position: 'none'},
+			//legend: { position: 'right'},
+    	    //legend: { position: 'right', maxLines: 6 },
+
+    	    //series: {0: {type: "line"}},
     	    //series: {1: {type: "line"}},
     	    //series: {2: {type: "line"}},
-
     	    //series: {2: {type: "line"}, interpolateNulls: false},
- 			//'colors' : ["#194D86","#699A36"],
- 			//'colors' : ["black"],
-    	    //'colors' : ["black","red"],
-    	    //'colors' : ["black","red","blue"],
-    	    //'colors' : ["black","red","grey"],
-	  		//seriesType: "bars",
+
+    	    //seriesType: "bars",
 	  		//seriesType: "line",
 			//seriesType: "bars", series: {0: {type: "line", color: "red"}}
+
+    	    //'colors' : ["#194D86","#699A36"],
+    	    //'colors' : ["black","red","blue"],
  /*
 			annotation: {
                 // index here is the index of the DataTable column providing the annotation
@@ -106,8 +96,8 @@ google.load("visualization", "1", {packages:["corechart"]});
 
  		//interpolateNulls = true;
 	  	  	% if modelosPrediccionList != [[]]:
-		  		var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-		  		//var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+		  		//var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+		  		var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
 				chart.draw(data, options);
 			% end
 	}

@@ -36,7 +36,7 @@ google.load("visualization", "1", {packages:["corechart"]});
 		width: '740', 
 		height: '400',
 		vAxis: {
-			title: 'Tecnologia (MWh)',
+			title: 'Tecnologias (MWh)',
 			textStyle:{color: '#000000', fontName: 'Roboto', fontSize: '14', bold: 'false', italic: 'true'},
 	  	    titleTextStyle: {/*color:'#8253E8',*/color: '#000000', fontName: 'Roboto', fontSize: '18', bold: 'false', italic: 'false'}, /*gridlines: {color: '#00ff00', count: 6},*/
 	  	    viewWindow: {min: 0}},

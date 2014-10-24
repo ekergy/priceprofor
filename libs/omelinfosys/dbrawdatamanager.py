@@ -113,12 +113,17 @@ class DBRawData():
             # self.collection = self.db.OMIEStudyData
             self.collection = self.db.tecnologiases
 
+            ''' la base de datos contiene 24 registros por cada dia, uno correspondiente a cada hora del dia '''
             if fecha is not None:
                 self.fecha = fecha
                 results = self.collection.find({ "fecha": {"$in": [self.fecha]} })
-                if results.count() == 1:
+#                 if results.count() == 1:
+#                     self._indatabase = True
+                if results.count() == 24:
                     self._indatabase = True
-                elif results.count() > 1:
+#                 elif results.count() > 1:
+#                     raise Exception('La base de datos tiene mas de un registro para la dada fecha.')
+                elif results.count() > 24:
                     raise Exception('La base de datos tiene mas de un registro para la dada fecha.')
                 self.connection.close()
         except:

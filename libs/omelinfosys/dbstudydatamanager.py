@@ -31,6 +31,16 @@ from urllib2 import urlopen
    datetime.datetime(2013, 10, 27, 0, 0)]}}
 '''
 
+'''
+en local, el siguiente metodo actualiza manualmente la base de datos de precios y tecnologias
+'''
+
+'''
+ConnectionFailure: could not connect to ds031117.mongolab.com:31117: timed out
+
+este error es porque no se puede acceder a la base de datos de openshift temporalmente
+'''
+
 # from sys import path
 # path.append('libs')
 
@@ -44,6 +54,8 @@ from urllib2 import urlopen
 # populateStudyData()
 def populateStudyData(startDate=None, endDate=None):
     '''
+    TECNOLOGIAS actualiza la base de datos de TECNOLOGIAS del servidor
+
     Metodos de usabilidad con las clases definidas
     This Method will performe the following operations:data = response.read()
     1st:    Gathering informacion of StudyDataES collection. Last data inserted.
@@ -238,7 +250,7 @@ def findLastStudyDocument():
     Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
     '''
     ins = DBStudyData()
-    collection = ins.get_connection()
+    collection = ins.getCollection()
     currentDT = datetime.now()
     cursor = collection.find({"fecha": {"$lte": currentDT}})
     for element in cursor:
@@ -281,6 +293,181 @@ def gettecnologiasesfromweb(fecha):
         #finally:
         #    del toparsePRECIOS,Precios
 
+# from sys import path
+# path.append('libs')
+# from datetime import datetime
+# from omelinfosys.dbstudydatamanager import populateStudyDataLocal
+# populateStudyDataLocal()
+def populateStudyDataLocal(startDate=None, endDate=None):
+    '''
+    TECNOLOGIAS actualiza la base de datos de TECNOLOGIAS del servidor
+
+    Metodos de usabilidad con las clases definidas
+    This Method will performe the following operations:data = response.read()
+    1st:    Gathering informacion of StudyDataES collection. Last data inserted.
+    2nd:    Gathering informacion of RawData collection. Last data available.
+    3rd:    Study data won't take into account the change of hour days with the following logic:
+            23 hours day: hour 3 will be replicated.
+            25 hours day: hour 3 will be removed.
+    Sustituimos el nombre TOTAL_DEMANDA por el de ENERGIA_GESTIONADA segun se define en la web de
+    http://www.esios.ree.es/web-publica/
+    '''
+    try:
+        # ONEHOUR = timedelta(seconds=3600)
+        ONEDAY = timedelta(1)
+        if startDate == None:
+            startDate = findLastStudyDocumentLocal()
+        # Disponemos de los datos de la web de la "REE" con 3 dias de retraso
+        currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
+        if endDate == None:
+            if startDate == currentDate:
+                endDate = currentDate
+            elif startDate == currentDate - timedelta(1):
+                endDate = startDate - timedelta(1)
+            elif startDate == currentDate - timedelta(2):
+                endDate = startDate - timedelta(2)
+            else:
+                endDate = currentDate - timedelta(3)
+    except:
+        raise
+    else:
+        listCHV = list()
+        listCHI = list()
+        for indi in range(endDate.year - startDate.year + 1):
+            fechaCHV, fechaCHI = centralEuropeanTime(startDate.year + indi)
+            listCHV.append(fechaCHV)
+            listCHI.append(fechaCHI)
+
+        emptyPD, zeroPD = diasEnFalta()
+        listDT = emptyPD + zeroPD
+        iterDate = startDate
+        while (endDate >= iterDate):
+            print iterDate.date()
+            ins = DBRawData()
+
+            ''' BASE DE DATOS LOCAL '''
+            ins.connection = Connection(host=None)
+
+            ins.set_fecha(iterDate)
+            ins.getDataFromWeb()
+            ins_raw = ins
+            # ins_raw = DBRawData(iterDate)
+            '''
+            si no hay datos en la base de datos falla
+            '''
+            # ins_raw.getRawDataFromDB()
+            for i in range(24):
+                ins_study = DBStudyData()
+
+                ins_study.fecha = iterDate
+                ins_study.hora = i
+
+                ''' PRODUCCION '''
+                ins_study.NUCLEAR = ins_raw.ProduccionyDemandaES['NUCLEAR'][i]
+                ins_study.HIDRAULICA_CONVENCIONAL = ins_raw.ProduccionyDemandaES['HIDRAULICA_CONVENCIONAL'][i]
+                ins_study.CARBON = ins_raw.ProduccionyDemandaES['CARBON_IMPORTACION'][i]
+                ins_study.CICLO_COMBINADO = ins_raw.ProduccionyDemandaES['CICLO_COMBINADO'][i]
+                ins_study.HIDRAULICA_BOMBEO = ins_raw.ProduccionyDemandaES['CONSUMO_DE_BOMBEO'][i]
+                ins_study.TERMICO_CON_PRIMA = ins_raw.ProduccionyDemandaES['TOTAL_TERMICA_(3+4+5+6+7+8)'][i]
+                ins_study.IMPORTACION_FRANCIA = ins_raw.ProduccionyDemandaES['IMPORTACION_FRANCIA'][i]
+                ins_study.IMPORTACION_PORTUGAL = ins_raw.ProduccionyDemandaES['IMPORTACION_PORTUGAL'][i]
+                ins_study.IMPORTACION_MARRUECOS = ins_raw.ProduccionyDemandaES['IMPORTACION_MARRUECOS'][i]
+                ins_study.IMPORTACION_ANDORRA = ins_raw.ProduccionyDemandaES['IMPORTACION_ANDORRA'][i]
+
+                if iterDate not in listDT:
+                    ins_study.ENERGIA_GESTIONADA = ins_raw.ProduccionyDemandaES['TOTAL_DEMANDA'][i]
+                    ins_study.REGIMEN_ESPECIAL = ins_raw.ProduccionyDemandaES['REGIMEN_ESPECIAL_A_DISTRIBUCION'][i]
+                    ins_study.FUEL_GAS = ins_raw.ProduccionyDemandaES['FUEL_+_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA)'][i]
+                    ins_study.UNIDADES_GENERICAS = ins_raw.ProduccionyDemandaES['UNIDADES_GENERICAS_SUBASTAS_DISTRIBUCION'][i]
+
+                    ''' DEMANDA '''
+                    ins_study.TOTAL_DEMANDA_NACIONAL_CLIENTES = ins_raw.ProduccionyDemandaES['TOTAL_DEMANDA_NACIONAL_CLIENTES_(21+22+23)'][i]
+                    ins_study.TOTAL_CONSUMO_BOMBEO = ins_raw.ProduccionyDemandaES['TOTAL_CONSUMO_BOMBEO_(24)'][i]
+                    ins_study.TOTAL_EXPORTACIONES = ins_raw.ProduccionyDemandaES['TOTAL_EXPORTACIONES_(25+26+27+28+29)'][i]
+                    ins_study.TOTAL_GENERICAS = ins_raw.ProduccionyDemandaES['TOTAL_GENERICAS_(30+31)'][i]
+
+                if iterDate in listCHV:
+                    chVERANO(ins_raw, ins_study)
+                elif iterDate in listCHI:
+                    chINVIERNO(ins_raw, ins_study)
+                elif iterDate in listDT:
+                    dic = datosEnFalta(iterDate)
+
+                    # if i == 0:
+                    #     print dic
+                    if dic['PreciosES']:
+                        ins_study.Precios = dic['PreciosES'][i]
+                    else:
+                        ins_study.Precios = ins_raw.PreciosES[i]
+                    if dic['PrevisionEolicaES']:
+                        ins_study.PrevisionEolica = dic['PrevisionEolicaES'][i]
+                    else:
+                        ins_study.PrevisionEolica = ins_raw.PrevisionEolicaES[i]
+                    if dic['PrevisionDemandaES']:
+                        ins_study.PrevisionDemanda = dic['PrevisionDemandaES'][i]
+                    else:
+                        ins_study.PrevisionDemanda = ins_raw.PrevisionDemandaES[i]
+
+#                         if dic['ProduccionyDemandaES']:
+#                             ins_study.NUCLEAR = ins_raw.dic['ProduccionyDemandaES']['NUCLEAR'][i]
+#                             ins_study.HIDRAULICA_CONVENCIONAL = ins_raw.dic['ProduccionyDemandaES']['HIDRAULICA_CONVENCIONAL'][i]
+#                             ins_study.CARBON = ins_raw.dic['ProduccionyDemandaES']['CARBON_IMPORTACION'][i]
+#                             ins_study.CICLO_COMBINADO = ins_raw.dic['ProduccionyDemandaES']['CICLO_COMBINADO'][i]
+#                             ins_study.HIDRAULICA_BOMBEO = ins_raw.dic['ProduccionyDemandaES']['CONSUMO_DE_BOMBEO'][i]
+#                             ins_study.TERMICO_CON_PRIMA = ins_raw.dic['ProduccionyDemandaES']['TOTAL_TERMICA_(3+4+5+6+7+8)'][i]
+#                             ins_study.IMPORTACION_FRANCIA = ins_raw.dic['ProduccionyDemandaES']['IMPORTACION_FRANCIA'][i]
+#                             ins_study.IMPORTACION_PORTUGAL = ins_raw.dic['ProduccionyDemandaES']['IMPORTACION_PORTUGAL'][i]
+#                             ins_study.IMPORTACION_MARRUECOS = ins_raw.dic['ProduccionyDemandaES']['IMPORTACION_MARRUECOS'][i]
+#                             ins_study.IMPORTACION_ANDORRA = ins_raw.dic['ProduccionyDemandaES']['IMPORTACION_ANDORRA'][i]
+#
+#                             if iterDate not in listDT:
+#                                 ins_study.ENERGIA_GESTIONADA = ins_raw.dic['ProduccionyDemandaES']['TOTAL_DEMANDA'][i]
+#                                 ins_study.REGIMEN_ESPECIAL = ins_raw.dic['ProduccionyDemandaES']['REGIMEN_ESPECIAL_A_DISTRIBUCION'][i]
+#                                 ins_study.FUEL_GAS = ins_raw.dic['ProduccionyDemandaES']['FUEL_+_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA)'][i]
+#                                 ins_study.UNIDADES_GENERICAS = ins_raw.dic['ProduccionyDemandaES']['UNIDADES_GENERICAS_SUBASTAS_DISTRIBUCION'][i]
+# 
+#                                 ins_study.TOTAL_DEMANDA_NACIONAL_CLIENTES = ins_raw.dic['ProduccionyDemandaES']['TOTAL_DEMANDA_NACIONAL_CLIENTES_(21+22+23)'][i]
+#                                 ins_study.TOTAL_CONSUMO_BOMBEO = ins_raw.dic['ProduccionyDemandaES']['TOTAL_CONSUMO_BOMBEO_(24)'][i]
+#                                 ins_study.TOTAL_EXPORTACIONES = ins_raw.dic['ProduccionyDemandaES']['TOTAL_EXPORTACIONES_(25+26+27+28+29)'][i]
+#                                 ins_study.TOTAL_GENERICAS = ins_raw.dic['ProduccionyDemandaES']['TOTAL_GENERICAS_(30+31)'][i]
+#                         else:
+#                             pass
+
+                else:
+                    ins_study.Precios = ins_raw.PreciosES[i]
+                    ins_study.PrevisionEolica = ins_raw.PrevisionEolicaES[i]
+                    ins_study.PrevisionDemanda = ins_raw.PrevisionDemandaES[i]
+
+                ''' BASE DE DATOS LOCAL '''
+                ins_study.insertorupdatedataintodblocal()
+
+            if currentDate == iterDate + timedelta(3):
+                raise Exception('En la web del OMIE no hay datos de hoy, ayer y antes de ayer')
+
+            iterDate += ONEDAY
+
+# from sys import path
+# path.append('libs')
+# from omelinfosys.dbstudydatamanager import findLastStudyDocumentLocal
+# findLastStudyDocumentLocal()
+def findLastStudyDocumentLocal():
+    '''
+    Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
+    '''
+    ins = DBStudyData()
+
+    ''' BASE DE DATOS LOCAL '''
+    ins.connectiondetails['host'] = None
+    ins.setCollection()
+
+    collection = ins.getCollection()
+
+    currentDT = datetime.now()
+    cursor = collection.find({"fecha": {"$lte": currentDT}})
+    for element in cursor:
+        lastelement = element
+    return lastelement['fecha']
+
 class DBStudyData():
     '''
     Esta clase es solo para gestionar la informacion a la hora de meter datos en la base de datos.
@@ -316,6 +503,15 @@ class DBStudyData():
     Esto es una supocion
     '''
 
+    connectiondetails = dict(host=None)
+
+# from sys import path
+# path.append('libs')
+# from datetime import datetime
+# startDate = datetime(2014,10,1)
+# from omelinfosys.dbstudydatamanager import populateStudyData
+# populateStudyData(startDate)
+
     # def __init__(self,fecha,hora=None):
     # def __init__(self,fecha=None):
     # def __init__(self,fecha,hora=None,collectionname=None):
@@ -327,16 +523,16 @@ class DBStudyData():
         '''
         try:
             ''' LOCAL '''
-#             self.connection = Connection(host=None)
-
+#             self.connectiondetails['host'] = None
             ''' SERVIDOR '''
-            self.connection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
+            self.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
 
             # self.db = self.connection.OMIEData
-            self.db = self.connection.mercadodiario
-            ''' NOMBRE DOCUMENTO (O TABLA) '''
+            self.connectiondetails['db_name'] = 'mercadodiario'
             # self.collection = self.db.OMIEStudyData
-            self.collection = self.db.tecnologiases
+            self.connectiondetails['coll_name'] = 'tecnologiases'
+            self.setCollection()
+
         except:
             raise
         else:
@@ -364,8 +560,32 @@ class DBStudyData():
             self.TOTAL_EXPORTACIONES = 0
             self.TOTAL_GENERICAS = 0
 
-    def get_connection(self):
-        return self.collection
+    def getCollection(self):
+        '''
+        Get mongo collection cursor
+        '''
+        return self._collection
+
+#     def setCollection(self, conndetails=None):
+    def setCollection(self, connectiondetails=None):
+        '''
+        Sets collection to be used
+        '''
+        self._connection = Connection(host=self.connectiondetails['host'])
+        self._db = self._connection[self.connectiondetails['db_name']]
+        self._collection = self._db[self.connectiondetails['coll_name']]
+
+    def delCollection(self):
+        '''
+        Remove cursors from mongo database and collections
+        '''
+        self._connection.close()
+        del self._db, self._collection
+
+    Collection = property(getCollection,
+                          setCollection,
+                          delCollection,
+                          "La collection para hacer las queries")
 
     # from sys import path
     # path.append('libs')
@@ -429,8 +649,12 @@ class DBStudyData():
         '''
         '''
         try:
+
+            self.setCollection()
+            collection = self.getCollection()
+
             # collection = db[self.collectionName]
-            results = self.collection.find({"fecha" : {"$in": [self.fecha]}, "hora": {"$in": [self.hora]}})
+            results = collection.find({"fecha" : {"$in": [self.fecha]}, "hora": {"$in": [self.hora]}})
             jsontoinsert = dict()
             jsontoinsert["fecha"] = self.fecha
             jsontoinsert["hora"] = self.hora
@@ -462,9 +686,64 @@ class DBStudyData():
 
             if results.count() == 0:
                 # construct the json to insert
-                self.collection.insert(jsontoinsert)
+                collection.insert(jsontoinsert)
             if results.count() == 1:
-                self.collection.update({"fecha" : {"$in" : [self.fecha]},
+                collection.update({"fecha" : {"$in" : [self.fecha]},
+                                        "hora" : {"$in" : [self.hora]}},
+                                       {"$set" : jsontoinsert })
+            if results.count() > 1:
+                raise Exception('La base de datos tiene mas de un registro para la dada fecha')
+        except:
+            raise
+        else:
+            self.setCollection(), jsontoinsert
+
+    def insertorupdatedataintodblocal(self):
+        '''
+        '''
+        try:
+            ''' BASE DE DATOS LOCAL '''
+            self.connectiondetails['host'] = None
+
+            self.setCollection()
+            collection = self.getCollection()
+
+            # collection = db[self.collectionName]
+            results = collection.find({"fecha" : {"$in": [self.fecha]}, "hora": {"$in": [self.hora]}})
+            jsontoinsert = dict()
+            jsontoinsert["fecha"] = self.fecha
+            jsontoinsert["hora"] = self.hora
+
+            ''' PRODUCCION '''
+            jsontoinsert["Precios"] = self.Precios
+            jsontoinsert["PrevisionDemanda"] = self.PrevisionDemanda
+            jsontoinsert["PrevisionEolica"] = self.PrevisionEolica
+            jsontoinsert["ENERGIA_GESTIONADA"] = self.ENERGIA_GESTIONADA
+            jsontoinsert["NUCLEAR"] = self.NUCLEAR
+            jsontoinsert["REGIMEN_ESPECIAL"] = self.REGIMEN_ESPECIAL
+            jsontoinsert["HIDRAULICA_CONVENCIONAL"] = self.HIDRAULICA_CONVENCIONAL
+            jsontoinsert["HIDRAULICA_BOMBEO"] = self.HIDRAULICA_BOMBEO
+            jsontoinsert["CARBON"] = self.CARBON
+            jsontoinsert["CICLO_COMBINADO"] = self.CICLO_COMBINADO
+            jsontoinsert["FUEL_GAS"] = self.FUEL_GAS
+            jsontoinsert["TERMICO_CON_PRIMA"] = self.TERMICO_CON_PRIMA
+            jsontoinsert["UNIDADES_GENERICAS"] = self.UNIDADES_GENERICAS
+            jsontoinsert["IMPORTACION_PORTUGAL"] = self.IMPORTACION_PORTUGAL
+            jsontoinsert["IMPORTACION_FRANCIA"] = self.IMPORTACION_FRANCIA
+            jsontoinsert["IMPORTACION_ANDORRA"] = self.IMPORTACION_ANDORRA
+            jsontoinsert["IMPORTACION_MARRUECOS"] = self.IMPORTACION_MARRUECOS
+
+            ''' DEMANDA '''
+            jsontoinsert["TOTAL_DEMANDA_NACIONAL_CLIENTES"] = self.TOTAL_DEMANDA_NACIONAL_CLIENTES
+            jsontoinsert["TOTAL_CONSUMO_BOMBEO"] = self.TOTAL_CONSUMO_BOMBEO
+            jsontoinsert["TOTAL_EXPORTACIONES"] = self.TOTAL_EXPORTACIONES
+            jsontoinsert["TOTAL_GENERICAS"] = self.TOTAL_GENERICAS
+
+            if results.count() == 0:
+                # construct the json to insert
+                collection.insert(jsontoinsert)
+            if results.count() == 1:
+                collection.update({"fecha" : {"$in" : [self.fecha]},
                                         "hora" : {"$in" : [self.hora]}},
                                        {"$set" : jsontoinsert })
             if results.count() > 1:
@@ -472,8 +751,7 @@ class DBStudyData():
         except:
             raise
         else:
-            self.connection.close()
-            del self.connection,self.db,self.collection,results
+            self.setCollection(), jsontoinsert
 
 # def populateStudyData2(startDate, endDate=None):
 #     '''
