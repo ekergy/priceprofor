@@ -1,3 +1,17 @@
+# Mibel Site
+
+Mible Site es una web que contiene informacion sobre el Mercado Iberico de la Electricidad y que recopila datos publicos disponibles en Internet sobre los balances energeticos en el Mercado Diario en España y Portugal. Estos datos se analizan para sacar estadisticas sobre el comportamiento del mercado y obtener conclusiones
+
+https://sites.google.com/a/ekergy.es/mibelsite/home
+
+# App Android de los precios del Mercado Diario Electrico
+
+https://play.google.com/store/apps/details?id=com.latteandcode.ekergy
+
+1. Visualizar los precios
+2. Hora y precio maximo
+3. Hora y precio minimo
+
 # Publicacion de contenido en OpenShift
 
 Primero debemos comprobar contra que repositorio estamos subiendo los cambios. Para ello usamos el siguiente comando
@@ -47,11 +61,3 @@ SERVIDOR $OPENSHIFT_REPO_DIR/.openshift/cron
 
 LOCAL /home/david/workspace/priceprofor/.openshift/cron
 ```
-
-# MicroApp para visualizar los precios del Mercado Diario de la electricidad
-
-https://play.google.com/store/apps/details?id=com.latteandcode.ekergy
-
-1. Visualizar los precios
-2. Hora y precio maximo
-3. Hora y precio minimo
