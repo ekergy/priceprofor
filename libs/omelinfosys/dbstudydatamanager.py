@@ -276,6 +276,8 @@ def updateStudyData():
     else:
         populateStudyData(startDate)
 
+####################################################################################################
+
 def gettecnologiasesfromweb(fecha):
         '''
         This is the main method so the usage of PreciosMibelHandler is more strainfoward.
@@ -292,6 +294,8 @@ def gettecnologiasesfromweb(fecha):
             return {"ProduccionyDemandaES":Produccion.ProduccionyDemandaES}
         #finally:
         #    del toparsePRECIOS,Precios
+
+####################################################################################################
 
 # from sys import path
 # path.append('libs')

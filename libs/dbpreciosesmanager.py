@@ -20,7 +20,8 @@ from utilities import omiepreciosurl, cambiohoraverano, cambiohorainvierno
 from urllib2 import urlopen
 # from csv import reader
 from omelinfosys.omelhandlers import PreciosMibelHandler
-from omelinfosys.dbrawdatamanager import DBRawData
+# from omelinfosys.dbrawdatamanager import DBRawData
+from omelinfosys.omelhandlers import getpreciosmibelfromweb
 
 '''
 URLError: <urlopen error [Errno 111] Connection refused>
@@ -68,7 +69,7 @@ def populatePrecios(startDate=None, endDate=None):
             print iterDate.date()
             ins = DBPreciosES()
             ins.fecha = iterDate
-            priceDay = getpreciosesfromweb(ins.fecha)['PreciosES']
+            priceDay = getpreciosmibelfromweb(ins.fecha)['PreciosES']
 
             if len(priceDay) == 24:
                 pass
@@ -104,6 +105,8 @@ def findLastPriceDocument():
         lastelement = element
     return lastelement['fecha']
 
+####################################################################################################
+
 # from sys import path
 # path.append('libs')
 # from datetime import datetime
@@ -123,50 +126,6 @@ def getpreciosesfromweb(fecha):
         else:
             Precios = PreciosMibelHandler(toparsePRECIOS)
             return {"PreciosES": Precios.precioses}
-        #finally:
-        #    del toparsePRECIOS,Precios
-
-####################################################################################################
-
-def getpreciosmibelfromweb(fecha,numero=None):
-        '''
-        This is the main method so the usage of PreciosMibelHandler is more strainfoward.
-        '''
-        try:
-#             currentDate = datetime.datetime(datetime.datetime.now().year,datetime.datetime.now().month,datetime.datetime.now().day)
-#             if fecha == currentDate + datetime.timedelta(1):
-#                 validafecha(fecha - datetime.timedelta(1))
-#             else:
-#                 validafecha(fecha)
-            URL = omiepreciosurl(fecha)
-            # print URL
-            toparsePRECIOS = urlopen(URL)
-        except:
-            raise
-#             req = Request(omiepreciosurl(fecha))
-#             urlopen(req)
-#         except URLError, e:
-#             print e.reason
-        else:
-            Precios = PreciosMibelHandler(toparsePRECIOS)
-            # print Precios.precioses
-            if Precios.precioses == []:
-#                 print ''
-#                 print 'ERROR'
-#                 print 'la fecha',fecha.date(),'no tiene precios horarios'
-#                 print ''
-                numero = '2'
-                print fecha.date()
-                URL = omiepreciosurl(fecha)[:len(omiepreciosurl(fecha))-1]+str(numero)
-                print URL
-                toparsePRECIOS = urlopen(URL)
-                Precios = PreciosMibelHandler(toparsePRECIOS)
-                print Precios.precioses
-                return {"PreciosMibel":Precios.preciospt,"PreciosES":Precios.precioses,"PreciosPT":Precios.preciosmibel}
-#                 return {"PreciosES": Precios.precioses}
-            else:
-                return {"PreciosMibel":Precios.preciospt,"PreciosES":Precios.precioses,"PreciosPT":Precios.preciosmibel}
-#                 return {"PreciosES": Precios.precioses}
         #finally:
         #    del toparsePRECIOS,Precios
 
@@ -635,7 +594,7 @@ def erroresMongo():
 #     collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
 
     horaenundia = 24
-    currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
+#     currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
 #     dayahead = currentDate + timedelta(1)
 
     '''
@@ -798,11 +757,6 @@ def populatePreciosLocal(startDate=None, endDate=None):
             ins.setCollection()
 
             ins.fecha = iterDate
-
-            ''' funciona bien salvo con extension ".2" '''
-#             priceDay = getpreciosesfromweb(ins.fecha)['PreciosES']
-
-            ''' marginalpdbc_20141018.2 '''
             priceDay = getpreciosmibelfromweb(ins.fecha)['PreciosES']
 
             if len(priceDay) == 24:
@@ -891,8 +845,6 @@ class DBPreciosES(object):
             jsontoinsert = dict()
             jsontoinsert['fecha'] = self.fecha
             jsontoinsert['hora'] = self.hora
-            # print getpreciosesfromweb(self.fecha)['PreciosES']
-            # jsontoinsert['PreciosES']=getpreciosesfromweb(self.fecha)['PreciosES'][self.hora]
             jsontoinsert['PreciosES'] = self.priceHour
             # print jsontoinsert
             if results.count() == 0:
@@ -923,8 +875,6 @@ class DBPreciosES(object):
             jsontoinsert = dict()
             jsontoinsert['fecha'] = self.fecha
             jsontoinsert['hora'] = self.hora
-            # print getpreciosesfromweb(self.fecha)['PreciosES']
-            # jsontoinsert['PreciosES']=getpreciosesfromweb(self.fecha)['PreciosES'][self.hora]
             jsontoinsert['PreciosES'] = self.priceHour
             # print jsontoinsert
             if results.count() == 0:

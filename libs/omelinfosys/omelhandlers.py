@@ -30,6 +30,12 @@ from datetime import datetime
 #         #finally:
 #         #    del toparsePRECIOS,Precios
 
+# from sys import path
+# path.append('libs/')
+# from omelinfosys.omelhandlers import getpreciosmibelfromweb
+# from datetime import datetime
+# fecha = datetime(2014,5,19)
+# getpreciosmibelfromweb(fecha)['PreciosES']
 def getpreciosmibelfromweb(fecha,numero=None):
         '''
         This is the main method so the usage of PreciosMibelHandler is more strainfoward.
