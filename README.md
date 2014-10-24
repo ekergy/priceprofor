@@ -61,3 +61,26 @@ SERVIDOR $OPENSHIFT_REPO_DIR/.openshift/cron
 
 LOCAL /home/david/workspace/priceprofor/.openshift/cron
 ```
+
+# Cron en maquina LocalHost
+
+Este es un ejemplo sencillo de como ejecutar un proceso Cron en local. Hay que tener en cuenta que para que en el minuto 15 de cada hora se ejecute el script, debe estar MongoDB conectada
+
+A)
+crontab -e
+
+15 * * * * /bin/sh /home/david/workspace/priceprofor/dcron/preciosMarginalesLocal.sh
+
+B)
+more /home/david/workspace/priceprofor/dcron/preciosMarginalesLocal.sh
+
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/lib/R/lib/                                                                                                               
+/usr/bin/python2.7 /home/david/workspace/priceprofor/dcron/populatePreciosLocal.py
+
+C)
+more /home/david/workspace/priceprofor/dcron/populatePreciosLocal.py
+
+from sys import path
+path.append('/home/david/workspace/priceprofor/libs')
+from dbpreciosesmanager import populatePreciosLocal
+populatePreciosLocal()
