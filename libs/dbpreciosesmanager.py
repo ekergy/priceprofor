@@ -572,9 +572,96 @@ def findPriceCurrentDate():
 
 # from sys import path
 # path.append('libs')
-# from dbpreciosesmanager import erroresMongo
-# erroresMongo()
-def erroresMongo():
+# from dbpreciosesmanager import realMongo
+# realMongo()
+def realMongo():
+    '''
+    '''
+#     from pymongo import Connection
+    collection = Connection(host=None).mercadodiario.precioses
+#     from datetime import datetime, timedelta
+    fecha_aux = datetime.now()
+
+    'today'
+    fecha = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
+    'dayahead'
+#    fecha = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(1)
+
+    print ''
+    print fecha.date()
+    print ''
+
+#     cursor = collection.find({"fecha": {"$gte": fecha, "$lte": fecha}}).sort("fecha",1)
+    cursor = collection.find({"fecha": {"$in": [fecha]}}).sort("fecha",1)
+    realPrices = list()
+    for element in cursor:
+        # print element
+        realPrices.append(element['PreciosES'])
+
+#     print realPrices
+#     print ''
+
+    horasEnUnDia = 24
+    if realPrices == []:
+        ''' con valores cero funciona '''
+#         realPrices = [0] * horasEnUnDia
+        ''' con valore -1 funciona y no se ve en la grafica '''
+        realPrices = [-1] * horasEnUnDia
+        ''' con None no funciona ni siquiera con la funcion dumps() '''
+#         realPrices = [None] * horasEnUnDia
+        print 'web precios dayahead vacia'
+
+    return realPrices
+
+# from sys import path
+# path.append('libs')
+# from dbpreciosesmanager import testeMongo
+# testeMongo()
+def testeMongo():
+    '''
+    '''
+#     from pymongo import Connection
+    collection = Connection(host=None).mercadodiario.modelosHTES
+#     from datetime import datetime, timedelta
+    fecha_aux = datetime.now()
+
+    'today'
+#     fecha = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
+    'dayahead'
+    fecha = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(1)
+
+#     cursor = collection.find({"dayahead": {"$gte": fecha, "$lte": fecha}}).sort("fecha",1)
+    cursor = collection.find({"dayahead": {"$in": [fecha]}, "tipo": "teste"}).sort("fecha",1)
+    testePrices = list()
+    for element in cursor:
+        # print element
+        testePrices.append(element['PreciosES'])
+
+#     print testePrices
+#     print ''
+
+#     horasEnUnDia = 24
+#     if testePrices == []:
+# #         testePrices = [None] * horasEnUnDia
+#         testePrices = [0] * horasEnUnDia
+#         print ''
+#         print 'web precios dayahead vacia'
+#         print ''
+
+    print ''
+    print fecha.date()
+    print ''
+    print testePrices
+    print ''
+    print len(testePrices)
+
+#     return testePrices
+
+# from sys import path
+# path.append('libs')
+# from dbpreciosesmanager import errorMongo
+# errorMongo()
+def errorMongo():
     '''
     para hacer un test del correcto funcionamiento conviene estudiar un dia anterior al dia actual
     currentDate = "el dia actual" (que deberia ser mañana a partir de las 14:00)
@@ -593,22 +680,21 @@ def erroresMongo():
     ''' SERVIDOR '''
 #     collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
 
-    horaenundia = 24
-#     currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
-#     dayahead = currentDate + timedelta(1)
-
     '''
     dayahead
     solo hay datos disponibles del precio de mañana a partir de las 14:00 horas
     por ese motivo redefinimos el valor dayahead intencionadamente al dia actual
     '''
-#     dayahead = datetime(2014,9,15)
-#     dayahead = datetime(2014,10,1)
-    dayahead = datetime(2014,10,8)
+    dayahead = datetime(2014,10,28)
+
+    horaenundia = 24
+#     currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
+#     dayahead = currentDate + timedelta(1)
 
     print ''
     print 'dayahead'
     print dayahead.date()
+    print ''
 
 #     cursor = collection.find({ "dayaheadNN": {"$in": [dayahead]}, "fecha": {"$in": [currentDate]}, "tipo": {"$in": ["working"]} })
     cursor = collection.find({ "fecha": {"$in": [dayahead]} })
@@ -616,10 +702,10 @@ def erroresMongo():
     for element in cursor:
         working.append(element['PreciosES'])
 
-    print ''
     print 'working'
     print working
     print len(working)
+    print ''
 
     ''' LOCAL '''
     collection = Connection(host=None).mercadodiario.modelosARNN
@@ -635,10 +721,10 @@ def erroresMongo():
     if len(testeNN) == horaenundia*2:
         testeNN = testeNN[:horaenundia]
 
-    print ''
     print 'testeNN'
     print testeNN
     print len(testeNN)
+    print ''
 
     ''' LOCAL '''
     collection = Connection(host=None).mercadodiario.modelosHTES
@@ -654,18 +740,17 @@ def erroresMongo():
     if len(testeHW) == horaenundia*2:
         testeHW = testeHW[:horaenundia]
 
-    print ''
     print 'testeHW'
     print testeHW
     print len(testeHW)
+    print ''
 
     rootECM_HWTES = errorCuadraticoMedio(testeHW, working)
-    print ''
     print 'rootECM_HWTES'
     print rootECM_HWTES
+    print ''
 
     rootECM_ARNN = errorCuadraticoMedio(testeNN, working)
-    print ''
     print 'rootECM_ARNN'
     print rootECM_ARNN
 

@@ -14,6 +14,7 @@ from pymongo import Connection
 from json import dumps
 from dbpreciosesmanager import populatePrecios
 from omelinfosys.dbstudydatamanager import populateStudyData
+from dbpreciosesmanager import realMongo
 
 @route('/populatePrecios')
 def indexprecios():
@@ -124,13 +125,15 @@ def findLastDayDocument():
     ''' LOCAL '''
 #     collection = Connection(host=None).mercadodiario.precioses
     ''' SERVIDOR '''
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
+    conn = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
+    collection = conn.mercadodiario.precioses
 
     currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
     cursor = collection.find({"fecha": {"$lte": currentDT}})
     for element in cursor:
         lastelement = element
         print element
+    del conn
     return lastelement['fecha']
 
 # from sys import path
@@ -562,6 +565,7 @@ def graficaTecnologiasDiariasPOST():
 #                     minMax=minMaxTuple
                     )
 
+# @route('/PredictionModelsHWTES', method='GET')
 @route('/PredictionModels', method='GET')
 @enable_cors
 def graphicpredictionmodelsGET():
@@ -883,3 +887,168 @@ def forecastArrayTDT():
 #     print ''
 
     return arrayTDT
+
+@route('/PredictionModelsHWTESreal', method='GET')
+@enable_cors
+def graphicpredictionmodelshwtesrealGET():
+    '''
+    Callback de '/PredictionModels'.
+    Este callback tiene que Buscar el ultimo documento dsiponible en la collection de Previsiones.
+
+    Este codigo incluye tanto modelo (working, model) como prediccion (teste, intervals)
+    '''
+    dateTime = findLastDayDocumentTechnology()
+    dic = tecnologiasDiarias(dateTime)
+    dateString = str(str(dateTime.day)+'/'+str(dateTime.month)+'/'+str(dateTime.year))
+
+    ''' LOCAL '''
+    collection = Connection(host=None).mercadodiario.modelosHTES
+    ''' SERVIDOR '''
+#     collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHTES
+
+    ''' el dia relevante a graficar es el dayahead y sus predicciones de precio '''
+    # dayahead = datetime(2014,6,1)
+    currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
+    # if hora < 14:
+    dayahead = currentDate
+    # else:
+#    dayahead = currentDate + timedelta(1)
+
+    ''' a partir de las 15:00 se podria ejecutar esta linea de codigo '''
+#     dayahead = currentDate + timedelta(2)
+
+    resultsdayahead = collection.find({ "dayahead" : {"$in": [dayahead]} })
+
+    VAR0 = list()
+    VAR1 = list()
+    VAR2 = list()
+    VAR3 = list()
+    VAR4 = list()
+    VAR5 = list()
+#     VAR6 = list()
+#     VAR7 = list()
+    arrayTDT = list()
+    emptyValue = None
+
+    fecha_aux = datetime.now()
+
+    if fecha_aux.hour in [0,1,2,3,4,5,6,7,8,9,10,11,12,12,14]:
+        realLine = 0
+    elif fecha_aux.hour in [15,16,17,18,19,20,21,22,23]:
+        realLine = 1
+
+    # print ''
+    # print fecha_aux.hour
+
+    ''' codigo replicado para simular una hora de hoy a partir de las 15:00 para que existan precios dayahead '''
+    hourNew = 15
+    if fecha_aux.replace(hour=hourNew).hour in [0,1,2,3,4,5,6,7,8,9,10,11,12,12,14]:
+        realLine = 0
+    elif fecha_aux.replace(hour=hourNew).hour in [15,16,17,18,19,20,21,22,23]:
+        realLine = 1
+    # print ''
+    # print fecha_aux.replace(hour=hourNew).hour
+
+    if realLine == 0:
+        arrayTDT.append( ['Fechayhora', 'Datos', 'Modelo', 'Prediccion', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}] )
+    elif realLine == 1:
+        arrayTDT.append( ['Fechayhora', 'Datos', 'Modelo', 'Prediccion', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, 'Real'] )
+
+#     arrayTDT.append( ['Fechayhora', 'Datos', 'Modelo', 'Prediccion', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}] )
+#     arrayTDT.append( ['Fechayhora', 'Datos', 'Modelo', 'Prediccion', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, 'Real'] )
+    for element in resultsdayahead:
+        if element['fecha'] <= dayahead + timedelta(1) and element['fecha'] >= dayahead - timedelta(7):
+            # print element['fecha']
+            if element['tipo'] == 'working' or element['tipo'] == 'teste':
+                dt = datetime(element['fecha'].year, element['fecha'].month, element['fecha'].day, element['hora'])
+                # VAR0.append(str(date.strftime(dt, '%Y/%m/%d %H:%M:%S')))
+                # VAR0.append(str(date.strftime(dt, '%Y/%m/%d %H:%M')))
+                VAR0.append(str(date.strftime(dt, '%d/%m/%Y %H:%M')))
+
+            if element['tipo'] == 'working':
+                VAR1.append(round(element['PreciosES'],2))
+            elif element['tipo'] == 'teste':
+                VAR1.append(emptyValue)
+            if element['tipo'] == 'model':
+                VAR2.append(round(element['PreciosES'],2))
+            elif element['tipo'] == 'teste':
+                VAR2.append(emptyValue)
+
+            if element['tipo'] == 'teste':
+                VAR3.append(round(element['PreciosES'],2))
+            elif element['tipo'] == 'working':
+                VAR3.append(emptyValue)
+
+            if element['tipo'] == 'lower80':
+                VAR4.append(round(element['PreciosES'],2))
+            elif element['tipo'] == 'working':
+                VAR4.append(emptyValue)
+            if element['tipo'] == 'upper80':
+                VAR5.append(round(element['PreciosES'],2))
+            elif element['tipo'] == 'working':
+                VAR5.append(emptyValue)
+
+#             if element['tipo'] == 'lower95':
+#                 VAR6.append(round(element['PreciosES'],2))
+#             elif element['tipo'] == 'working':
+#                 VAR6.append(emptyValue)
+#             if element['tipo'] == 'upper95':
+#                 VAR7.append(round(element['PreciosES'],2))
+#             elif element['tipo'] == 'working':
+#                 VAR7.append(emptyValue)
+
+##################################################
+
+    '''
+    collection = Connection(host=None).mercadodiario.modelosHTES
+    /usr/bin/python2.7 /home/david/workspace/electraPROFOR/ElectricityMarket/ExponentialSmoothing/testeHWTES_robjects.py
+    '''
+
+    horasEnUnDia = 24
+    horasGraficadas = len(VAR0)
+
+    ''' VAR8 longitud actual 216 '''
+    zerosListINI = [None] * (horasGraficadas - horasEnUnDia * 2)
+#     zerosListINI = [None] * (216 - horasEnUnDia * 2)
+    zerosListFIN = [None] * horasEnUnDia
+    VAR8 = zerosListINI + realMongo() + zerosListFIN
+
+    print ''
+    print VAR8
+    print len(VAR8)
+    print ''
+
+##################################################
+
+    for index in range(len(VAR0)):
+        if realLine == 0:
+            arrayTDT.append([ VAR0[index], VAR1[index], VAR2[index], VAR3[index], VAR4[index], VAR5[index]])
+        elif realLine == 1:
+            arrayTDT.append([ VAR0[index], VAR1[index], VAR2[index], VAR3[index], VAR4[index], VAR5[index], VAR8[index]])
+
+#     arrayTDTda = list()
+#     for index in range(len(arrayTDT)):
+#         if arrayTDT[index][0] == date.strftime(dayahead, '%Y/%m/%d %H:%M:%S'):
+#             daList = list()
+#             for element in arrayTDT[index]:
+#                 daList.append(element)
+#             daList.pop(6)
+#             daList.insert(6,100)
+#             arrayTDTda.append(daList)
+#         arrayTDTda.append(arrayTDT[index])
+#     for index in range(len(arrayTDTda)):
+#         if arrayTDTda[index][0] > '2014/05/18 00:00:00' and arrayTDTda[index][0] < '2014/05/19 01:00:00':
+#             print arrayTDTda[index]
+
+    print 'DAYAHEAD'
+    print dayahead.date()
+    print ''
+    # print arrayTDT
+    # print ''
+
+    ''' json.dumps interpreta "None" de python como "null" para google '''
+    return template('priceprofor_modelo_prediccion_HWTES_real',
+                    modelosPrediccionList=dumps(arrayTDT),
+                    fecha=dateString,
+                    mensaje=dic['mensaje'],
+                    )
