@@ -1,5 +1,6 @@
 # Publicacion de contenido en OpenShift
 
+
 Primero debemos comprobar contra que repositorio estamos subiendo los cambios. Para ello usamos el siguiente comando
 ```
 #!git
