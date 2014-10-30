@@ -9,6 +9,11 @@ from pymongo import Connection
 from dbpreciosesmanager import DBPreciosES
 from omelinfosys.dbstudydatamanager import DBStudyData
 
+DBPreciosES.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
+DBStudyData.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
+
+# connectiondetails = dict(host=None)
+
 CALENDARIONOLABORAL = {'2010': [datetime(2010,  1,  1),
                                 datetime(2010,  1,  6),
                                 datetime(2010,  4,  1),
