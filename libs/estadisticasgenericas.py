@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 # CONN_HOST = None
 
 ''' SERVIDOR '''
-CONN_HOST = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
+CONN_HOST = None
 
 # from sys import path
 # path.append('libs')
