@@ -20,7 +20,8 @@ from priceprofor import aplicacion
 from dbpreciosesmanager import DBPreciosES
 from omelinfosys.dbstudydatamanager import DBStudyData
 # from controllers.priceprofor_graficas import connectiondetails
-from utilities import connectiondetails
+from utilities import connectiondetails as connectiondetailsutilities
+from estadisticasgenericas import connectiondetails as connectiondetailsestadisticasgenericas
 
 if __name__ == '__main__':
 #     application.CONN_URI = None
@@ -32,7 +33,8 @@ if __name__ == '__main__':
 
     DBPreciosES.connectiondetails['host'] = None
     DBStudyData.connectiondetails['host'] = None
-    connectiondetails['host'] = None
+    connectiondetailsutilities['host'] = None
+    connectiondetailsestadisticasgenericas['host'] = None
 
     run(aplicacion,host='0.0.0.0',port='8000',reloader=False)
 #     run(application,host='0.0.0.0')
