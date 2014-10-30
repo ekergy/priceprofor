@@ -12,7 +12,6 @@ except IOError:
 
 # from sme_hogar import application
 from priceprofor import aplicacion
-from estadisticasgenericas import CONN_HOST
 from utilities import connectiondetails
 from database import DatabaseUsers
 from dbpreciosesmanager import DBPreciosES

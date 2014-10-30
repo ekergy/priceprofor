@@ -34,5 +34,5 @@ if __name__ == '__main__':
     DBStudyData.connectiondetails['host'] = None
     connectiondetails['host'] = None
 
-    run(aplicacion,host='0.0.0.0',port='8000',reloader=True)
+    run(aplicacion,host='0.0.0.0',port='8000',reloader=False)
 #     run(application,host='0.0.0.0')

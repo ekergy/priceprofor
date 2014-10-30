@@ -6,12 +6,13 @@ Created on 05/2014
 
 from pymongo import MongoClient
 from datetime import datetime, timedelta
+from utilities import connectiondetails
 
 ''' LOCAL '''
 # CONN_HOST = None
 
 ''' SERVIDOR '''
-CONN_HOST = None
+CONN_HOST = connectiondetails['host']
 
 # from sys import path
 # path.append('libs')
