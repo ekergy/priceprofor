@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+'''
+Created on 2014
+@author: hmarrao & david
+'''
 from datetime import datetime, timedelta
 from pymongo import MongoClient
 
@@ -7,20 +11,6 @@ CONN_HOST = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario
 def estadisticasPrecios():
     '''
     '''
-
-    '''
-    CODIGO MONGO
-    '''
-
-    '''
-    var fecha = ISODate("2014-10-02T00:00:00Z");
-    db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}]);
-    '''
-
-    '''
-    CODIGO PYMONGO
-    '''
-
 #     db = MongoClient().mercadodiario
 
 #     db.precioses.aggregate([{"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])

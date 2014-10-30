@@ -30,7 +30,7 @@ class GMT1(tzinfo):
     def dst(self, dt):
         '''
         '''
-       # DST starts last Sunday in March
+        # DST starts last Sunday in March
         d = datetime(dt.year, 4, 1)   # ends last Sunday in October
         self.dston = d - timedelta(days=d.weekday() + 1)
         d = datetime(dt.year, 11, 1)
@@ -106,23 +106,21 @@ def str2datetime(value):
     '''
     takes 
     Using know parsers "%Y-%m-%dT%H:%MZ", "%Y-%m-%d"
-    check if a string can represent one of the defined formats and return a datetime.datetime,
+    check if a string can represent one of the defined formats and return a datetime,
     else just return the value given.
-    
     '''
-    import datetime
     if value is None:
         return value
     else:
-        if not isinstance(value, datetime.datetime):
+        if not isinstance(value, datetime):
             if isinstance(value, str) \
             or isinstance(value, unicode):
                 try:
-                    value = datetime.datetime.strptime(value, "%Y-%m-%dT%H:%MZ")
+                    value = datetime.strptime(value, "%Y-%m-%dT%H:%MZ")
                 except ValueError:
-                    value = datetime.datetime.strptime(value, "%Y-%m-%d")
+                    value = datetime.strptime(value, "%Y-%m-%d")
                 finally:
-                    if isinstance(value, datetime.datetime):
+                    if isinstance(value, datetime):
                         return value
                     else:
                         raise Exception('Error parsing sistema de medicion fechas')
@@ -131,7 +129,6 @@ def str2datetime(value):
 
 def toD3jsDataFormat(*args,**kwargs):
     '''
-    TODO: After studing the data driven document Lib we will construct a method similiar to the one done the
-    toGoogleDataTable.
+    After studing the data driven document Lib we will construct a method similiar to the one done toGoogleDataTable.
     '''
     pass

@@ -68,7 +68,7 @@ class DatabaseUsers(object):
         if results.count() == 0:
             return False
         elif results.count() > 1:
-            # TODO: send a email to app admin if this occur.
+            # send a email to app admin if this occur.
             return False
         #check user password:
         for result in results:
@@ -90,7 +90,7 @@ class DatabaseUsers(object):
 
         #uinfo = {'ufname':ufname, 'ulname':ulname, 'uname':uname, 'uemail': uemail, 'upassword':upassword,
         #'ulastauth':ulastauth,'ulastlogintime':ulastlogintime,'ufirstauth':ulastauth,'ufirstlogindatetime':ulastlogindatetime}
-        oid = None
+        #oid = None
         self.setCollection()
         collection = self.getCollection()
         results = collection.find({"uemail": add_user_options['uemail'] })
@@ -125,7 +125,6 @@ class DatabaseUsers(object):
     def recover_user_password(self, email):
         '''
         yet another password recovery mode.
-        TODO:
         '''
         pass
 

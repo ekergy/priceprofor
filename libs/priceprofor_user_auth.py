@@ -8,8 +8,6 @@ import time
 import database
 #Here you can import your database module, this is a demo import
 
-
-
 class User(object):
 
     def __init__( self ):
@@ -18,14 +16,13 @@ class User(object):
         self.loggedin = False
         self.credentials = None
         self.validate() #validating user to see if he is logged in
-    
+
     def authenticate( self , email , password ):
-    
         '''
-            @type email str
-            @type password dict
-            
-            Checks user credentials and authenticates him in system.
+        @type email str
+        @type password dict
+
+        Checks user credentials and authenticates him in system.
         '''
         if email and password:
             user = self.db.find_user( email, password ) #if user exitsts
@@ -42,16 +39,15 @@ class User(object):
                 self.loggedin = True
                 self.credentials = user
                 return True
-                
+
         return False
 
     def loginusinggoogle(self, google_json):
-    
         '''
-            @type email str
-            @type password dict
-            
-            Checks user credentials and authenticates him in system.
+        @type email str
+        @type password dict
+
+        Checks user credentials and authenticates him in system.
         '''
         {u'family_name': 'Marr\\xc3\\xa3o Rodrigues', u'name': 'Hugo Marr\\xc3\\xa3o Rodrigues', u'picture': 'https://lh3.googleusercontent.com/-5C4DJsnFrQY/AAAAAAAAAAI/AAAAAAAAAhc/syjLemW4kaM/photo.jpg', u'locale': 'en', u'gender': 'male', u'id': '117948364019653655693', u'link': 'https://plus.google.com/117948364019653655693', u'given_name': 'Hugo', u'email': 'marrao@gmail.com', u'verified_email': 'True'}
         email = google_json['email']
@@ -70,9 +66,9 @@ class User(object):
                 self.loggedin = True
                 self.credentials = user
                 return True
-                
+
         return False
-        
+
     def loginusingfacebook(self, facebook_json):
         '''
         '''
@@ -86,23 +82,22 @@ class User(object):
         pass
 
     def logout( self ):
-    
         '''
-            Initiates user logout by destoying cookie.
+        Initiates user logout by destoying cookie.
         '''
-        
+
         self.remove_cookie()
         self.loggedin = False
         self.credentials = None
 
         return True
-        
+
     def register( self , **kwargs ):
         '''
         @type email str
         @type password str
         @type accepted str
-        
+
         Get email, password and age acceptance from register page, 
         checks if email is already registered, hashes password with 
         md5 and store user data.
@@ -123,16 +118,15 @@ class User(object):
                     self.credentials = self.db.return_user_by_objectid( uid )
                     return True
 
-        return False    
+        return False
 
     def validate( self ):
-    
         '''
-            Validates user email credential by decrypting encrypted cookie.
-            Indicates that user is logged in and verified. If verification
-            fails - destroys cookie by calling logout method ( because of
-            possible cookie fraud ). Stores user info in credentials
-            attribute in case of successful decryption.
+        Validates user email credential by decrypting encrypted cookie.
+        Indicates that user is logged in and verified. If verification
+        fails - destroys cookie by calling logout method ( because of
+        possible cookie fraud ). Stores user info in credentials
+        attribute in case of successful decryption.
         '''
 
         #uid = request.get_cookie( 'teste' , secret = self.COOKIE_SECRET_KEY )
@@ -143,18 +137,15 @@ class User(object):
             self.loggedin = True
             self.credentials = user
             return True
-            
+
         self.logout()
         return None
-        
+
     #COOKIES
-        
     def set_cookie( self, uid ):
-        
         '''
-            Sets user cookie based on his uid.
+        Sets user cookie based on his uid.
         '''
-            
         response.set_cookie( 
                 'teste',
                 str(uid),
@@ -165,13 +156,11 @@ class User(object):
         )
 
         #print request.get_cookie( 'teste' , secret = self.COOKIE_SECRET_KEY )
-        
+
     def remove_cookie( self ):
-    
         '''
-            Destroys user cookie.
+        Destroys user cookie.
         '''
-        
         response.set_cookie(
                 'teste',
                 '',
