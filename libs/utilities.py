@@ -6,6 +6,8 @@ Created on 11/2013
 
 from datetime import datetime, timedelta
 from pymongo import Connection
+from dbpreciosesmanager import DBPreciosES
+from omelinfosys.dbstudydatamanager import DBStudyData
 
 CALENDARIONOLABORAL = {'2010': [datetime(2010,  1,  1),
                                 datetime(2010,  1,  6),
@@ -66,9 +68,6 @@ CALENDARIONOLABORAL = {'2010': [datetime(2010,  1,  1),
                                 datetime(2014, 12,  25),
                                 ]
                       }
-
-from dbpreciosesmanager import DBPreciosES
-from omelinfosys.dbstudydatamanager import DBStudyData
 
 # from sys import path
 # path.append('libs')
