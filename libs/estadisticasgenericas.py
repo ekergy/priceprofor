@@ -4,7 +4,7 @@ Created on 05/2014
 @author: hmarrao & david
 '''
 
-from pymongo import MongoClient
+from pymongo import Connection
 from datetime import datetime, timedelta
 from utilities import connectiondetails
 
@@ -62,7 +62,8 @@ def estadisticasPrecios():
     promediosHasta = list()
 
     fecha_aux = datetime.now()
-    db = MongoClient(host=CONN_HOST).mercadodiario
+    db = Connection(connectiondetails['host'])
+    collection = db.mercadodiario.precioses
 
     ''' Precio Promedio dia actual '''
 #     db = MongoClient(host=CONN_HOST).mercadodiario
@@ -70,7 +71,7 @@ def estadisticasPrecios():
 #     fecha2 = parser.parse(my_date_str)
     fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
     fecha = fecha2
-    query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
+    query = collection.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(0, round(query,2))
     promediosDesde.insert(0, fecha)
     promediosHasta.insert(0, fecha2)
@@ -82,7 +83,7 @@ def estadisticasPrecios():
     fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
     fecha2 = fecha3 - timedelta(days=1)
     fecha = fecha3 - timedelta(days=1)
-    query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
+    query = collection.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(1, round(query,2))
     promediosDesde.insert(1, fecha)
     promediosHasta.insert(1, fecha2)
@@ -117,7 +118,7 @@ def estadisticasPrecios():
 #     fecha2 = parser.parse(my_date_str)
     fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
     fecha = fecha2 - timedelta(weeks=1) + timedelta(days=1)
-    query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
+    query = collection.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(2, round(query,2))
     promediosDesde.insert(2, fecha)
     promediosHasta.insert(2, fecha2)
@@ -129,7 +130,7 @@ def estadisticasPrecios():
     fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
     fecha2 = fecha3 - timedelta(weeks=1)
     fecha = fecha3 - timedelta(weeks=2) + timedelta(days=1)
-    query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
+    query = collection.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(3, round(query,2))
     promediosDesde.insert(3, fecha)
     promediosHasta.insert(3, fecha2)
@@ -141,7 +142,7 @@ def estadisticasPrecios():
     fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
 #     fecha = fecha2.replace(month=fecha2.month - 1)
     fecha = (fecha2 - timedelta(weeks=4) - timedelta(days=2)).replace(day=fecha2.day) + timedelta(days=1)
-    query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
+    query = collection.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(4, round(query,2))
     promediosDesde.insert(4, fecha)
     promediosHasta.insert(4, fecha2)
@@ -155,7 +156,7 @@ def estadisticasPrecios():
     fecha2 = (fecha3 - timedelta(weeks=4) - timedelta(days=2)).replace(day=fecha3.day)
 #     fecha = fecha2.replace(month=fecha2.month - 1)
     fecha = (fecha3 - timedelta(weeks=8) - timedelta(days=4)).replace(day=fecha3.day) + timedelta(days=1)
-    query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
+    query = collection.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(5, round(query,2))
     promediosDesde.insert(5, fecha)
     promediosHasta.insert(5, fecha2)
@@ -167,7 +168,7 @@ def estadisticasPrecios():
     fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
 #     fecha = fecha2.replace(month=fecha2.month - 3)
     fecha = (fecha2 - timedelta(weeks=13)).replace(day=fecha2.day) + timedelta(days=1)
-    query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
+    query = collection.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(6, round(query,2))
     promediosDesde.insert(6, fecha)
     promediosHasta.insert(6, fecha2)
