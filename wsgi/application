@@ -12,7 +12,8 @@ except IOError:
 
 # from sme_hogar import application
 from priceprofor import aplicacion
-from utilities import connectiondetails
+from utilities import connectiondetails as connectiondetailsutilities
+from estadisticasgenericas import connectiondetails as connectiondetailsestadisticasgenericas
 from database import DatabaseUsers
 from dbpreciosesmanager import DBPreciosES
 from omelinfosys.dbstudydatamanager import DBStudyData
@@ -24,6 +25,7 @@ DatabaseUsers.connectiondetails['host'] = 'mongodb://sme:sme@ds035997.mongolab.c
 DBPreciosES.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
 DBStudyData.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
 CONN_HOST = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
-connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
+connectiondetailsutilities['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
+connectiondetailsestadisticasgenericas['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
 
 application = aplicacion

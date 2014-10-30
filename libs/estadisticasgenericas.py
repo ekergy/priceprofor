@@ -64,7 +64,7 @@ def estadisticasPrecios():
     promediosHasta = list()
 
     fecha_aux = datetime.now()
-    db = MongoClient(host = connectiondetails['host']).mercadodiario
+    db = MongoClient(connectiondetails['host']).mercadodiario
 
     ''' Precio Promedio dia actual '''
 #     db = MongoClient(host=CONN_HOST).mercadodiario
