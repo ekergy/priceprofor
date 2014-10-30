@@ -38,4 +38,4 @@ finally:
 
 CONN_URI=None
 
-aplicacion = default_app()
+myapplication = default_app()

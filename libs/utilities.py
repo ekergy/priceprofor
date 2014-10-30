@@ -82,7 +82,7 @@ def findLastDayDocumentPrice():
     ''' SERVIDOR '''
 #     connec = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
 
-    connec = Connection(connectiondetails['host'])
+    connec = Connection(host=connectiondetails['host'])
     collection = connec.mercadodiario.precioses
 
 #     currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
@@ -114,7 +114,7 @@ def findLastDayDocumentTechnology():
     ''' SERVIDOR '''
 #     connec = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
 
-    connec = Connection(connectiondetails['host'])
+    connec = Connection(host=connectiondetails['host'])
     collection = connec.mercadodiario.tecnologiases
 
 #     currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
@@ -145,7 +145,7 @@ def findLastDayDocumentPriceThree():
     ''' SERVIDOR '''
 #     connec = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
 
-    connec = Connection(connectiondetails['host'])
+    connec = Connection(host=connectiondetails['host'])
     collection = connec.mercadodiario.precioses
 
 #     currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)

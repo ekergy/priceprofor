@@ -7,35 +7,15 @@ Created on 05/2014
 from pymongo import MongoClient
 from datetime import datetime, timedelta
 
-''' LOCAL '''
-# CONN_HOST = None
-
-''' SERVIDOR '''
-#CONN_HOST = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
+connectiondetails = dict(host=None)
 
 # from sys import path
 # path.append('libs')
 # path.append('wsgi')
 # from estadisticasgenericas import estadisticasPrecios
 # estadisticasPrecios()
-connectiondetails = dict(host=None)
-
 def estadisticasPrecios():
-    
     '''
-    '''
-
-    '''
-    CODIGO MONGO
-    '''
-
-    '''
-    var fecha = ISODate("2014-10-02T00:00:00Z");
-    db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}]);
-    '''
-
-    '''
-    CODIGO PYMONGO
     '''
 
 #     db = MongoClient().mercadodiario
@@ -64,7 +44,7 @@ def estadisticasPrecios():
     promediosHasta = list()
 
     fecha_aux = datetime.now()
-    db = MongoClient(connectiondetails['host']).mercadodiario
+    db = MongoClient(host=connectiondetails['host']).mercadodiario
 
     ''' Precio Promedio dia actual '''
 #     db = MongoClient(host=CONN_HOST).mercadodiario
@@ -275,7 +255,7 @@ def estadisticasTecnologias():
     promediosHasta = list()
 
     fecha_aux = datetime.now()
-    db = MongoClient(host=CONN_HOST).mercadodiario
+    db = MongoClient(host=connectiondetails['host']).mercadodiario
 
     ''' Promedio dia actual '''
 #     db = MongoClient(host=CONN_HOST).mercadodiario
