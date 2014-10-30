@@ -11,7 +11,7 @@ except IOError:
     pass
 
 # from sme_hogar import application
-from priceprofor import aplicacion
+from priceprofor import application
 from estadisticasgenericas import CONN_HOST
 from database import DatabaseUsers
 from dbpreciosesmanager import DBPreciosES
