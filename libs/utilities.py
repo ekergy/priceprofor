@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*
 '''
-Created on 11/11/2013
+Created on 11/2013
 @author: hmarrao & david
 '''
+
 from datetime import datetime, timedelta
+from pymongo import Connection
 
 CALENDARIONOLABORAL = {'2010': [datetime(2010,  1,  1),
                                 datetime(2010,  1,  6),
@@ -64,6 +66,106 @@ CALENDARIONOLABORAL = {'2010': [datetime(2010,  1,  1),
                                 datetime(2014, 12,  25),
                                 ]
                       }
+
+connectiondetails = dict(host=None)
+
+# from sys import path
+# path.append('libs')
+# from utilities import findLastDayDocumentPrice
+# findLastDayDocumentPrice()
+def findLastDayDocumentPrice():
+    '''
+    Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
+    '''
+    ''' LOCAL '''
+#     connec = Connection(host=None)
+    ''' SERVIDOR '''
+#     connec = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
+
+    connec = Connection(connectiondetails['host'])
+    collection = connec.mercadodiario.precioses
+
+#     currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
+#     cursor = collection.find({"fecha": {"$lte": currentDT}})
+#     for element in cursor:
+#         lastelement = element
+#         # print element
+
+#     cursor = collection.find().sort("fecha",-1).limit(1)
+    cursor = collection.find().sort([("fecha",-1),("hora",-1)]).limit(1)
+    for element in cursor:
+        fecha = element['fecha']
+        # fecha.replace(hour=0, minute=0, second=0, microsecond=0)
+    del connec
+
+#     return lastelement['fecha']
+    return fecha
+
+# from sys import path
+# path.append('libs')
+# from utilities import findLastDayDocumentTechnology
+# findLastDayDocumentTechnology()
+def findLastDayDocumentTechnology():
+    '''
+    Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
+    '''
+    ''' LOCAL '''
+#     connec = Connection(host=None)
+    ''' SERVIDOR '''
+#     connec = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
+
+    connec = Connection(connectiondetails['host'])
+    collection = connec.mercadodiario.tecnologiases
+
+#     currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
+#     cursor = collection.find({"fecha": {"$lte": currentDT}})
+#     for element in cursor:
+#         lastelement = element
+
+#     cursor = collection.find().sort("fecha",-1).limit(1)
+    cursor = collection.find().sort([("fecha",-1),("hora",-1)]).limit(1)
+    for element in cursor:
+        fecha = element['fecha']
+        # fecha.replace(hour=0, minute=0, second=0, microsecond=0)
+    del connec
+
+#     return lastelement['fecha']
+    return fecha
+
+# from sys import path
+# path.append('libs')
+# from utilities import findLastDayDocumentPriceThree
+# findLastDayDocumentPriceThree()
+def findLastDayDocumentPriceThree():
+    '''
+    Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
+    '''
+    ''' LOCAL '''
+#     connec = Connection(host=None)
+    ''' SERVIDOR '''
+#     connec = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
+
+    connec = Connection(connectiondetails['host'])
+    collection = connec.mercadodiario.precioses
+
+#     currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
+#     fecha = currentDT - timedelta(3)
+#     cursor = collection.find({"fecha": {"$lte": fecha}})
+#     for element in cursor:
+#         lastelement = element
+#         # print element
+
+#     cursor = collection.find().sort("fecha",-1).limit(1)
+    cursor = collection.find().sort([("fecha",-1),("hora",-1)]).limit(1)
+    for element in cursor:
+        # print element
+        fecha = element['fecha']
+        # fecha.replace(hour=0, minute=0, second=0, microsecond=0)
+        fecha = fecha - timedelta(3)
+    del connec
+
+#     return lastelement['fecha']
+    return fecha
 
 # from sys import path
 # path.append('libs')
@@ -402,7 +504,9 @@ def validafecha(fecha):
         if not isinstance(fecha, datetime):
             raise Exception('El formato fecha no es del tipo correcto.')
         fecha.replace(hour = 11)
-        if datetime.now() < fecha:
+#         if datetime.now() < fecha:
+        ''' en desarrollo para dayahead '''
+        if datetime.now() + timedelta(1) < fecha:
             raise Exception('La fecha selecionada es posterior a hoy. No hay datos disponibles en la web.')
         fecha.replace(hour = 0)
     except:

@@ -87,6 +87,13 @@ def populatePrecios(startDate=None, endDate=None):
             del ins
             iterDate += ONEDAY
 
+'''
+var fecha = ISODate("2014-10-29 00:00:00.000Z");
+db.precioses.findOne();
+db.precioses.findOne({fecha: {$gte: fecha, $lte: fecha} });
+db.precioses.findOne({fecha: {$lte: fecha} });
+'''
+
 # from sys import path
 # path.append('libs')
 # from dbpreciosesmanager import findLastPriceDocument
@@ -106,6 +113,8 @@ def findLastPriceDocument():
     return lastelement['fecha']
 
 ####################################################################################################
+
+''' codigo no utilizado al menos en este mismo script '''
 
 # from sys import path
 # path.append('libs')
@@ -583,13 +592,12 @@ def realMongo():
     fecha_aux = datetime.now()
 
     'today'
-    fecha = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
+#     fecha = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
     'dayahead'
-#    fecha = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(1)
+    fecha = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(1)
 
-    print ''
-    print fecha.date()
-    print ''
+#     print fecha.date()
+#     print ''
 
 #     cursor = collection.find({"fecha": {"$gte": fecha, "$lte": fecha}}).sort("fecha",1)
     cursor = collection.find({"fecha": {"$in": [fecha]}}).sort("fecha",1)
@@ -609,7 +617,7 @@ def realMongo():
         realPrices = [-1] * horasEnUnDia
         ''' con None no funciona ni siquiera con la funcion dumps() '''
 #         realPrices = [None] * horasEnUnDia
-        print 'web precios dayahead vacia'
+#         print 'web precios dayahead vacia'
 
     return realPrices
 
@@ -820,7 +828,9 @@ def populatePreciosLocal(startDate=None, endDate=None):
             currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
             # endDate = currentDate - timedelta(3)
             ''' no se seleccionan los precios "day ahead" de mañana publicados hoy a las 13:00 '''
-            endDate = currentDate
+#             endDate = currentDate
+            ''' en desarrollo para dayahead '''
+            endDate = currentDate + timedelta(1)
     except:
         raise
     else:
@@ -898,8 +908,8 @@ class DBPreciosES(object):
 
     def __init__(self):
         '''
-        SET COLLECTION NAME IN MONGO.
-        No need for user uname or coopid.
+        SET COLLECTION NAME IN MONGO
+        No need for user uname or coopid
         '''
 
 # from sys import path
@@ -912,8 +922,9 @@ class DBPreciosES(object):
         ''' LOCAL '''
 #         self.connectiondetails['host'] = None
         ''' SERVIDOR '''
-        self.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
+#             self.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
 
+        self.connectiondetails['host'] = self.connectiondetails['host']
         self.connectiondetails['db_name'] = 'mercadodiario'
         self.connectiondetails['coll_name'] = 'precioses'
         self.setCollection()

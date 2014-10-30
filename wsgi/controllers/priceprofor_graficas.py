@@ -4,17 +4,19 @@ Created on 05/2014
 @author: hmarrao & david
 '''
 
+# from time import strptime
+# from omelinfosys.dbstudydatamanager import DBStudyData
 from bottle import route,template, response, request
 from kernelCaracterizacionEnergetica import temporadaConsumoVector
 from datautilities import toGoogleDataTable
 from dbpreciosesmanager import preciosDiarios, tecnologiasDiarias
-# from time import strptime
 from datetime import datetime, timedelta, date
 from pymongo import Connection
 from json import dumps
 from dbpreciosesmanager import populatePrecios
 from omelinfosys.dbstudydatamanager import populateStudyData
 from dbpreciosesmanager import realMongo
+from utilities import findLastDayDocumentPrice, findLastDayDocumentTechnology
 
 @route('/populatePrecios')
 def indexprecios():
@@ -95,7 +97,6 @@ def populatePreciosActualiza(fn):
         populatePrecios()
         #actual request; reply with the actual response
         return fn(*args, **kwargs)
-
     return _populatePreciosActualiza
 
 def populateTecnologiasActualiza(fn):
@@ -110,73 +111,7 @@ def populateTecnologiasActualiza(fn):
         populateStudyData()
         #actual request; reply with the actual response
         return fn(*args, **kwargs)
-
     return _populateTecnologiasActualiza
-
-# from sys import path
-# path.append('libs')
-# path.append('wsgi')
-# from controllers.priceprofor_graficas import findLastDayDocument
-# findLastDayDocument()
-def findLastDayDocument():
-    '''
-    Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
-    '''
-    ''' LOCAL '''
-#     collection = Connection(host=None).mercadodiario.precioses
-    ''' SERVIDOR '''
-    conn = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
-    collection = conn.mercadodiario.precioses
-
-    currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
-    cursor = collection.find({"fecha": {"$lte": currentDT}})
-    for element in cursor:
-        lastelement = element
-        print element
-    del conn
-    return lastelement['fecha']
-
-# from sys import path
-# path.append('libs')
-# path.append('wsgi')
-# from controllers.priceprofor_graficas import findLastDayDocumentThree
-# findLastDayDocumentThree()
-def findLastDayDocumentThree():
-    '''
-    Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
-    '''
-    ''' LOCAL '''
-#     collection = Connection(host=None).mercadodiario.precioses
-    ''' SERVIDOR '''
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
-
-    currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
-    fecha = currentDT - timedelta(3)
-    cursor = collection.find({"fecha": {"$lte": fecha}})
-    for element in cursor:
-        lastelement = element
-        print element
-    return lastelement['fecha']
-
-# from sys import path
-# path.append('libs')
-# path.append('wsgi')
-# from controllers.priceprofor_graficas import findLastDayDocumentTechnology
-# findLastDayDocumentTechnology()
-def findLastDayDocumentTechnology():
-    '''
-    Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
-    '''
-    ''' LOCAL '''
-#     collection = Connection(host=None).OMIEData.OMIEStudyData
-    ''' SERVIDOR '''
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.tecnologiases
-
-    currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
-    cursor = collection.find({"fecha": {"$lte": currentDT}})
-    for element in cursor:
-        lastelement = element
-    return lastelement['fecha']
 
 # from sys import path
 # path.append('libs')
@@ -427,7 +362,7 @@ def graficaPreciosDiariosGET():
 #     if dateString == '':
 #         dic = preciosDiarios()
     ''' se grafica en el GET el ultimo dia en base de datos '''
-    dateTime = findLastDayDocument()
+    dateTime = findLastDayDocumentPrice()
     dic = preciosDiarios(dateTime)
     dateString = str(str(dateTime.day)+'/'+str(dateTime.month)+'/'+str(dateTime.year))
 
@@ -506,6 +441,12 @@ def graficaTecnologiasDiariasGET():
 #         dic = preciosDiarios()
     ''' se grafica en el GET el ultimo dia en base de datos '''
     dateTime = findLastDayDocumentTechnology()
+
+    ''' instancia al metodo de clase DBStudyData '''
+#     ins = DBStudyData()
+#     dateTime = ins.findLastRecordInDB()['fecha']
+#     del ins
+
 #     dic = preciosDiarios(dateTime)
     dic = tecnologiasDiarias(dateTime)
     dateString = str(str(dateTime.day)+'/'+str(dateTime.month)+'/'+str(dateTime.year))
@@ -888,6 +829,11 @@ def forecastArrayTDT():
 
     return arrayTDT
 
+'''
+collection = Connection(host=None).mercadodiario.modelosHTES
+/usr/bin/python2.7 /home/david/workspace/electraPROFOR/ElectricityMarket/ExponentialSmoothing/testeHWTES_robjects.py
+'''
+
 @route('/PredictionModelsHWTESreal', method='GET')
 @enable_cors
 def graphicpredictionmodelshwtesrealGET():
@@ -907,12 +853,11 @@ def graphicpredictionmodelshwtesrealGET():
 #     collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHTES
 
     ''' el dia relevante a graficar es el dayahead y sus predicciones de precio '''
-    # dayahead = datetime(2014,6,1)
     currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
-    # if hora < 14:
-    dayahead = currentDate
-    # else:
-#    dayahead = currentDate + timedelta(1)
+    dayahead = currentDate + timedelta(1)
+
+#     dayahead = datetime(2014,6,1)
+#     dayahead = currentDate
 
     ''' a partir de las 15:00 se podria ejecutar esta linea de codigo '''
 #     dayahead = currentDate + timedelta(2)
@@ -932,22 +877,22 @@ def graphicpredictionmodelshwtesrealGET():
 
     fecha_aux = datetime.now()
 
-    if fecha_aux.hour in [0,1,2,3,4,5,6,7,8,9,10,11,12,12,14]:
+    if fecha_aux.hour in [0,1,2,3,4,5,6,7,8,9,10,11,12,13]:
         realLine = 0
-    elif fecha_aux.hour in [15,16,17,18,19,20,21,22,23]:
+    elif fecha_aux.hour in [14,15,16,17,18,19,20,21,22,23]:
         realLine = 1
 
     # print ''
     # print fecha_aux.hour
 
     ''' codigo replicado para simular una hora de hoy a partir de las 15:00 para que existan precios dayahead '''
-    hourNew = 15
-    if fecha_aux.replace(hour=hourNew).hour in [0,1,2,3,4,5,6,7,8,9,10,11,12,12,14]:
-        realLine = 0
-    elif fecha_aux.replace(hour=hourNew).hour in [15,16,17,18,19,20,21,22,23]:
-        realLine = 1
-    # print ''
-    # print fecha_aux.replace(hour=hourNew).hour
+#     hourNew = 14
+#     if fecha_aux.replace(hour=hourNew).hour in [0,1,2,3,4,5,6,7,8,9,10,11,12,13]:
+#         realLine = 0
+#     elif fecha_aux.replace(hour=hourNew).hour in [14,15,16,17,18,19,20,21,22,23]:
+#         realLine = 1
+#     # print ''
+#     # print fecha_aux.replace(hour=hourNew).hour
 
     if realLine == 0:
         arrayTDT.append( ['Fechayhora', 'Datos', 'Modelo', 'Prediccion', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}] )
@@ -999,11 +944,6 @@ def graphicpredictionmodelshwtesrealGET():
 
 ##################################################
 
-    '''
-    collection = Connection(host=None).mercadodiario.modelosHTES
-    /usr/bin/python2.7 /home/david/workspace/electraPROFOR/ElectricityMarket/ExponentialSmoothing/testeHWTES_robjects.py
-    '''
-
     horasEnUnDia = 24
     horasGraficadas = len(VAR0)
 
@@ -1013,10 +953,9 @@ def graphicpredictionmodelshwtesrealGET():
     zerosListFIN = [None] * horasEnUnDia
     VAR8 = zerosListINI + realMongo() + zerosListFIN
 
-    print ''
-    print VAR8
-    print len(VAR8)
-    print ''
+#     print VAR8
+#     print len(VAR8)
+#     print ''
 
 ##################################################
 

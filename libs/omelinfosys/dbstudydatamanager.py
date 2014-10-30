@@ -251,11 +251,32 @@ def findLastStudyDocument():
     '''
     ins = DBStudyData()
     collection = ins.getCollection()
-    currentDT = datetime.now()
-    cursor = collection.find({"fecha": {"$lte": currentDT}})
+
+#     currentDT = datetime.now()
+#     cursor = collection.find({"fecha": {"$lte": currentDT}})
+#     for element in cursor:
+#         lastelement = element
+
+    '''
+    DBStudyData
+    findLastRecordInDB
+    '''
+
+    # cursor = collection.find().sort("fecha",-1).limit(1)
+    cursor = collection.find().sort([("fecha",-1),("hora",-1)]).limit(1)
     for element in cursor:
-        lastelement = element
-    return lastelement['fecha']
+        # print element
+        # print element['hora']
+        fecha = element['fecha']
+        # fecha.replace(hour=0, minute=0, second=0, microsecond=0)
+    del ins
+
+#     return lastelement['fecha']
+    return fecha
+
+####################################################################################################
+
+''' populateStudyData ya tiene esta funcionalidad añadida '''
 
 # from sys import path
 # path.append('libs')
@@ -277,6 +298,8 @@ def updateStudyData():
         populateStudyData(startDate)
 
 ####################################################################################################
+
+''' codigo no utilizado al menos en este mismo script '''
 
 def gettecnologiasesfromweb(fecha):
         '''
@@ -507,8 +530,6 @@ class DBStudyData():
     Esto es una supocion
     '''
 
-    connectiondetails = dict(host=None)
-
 # from sys import path
 # path.append('libs')
 # from datetime import datetime
@@ -516,24 +537,21 @@ class DBStudyData():
 # from omelinfosys.dbstudydatamanager import populateStudyData
 # populateStudyData(startDate)
 
-    # def __init__(self,fecha,hora=None):
-    # def __init__(self,fecha=None):
-    # def __init__(self,fecha,hora=None,collectionname=None):
+    connectiondetails = dict(host=None)
+
     def __init__(self):
         '''
-        if no hour is given get it from the fecha.
-        in data base hour in fecha datetime is set to zero in order to be able to perform queries 
-        of a full day.
+        if no hour is given get it from the fecha
+        in data base hour in fecha datetime is set to zero in order to be able to perform queries of a full day
         '''
         try:
             ''' LOCAL '''
 #             self.connectiondetails['host'] = None
             ''' SERVIDOR '''
-            self.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
+#             self.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
 
-            # self.db = self.connection.OMIEData
+            self.connectiondetails['host'] = self.connectiondetails['host']
             self.connectiondetails['db_name'] = 'mercadodiario'
-            # self.collection = self.db.OMIEStudyData
             self.connectiondetails['coll_name'] = 'tecnologiases'
             self.setCollection()
 
@@ -570,7 +588,6 @@ class DBStudyData():
         '''
         return self._collection
 
-#     def setCollection(self, conndetails=None):
     def setCollection(self, connectiondetails=None):
         '''
         Sets collection to be used
@@ -590,6 +607,22 @@ class DBStudyData():
                           setCollection,
                           delCollection,
                           "La collection para hacer las queries")
+
+    def findLastRecordInDB(self):
+        """
+        Devuelve el ultimo registro que se encuentra en la base de datos:
+        """
+        try:
+            self.setCollection()
+            collection = self.getCollection()
+            results = collection.find().sort([("fecha",-1),("hora",-1)]).limit(1)
+            for element in results:
+                result = element
+            return result
+        except:
+            raise
+        else:
+            self.delCollection()
 
     # from sys import path
     # path.append('libs')

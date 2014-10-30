@@ -80,8 +80,9 @@ def updateRawData():
 
 class DBRawData():
     '''
-    classdocs
+    class docs
     '''
+
     # Class attribute: pymongo connection.
     # Should this always be an no_attribute¿?
     # Maybe yes, because in this ways we may force to del class instance and put connection and close connection
@@ -93,25 +94,30 @@ class DBRawData():
     # Check if the date is in the database.
     # self._indatabase = False
 
+    connectiondetails = dict(host=None)
+
     def __init__(self,fecha=None):
         '''
         '''
         try:
-#             self.connection = Connection()
-#             self.db = self.connection.OMIEData
-#             self.collection = self.db.OMIERawData
-
             ''' LOCAL '''
 #             self.connection = Connection(host=None)
 
             ''' SERVIDOR '''
             self.connection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
 
-            # self.db = self.connection.OMIEData
             self.db = self.connection.mercadodiario
-            ''' NOMBRE DOCUMENTO (O TABLA) '''
-            # self.collection = self.db.OMIEStudyData
             self.collection = self.db.tecnologiases
+
+            ''' LOCAL '''
+#             self.connectiondetails['host'] = None
+            ''' SERVIDOR '''
+#             self.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
+
+#             self.connectiondetails['host'] = self.connectiondetails['host']
+#             self.connectiondetails['db_name'] = 'mercadodiario'
+#             self.connectiondetails['coll_name'] = 'tecnologiases'
+#             self.setCollection()
 
             ''' la base de datos contiene 24 registros por cada dia, uno correspondiente a cada hora del dia '''
             if fecha is not None:

@@ -4,19 +4,20 @@ Created on 05/2014
 @author: hmarrao & david
 '''
 
-from pymongo import Connection
+# from pymongo import Connection
+# from dateutil import parser
+# from bottle import template
+# from kernelCaracterizacionEnergetica import temporadaConsumoVector
+# from datautilities import toGoogleDataTable
+# from dbpreciosesmanager import preciosDiarios, tecnologiasDiarias
+# from time import strptime
+# from datetime import date
+# from omelinfosys.dbstudydatamanager import populateStudyData
+# from json import dumps
 from dbpreciosesmanager import populatePrecios
 from pymongo import MongoClient
-
-# from dateutil import parser
-from bottle import route, template, response, request
-from kernelCaracterizacionEnergetica import temporadaConsumoVector
-from datautilities import toGoogleDataTable
-from dbpreciosesmanager import preciosDiarios, tecnologiasDiarias
-from time import strptime
-from datetime import datetime, timedelta, date
-from omelinfosys.dbstudydatamanager import populateStudyData
-from json import dumps
+from bottle import route, response, request
+from datetime import datetime, timedelta
 
 ''' LOCAL '''
 # CONN_HOST = None
@@ -71,46 +72,6 @@ def enable_cors(fn):
             #actual request; reply with the actual response
             return fn(*args, **kwargs)
     return _enable_cors
-
-# from sys import path
-# path.append('libs')
-# path.append('wsgi')
-# from controllers.priceprofor_graficas import findLastDayDocument
-# findLastDayDocument()
-def findLastDayDocument():
-    '''
-    Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
-    '''
-    ''' LOCAL '''
-#     collection = Connection(host=None).mercadodiario.precioses
-    ''' SERVIDOR '''
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
-
-    currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
-    cursor = collection.find({"fecha": {"$lte": currentDT}})
-    for element in cursor:
-        lastelement = element
-    return lastelement['fecha']
-
-# from sys import path
-# path.append('libs')
-# path.append('wsgi')
-# from controllers.priceprofor_graficas import findLastDayDocumentTechnology
-# findLastDayDocumentTechnology()
-def findLastDayDocumentTechnology():
-    '''
-    Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
-    '''
-    ''' LOCAL '''
-#     collection = Connection(host=None).OMIEData.OMIEStudyData
-    ''' SERVIDOR '''
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.tecnologiases
-
-    currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
-    cursor = collection.find({"fecha": {"$lte": currentDT}})
-    for element in cursor:
-        lastelement = element
-    return lastelement['fecha']
 
 # from sys import path
 # path.append('libs')

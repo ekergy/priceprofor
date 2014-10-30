@@ -11,7 +11,8 @@ from json import dumps
 
 # LOCAL
 from dbpreciosesmanager import priceAppli, forecastAppli
-from controllers.priceprofor_graficas import findLastDayDocumentTechnology, tecnologiasDiarias, forecastArrayTDT
+from controllers.priceprofor_graficas import tecnologiasDiarias, forecastArrayTDT
+from utilities import findLastDayDocumentTechnology
 
 @route('/priceprofor/rest/help', method=['GET'])
 def helpinfo():

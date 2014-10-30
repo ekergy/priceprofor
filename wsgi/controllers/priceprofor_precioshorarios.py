@@ -8,14 +8,14 @@ from bottle import route, template
 
 # LOCAL
 # from datetime import datetime
+# from estadisticasgenericas import estadisticasPrecios
 from priceprofor_graficas import preciosDiarios, tecnologiasDiarias
-from priceprofor_graficas import findLastDayDocument, findLastDayDocumentTechnology, findLastDayDocumentThree
 from priceprofor_graficas import relativeExtremes, colorChart, averageList, lineChart
 from priceprofor_graficas import lineChartMulti, lineChartMultiPrice
 from omelinfosys.reehandlers import getdemandeforcast, getpreveoldd
 from omelinfosys.dbstudydatamanager import DBRawData
 from priceprofor_estadisticas import estadisticasPrecios, estadisticasTecnologias
-# from estadisticasgenericas import estadisticasPrecios
+from utilities import findLastDayDocumentPrice, findLastDayDocumentTechnology, findLastDayDocumentPriceThree
 
 # from sys import exit
 # exit(0)
@@ -76,7 +76,7 @@ def precioshorarios():
     '''
 
     ''' DATETIME '''
-    pricesDT = findLastDayDocument()
+    pricesDT = findLastDayDocumentPrice()
 #     pricesDT = datetime(2014,7,12)
 
     ''' PRICES '''
@@ -126,7 +126,7 @@ def precioshorariosultimodia():
     """
 
     ''' DATETIME '''
-    pricesDT = findLastDayDocument()
+    pricesDT = findLastDayDocumentPrice()
 #     pricesDT = datetime(2014,7,12)
 
     ''' PRICES '''
@@ -339,8 +339,7 @@ def energiagestionadavalores():
     """
 
     ''' DATETIME '''
-#     pricesDT = findLastDayDocument()
-    pricesDT = findLastDayDocumentThree()
+    pricesDT = findLastDayDocumentPriceThree()
     technologyDT = findLastDayDocumentTechnology()
 #     pricesDT = datetime(2014,7,12)
 
@@ -389,8 +388,7 @@ def energiagestionadacoeficientes():
     """
 
     ''' DATETIME '''
-#     pricesDT = findLastDayDocument()
-    pricesDT = findLastDayDocumentThree()
+    pricesDT = findLastDayDocumentPriceThree()
 #     pricesDT = datetime(2014,7,12)
 
     technologyDT = findLastDayDocumentTechnology()
