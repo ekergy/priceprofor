@@ -7,16 +7,6 @@ Created on 11/2013
 from datetime import datetime, timedelta
 from pymongo import Connection
 
-# connectiondetails = dict(host=None)
-
-''' LOCAL '''
-# connecPrices = Connection(host=None).mercadodiario.precioses
-# connecTechnologies = Connection(host=None).mercadodiario.tecnologiases
-
-''' SERVIDOR '''
-connecPrices = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
-connecTechnologies = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.tecnologiases
-
 CALENDARIONOLABORAL = {'2010': [datetime(2010,  1,  1),
                                 datetime(2010,  1,  6),
                                 datetime(2010,  4,  1),
@@ -77,6 +67,8 @@ CALENDARIONOLABORAL = {'2010': [datetime(2010,  1,  1),
                                 ]
                       }
 
+connectiondetails = dict(host=None)
+
 # from sys import path
 # path.append('libs')
 # from utilities import findLastDayDocumentPrice
@@ -90,7 +82,8 @@ def findLastDayDocumentPrice():
     ''' SERVIDOR '''
 #     connec = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
 
-    collection = connecPrices.mercadodiario.precioses
+    connec = Connection(connectiondetails['host'])
+    collection = connec.mercadodiario.precioses
 
 #     currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
 #     cursor = collection.find({"fecha": {"$lte": currentDT}})
@@ -103,7 +96,7 @@ def findLastDayDocumentPrice():
     for element in cursor:
         fecha = element['fecha']
         # fecha.replace(hour=0, minute=0, second=0, microsecond=0)
-    del connecPrices
+    del connec
 
 #     return lastelement['fecha']
     return fecha
@@ -121,7 +114,8 @@ def findLastDayDocumentTechnology():
     ''' SERVIDOR '''
 #     connec = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
 
-    collection = connecTechnologies.mercadodiario.tecnologiases
+    connec = Connection(connectiondetails['host'])
+    collection = connec.mercadodiario.tecnologiases
 
 #     currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
 #     cursor = collection.find({"fecha": {"$lte": currentDT}})
@@ -133,7 +127,7 @@ def findLastDayDocumentTechnology():
     for element in cursor:
         fecha = element['fecha']
         # fecha.replace(hour=0, minute=0, second=0, microsecond=0)
-    del connecTechnologies
+    del connec
 
 #     return lastelement['fecha']
     return fecha
@@ -151,7 +145,8 @@ def findLastDayDocumentPriceThree():
     ''' SERVIDOR '''
 #     connec = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
 
-    collection = connecPrices.mercadodiario.precioses
+    connec = Connection(connectiondetails['host'])
+    collection = connec.mercadodiario.precioses
 
 #     currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
 #     fecha = currentDT - timedelta(3)
@@ -167,7 +162,7 @@ def findLastDayDocumentPriceThree():
         fecha = element['fecha']
         # fecha.replace(hour=0, minute=0, second=0, microsecond=0)
         fecha = fecha - timedelta(3)
-    del connecPrices
+    del connec
 
 #     return lastelement['fecha']
     return fecha
