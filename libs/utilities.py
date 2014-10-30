@@ -67,7 +67,8 @@ CALENDARIONOLABORAL = {'2010': [datetime(2010,  1,  1),
                                 ]
                       }
 
-connectiondetails = dict(host=None)
+from dbpreciosesmanager import DBPreciosES
+from omelinfosys.dbstudydatamanager import DBStudyData
 
 # from sys import path
 # path.append('libs')
@@ -82,7 +83,7 @@ def findLastDayDocumentPrice():
     ''' SERVIDOR '''
 #     connec = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
 
-    connec = Connection(connectiondetails['host'])
+    connec = Connection(DBPreciosES.connectiondetails['host'])
     collection = connec.mercadodiario.precioses
 
 #     currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
@@ -114,7 +115,7 @@ def findLastDayDocumentTechnology():
     ''' SERVIDOR '''
 #     connec = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
 
-    connec = Connection(connectiondetails['host'])
+    connec = Connection(DBStudyData.connectiondetails['host'])
     collection = connec.mercadodiario.tecnologiases
 
 #     currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
@@ -145,7 +146,7 @@ def findLastDayDocumentPriceThree():
     ''' SERVIDOR '''
 #     connec = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
 
-    connec = Connection(connectiondetails['host'])
+    connec = Connection(DBPreciosES.connectiondetails['host'])
     collection = connec.mercadodiario.precioses
 
 #     currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
