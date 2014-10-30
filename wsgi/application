@@ -11,7 +11,7 @@ except IOError:
     pass
 
 # from sme_hogar import application
-from priceprofor import application
+from priceprofor import aplicacion
 from estadisticasgenericas import CONN_HOST
 from utilities import connectiondetails
 from database import DatabaseUsers
@@ -26,3 +26,5 @@ DBPreciosES.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mong
 DBStudyData.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
 CONN_HOST = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
 connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
+
+application = aplicacion
