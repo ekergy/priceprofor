@@ -14,6 +14,7 @@ https://play.google.com/store/apps/details?id=com.latteandcode.ekergy
 
 # Publicacion de contenido en OpenShift
 
+
 Primero debemos comprobar contra que repositorio estamos subiendo los cambios. Para ello usamos el siguiente comando
 ```
 #!git
@@ -66,6 +67,7 @@ LOCAL /home/david/workspace/priceprofor/.openshift/cron
 
 Este es un ejemplo sencillo de como ejecutar un proceso Cron en local. Hay que tener en cuenta que para que en el minuto 15 de cada hora se ejecute el script, debe estar MongoDB conectada
 
+<<<<<<< HEAD
 [david@bootes dcron]$ 
 pwd
 ```
@@ -100,3 +102,8 @@ from dbpreciosesmanager import populatePreciosLocal
 
 populatePreciosLocal()
 ```
+=======
+1. Visualizar los precios
+2. Hora y precio maximo
+3. Hora y precio minimo
+>>>>>>> a1d5e3bfa18c54715e070134acbac0df9a83ad49

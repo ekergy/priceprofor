@@ -16,10 +16,13 @@ except:
 
 # importing models to setting the db URI
 from bottle import run
-from priceprofor import application
+from priceprofor import aplicacion
 from dbpreciosesmanager import DBPreciosES
 from omelinfosys.dbstudydatamanager import DBStudyData
-from controllers.priceprofor_graficas import connectiondetails
+# from controllers.priceprofor_graficas import connectiondetails
+from utilities import connectiondetails
+
+
 
 if __name__ == '__main__':
 #     application.CONN_URI = None
@@ -33,5 +36,5 @@ if __name__ == '__main__':
     DBStudyData.connectiondetails['host'] = None
     connectiondetails['host'] = None
 
-    run(application,host='0.0.0.0',port='8000',reloader=True)
+    run(aplicacion,host='0.0.0.0',port='8000',reloader=True)
 #     run(application,host='0.0.0.0')

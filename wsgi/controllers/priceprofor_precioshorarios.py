@@ -8,14 +8,13 @@ from bottle import route, template
 
 # LOCAL
 # from datetime import datetime
-# from estadisticasgenericas import estadisticasPrecios
 from priceprofor_graficas import preciosDiarios, tecnologiasDiarias
 from priceprofor_graficas import relativeExtremes, colorChart, averageList, lineChart
 from priceprofor_graficas import lineChartMulti, lineChartMultiPrice
 from omelinfosys.reehandlers import getdemandeforcast, getpreveoldd
 from omelinfosys.dbstudydatamanager import DBRawData
-from priceprofor_estadisticas import estadisticasPrecios, estadisticasTecnologias
 from utilities import findLastDayDocumentPrice, findLastDayDocumentTechnology, findLastDayDocumentPriceThree
+from estadisticasgenericas import estadisticasPrecios, estadisticasTecnologias
 
 # from sys import exit
 # exit(0)
