@@ -6,13 +6,16 @@ Created on 11/2013
 
 from datetime import datetime, timedelta
 from pymongo import Connection
-from dbpreciosesmanager import DBPreciosES
-from omelinfosys.dbstudydatamanager import DBStudyData
-
-DBPreciosES.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
-DBStudyData.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
 
 # connectiondetails = dict(host=None)
+
+''' LOCAL '''
+# connecPrices = Connection(host=None).mercadodiario.precioses
+# connecTechnologies = Connection(host=None).mercadodiario.tecnologiases
+
+''' SERVIDOR '''
+connecPrices = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
+connecTechnologies = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.tecnologiases
 
 CALENDARIONOLABORAL = {'2010': [datetime(2010,  1,  1),
                                 datetime(2010,  1,  6),
@@ -87,7 +90,7 @@ def findLastDayDocumentPrice():
     ''' SERVIDOR '''
 #     connec = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
 
-    connec = Connection(DBPreciosES.connectiondetails['host'])
+    connec = Connection(host=connecPrices)
     collection = connec.mercadodiario.precioses
 
 #     currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
@@ -119,7 +122,7 @@ def findLastDayDocumentTechnology():
     ''' SERVIDOR '''
 #     connec = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
 
-    connec = Connection(DBStudyData.connectiondetails['host'])
+    connec = Connection(host=connecTechnologies)
     collection = connec.mercadodiario.tecnologiases
 
 #     currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
@@ -150,7 +153,7 @@ def findLastDayDocumentPriceThree():
     ''' SERVIDOR '''
 #     connec = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
 
-    connec = Connection(DBPreciosES.connectiondetails['host'])
+    connec = Connection(host=connecPrices)
     collection = connec.mercadodiario.precioses
 
 #     currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
