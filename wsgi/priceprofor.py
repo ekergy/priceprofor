@@ -6,24 +6,21 @@ Created on 13/05/2014
 
 from bottle import route
 
-# framework:
+# framework
 from bottle import default_app
 
-# controllers:
+# controllers
 from controllers import resources
 from controllers import priceprofor_graficas
 from controllers import priceprofor_single_plots
 from controllers import sme_mde_viz
 from controllers import priceprofor_RESTful_API
-
-''' subir script al servidor '''
 from controllers import priceprofor_precioshorarios
 
 from bottle import TEMPLATE_PATH
-#TEMPLATE_PATH.append(os.path.join(os.environ['OPENSHIFT_HOMEDIR'], 
-#    'runtime/repo/wsgi/views/'))
+# TEMPLATE_PATH.append(os.path.join(os.environ['OPENSHIFT_HOMEDIR'],'runtime/repo/wsgi/views/'))
 
-# Get APP root in system:
+# Get APP root in system
 from os import path as ospath
 from os import environ as osenviron
 
@@ -42,6 +39,3 @@ finally:
 CONN_URI=None
 
 application = default_app()
-
-
-

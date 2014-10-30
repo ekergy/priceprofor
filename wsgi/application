@@ -10,17 +10,17 @@ try:
 except IOError:
     pass
 
-
 # from sme_hogar import application
 from priceprofor import application
+from estadisticasgenericas import CONN_HOST
 from database import DatabaseUsers
 from dbpreciosesmanager import DBPreciosES
-from estadisticasgenericas import CONN_HOST
+from omelinfosys.dbstudydatamanager import DBStudyData
+
 # application.CONN_URI = 'mongodb://sme:sme@ds035997.mongolab.com:35997/smehogar'
-#application.CONN_URI = 'mongodb://sme:sme@ds035997.mongolab.com:35997/smehogar'
-# 
 # application.CONN_URI = None
+
 DatabaseUsers.connectiondetails['host'] = 'mongodb://sme:sme@ds035997.mongolab.com:35997/smehogar'
 DBPreciosES.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
+DBStudyData.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
 CONN_HOST = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
-
