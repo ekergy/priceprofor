@@ -90,8 +90,7 @@ def findLastDayDocumentPrice():
     ''' SERVIDOR '''
 #     connec = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
 
-    connec = Connection(host=connecPrices)
-    collection = connec.mercadodiario.precioses
+    collection = connecPrices.mercadodiario.precioses
 
 #     currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
 #     cursor = collection.find({"fecha": {"$lte": currentDT}})
@@ -104,7 +103,7 @@ def findLastDayDocumentPrice():
     for element in cursor:
         fecha = element['fecha']
         # fecha.replace(hour=0, minute=0, second=0, microsecond=0)
-    del connec
+    del connecPrices
 
 #     return lastelement['fecha']
     return fecha
@@ -122,8 +121,7 @@ def findLastDayDocumentTechnology():
     ''' SERVIDOR '''
 #     connec = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
 
-    connec = Connection(host=connecTechnologies)
-    collection = connec.mercadodiario.tecnologiases
+    collection = connecTechnologies.mercadodiario.tecnologiases
 
 #     currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
 #     cursor = collection.find({"fecha": {"$lte": currentDT}})
@@ -135,7 +133,7 @@ def findLastDayDocumentTechnology():
     for element in cursor:
         fecha = element['fecha']
         # fecha.replace(hour=0, minute=0, second=0, microsecond=0)
-    del connec
+    del connecTechnologies
 
 #     return lastelement['fecha']
     return fecha
@@ -153,8 +151,7 @@ def findLastDayDocumentPriceThree():
     ''' SERVIDOR '''
 #     connec = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
 
-    connec = Connection(host=connecPrices)
-    collection = connec.mercadodiario.precioses
+    collection = connecPrices.mercadodiario.precioses
 
 #     currentDT = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
 #     fecha = currentDT - timedelta(3)
@@ -170,7 +167,7 @@ def findLastDayDocumentPriceThree():
         fecha = element['fecha']
         # fecha.replace(hour=0, minute=0, second=0, microsecond=0)
         fecha = fecha - timedelta(3)
-    del connec
+    del connecPrices
 
 #     return lastelement['fecha']
     return fecha
