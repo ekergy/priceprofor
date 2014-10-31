@@ -1098,7 +1098,7 @@ def exploradorporenergiagestionada(fechaIni,fechaFin):
     Esta funcion realiza la consulta a mongo a los registros de tecnologiases y ordenados por ENERGIA_GESTIONADA.
     El objetivo de este metodo es alimentar el controlador "/exploradorporenergiagestionada".
     El formato que tiene que tener este resultado es:
-    [ {--el registro tal cual sale de mongo} ]
+    [ {el registro tal cual sale de mongo} ]
     '''
 
     # rellenar este metodo con lo que haga falta para tener lo mismo que tenemos si en robo mongo si hacemos
@@ -1108,7 +1108,11 @@ def exploradorporenergiagestionada(fechaIni,fechaFin):
 
     resultados = []
 
-    connec = Connection(host=None)
+    # LOCAL
+    # connec = Connection(host=None)
+    # SERVIDOR
+    connec = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
+
     collection = connec.mercadodiario.tecnologiases
 
     # ordenacion de menor a mayor con el positivo "1" y ordenacion de mayor a menor con el negativo "-1"

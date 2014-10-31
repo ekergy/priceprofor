@@ -6,7 +6,7 @@ Created on 05/2014
 
 # from time import strptime
 # from omelinfosys.dbstudydatamanager import DBStudyData
-from bottle import route,template, response, request
+from bottle import route, template, response, request
 from kernelCaracterizacionEnergetica import temporadaConsumoVector
 from datautilities import toGoogleDataTable
 from dbpreciosesmanager import preciosDiarios, tecnologiasDiarias
@@ -15,8 +15,26 @@ from pymongo import Connection
 from json import dumps
 from dbpreciosesmanager import populatePrecios
 from omelinfosys.dbstudydatamanager import populateStudyData
-from dbpreciosesmanager import realMongo
+from dbpreciosesmanager import realMongo, exploradorporenergiagestionada
 from utilities import findLastDayDocumentPrice, findLastDayDocumentTechnology
+
+@route('/exploradorporenergiagestionada')
+def exploradorporenergiagestionadaGET():
+    '''
+    '''
+    fechaIni = datetime(2014,9,1)
+    fechaFin = datetime(2014,10,28)
+
+    try:
+        # return 'try'
+        resultados = exploradorporenergiagestionada(fechaIni,fechaFin)
+        # print resultados
+        return str(resultados)
+    except:
+        raise
+        return 'except'
+    else:
+        return 'ok'
 
 @route('/populatePrecios')
 def indexprecios():
@@ -848,9 +866,9 @@ def graphicpredictionmodelshwtesrealGET():
     dateString = str(str(dateTime.day)+'/'+str(dateTime.month)+'/'+str(dateTime.year))
 
     ''' LOCAL '''
-    collection = Connection(host=None).mercadodiario.modelosHTES
+#     collection = Connection(host=None).mercadodiario.modelosHTES
     ''' SERVIDOR '''
-#     collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHTES
+    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHTES
 
     ''' el dia relevante a graficar es el dayahead y sus predicciones de precio '''
     currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
