@@ -9,6 +9,11 @@ from datetime import datetime, timedelta
 
 connectiondetails = dict(host=None)
 
+# ''' LOCAL '''
+# CONN_HOST = None
+# ''' SERVIDOR '''
+# CONN_HOST = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
+
 # from sys import path
 # path.append('libs')
 # path.append('wsgi')
@@ -17,7 +22,6 @@ connectiondetails = dict(host=None)
 def estadisticasPrecios():
     '''
     '''
-
 #     db = MongoClient().mercadodiario
 
 #     db.precioses.aggregate([{"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])
@@ -44,6 +48,21 @@ def estadisticasPrecios():
     promediosHasta = list()
 
     fecha_aux = datetime.now()
+
+    ''' se deben probar en todos los años los dias finales de cada mes que dan problemas por ser o 30 o 31 '''
+#     fecha_aux = datetime(2014,1,31)
+#     fecha_aux = datetime(2013,2,28)
+#     fecha_aux = datetime(2013,3,31)
+#     fecha_aux = datetime(2013,4,30)
+#     fecha_aux = datetime(2013,5,31)
+#     fecha_aux = datetime(2013,6,30)
+#     fecha_aux = datetime(2013,7,31)
+#     fecha_aux = datetime(2013,8,31)
+#     fecha_aux = datetime(2013,9,30)
+#     fecha_aux = datetime(2013,10,31)
+#     fecha_aux = datetime(2013,11,30)
+#     fecha_aux = datetime(2013,12,31)
+
     db = MongoClient(host=connectiondetails['host']).mercadodiario
 
     ''' Precio Promedio dia actual '''
@@ -57,6 +76,10 @@ def estadisticasPrecios():
     promediosDesde.insert(0, fecha)
     promediosHasta.insert(0, fecha2)
 
+#     print 'dia actual'
+#     print fecha2 - fecha
+#     print ''
+
     ''' Precio Promedio dia anterior '''
 #     db = MongoClient(host=CONN_HOST).mercadodiario
 #     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
@@ -68,6 +91,10 @@ def estadisticasPrecios():
     promediosPrecios.insert(1, round(query,2))
     promediosDesde.insert(1, fecha)
     promediosHasta.insert(1, fecha2)
+
+#     print 'dia anterior'
+#     print fecha3 - fecha
+#     print ''
 
     ''' Precio Promedio ultimos dos dias '''
 #     db = MongoClient().mercadodiario
@@ -104,6 +131,10 @@ def estadisticasPrecios():
     promediosDesde.insert(2, fecha)
     promediosHasta.insert(2, fecha2)
 
+#     print 'semana actual'
+#     print fecha2 - fecha
+#     print ''
+
     ''' Precio Promedio semana anterior '''
 #     db = MongoClient(host=CONN_HOST).mercadodiario
 #     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
@@ -116,17 +147,31 @@ def estadisticasPrecios():
     promediosDesde.insert(3, fecha)
     promediosHasta.insert(3, fecha2)
 
+#     print 'semana anterior'
+#     print fecha3 - fecha
+#     print ''
+
     ''' Precio Promedio mes actual '''
-#     db = MongoClient(host=CONN_HOST).mercadodiario
-#     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
-#     fecha2 = parser.parse(my_date_str)
+    # db = MongoClient(host=CONN_HOST).mercadodiario
+    # my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
+    # fecha2 = parser.parse(my_date_str)
     fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
-#     fecha = fecha2.replace(month=fecha2.month - 1)
-    fecha = (fecha2 - timedelta(weeks=4) - timedelta(days=2)).replace(day=fecha2.day) + timedelta(days=1)
+    # fecha = fecha2.replace(month=fecha2.month - 1)
+    # fecha = (fecha2 - timedelta(weeks=4) - timedelta(days=2)).replace(day=fecha2.day) + timedelta(days=1)
+
+    try:
+        fecha = (fecha2 - timedelta(weeks=4) - timedelta(days=3)).replace(day=fecha2.day) + timedelta(days=1)
+    except ValueError:
+        fecha = (fecha2 - timedelta(weeks=4) - timedelta(days=3))
+
     query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(4, round(query,2))
     promediosDesde.insert(4, fecha)
     promediosHasta.insert(4, fecha2)
+
+#     print 'mes actual'
+#     print fecha2 - fecha
+#     print ''
 
     ''' Precio Promedio mes anterior '''
 #     db = MongoClient(host=CONN_HOST).mercadodiario
@@ -134,13 +179,30 @@ def estadisticasPrecios():
 #     fecha3 = parser.parse(my_date_str)
     fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
 #     fecha2 = fecha3.replace(month=fecha3.month - 1)
-    fecha2 = (fecha3 - timedelta(weeks=4) - timedelta(days=2)).replace(day=fecha3.day)
+    # fecha2 = (fecha3 - timedelta(weeks=4) - timedelta(days=3)).replace(day=fecha3.day)
+
+    try:
+        fecha2 = (fecha3 - timedelta(weeks=4) - timedelta(days=3)).replace(day=fecha3.day) + timedelta(days=1)
+    except ValueError:
+        fecha2 = (fecha3 - timedelta(weeks=4) - timedelta(days=3))
+
 #     fecha = fecha2.replace(month=fecha2.month - 1)
-    fecha = (fecha3 - timedelta(weeks=8) - timedelta(days=4)).replace(day=fecha3.day) + timedelta(days=1)
+    # fecha = (fecha3 - timedelta(weeks=8) - timedelta(days=4)).replace(day=fecha3.day) + timedelta(days=1)
+    # fecha = (fecha3 - timedelta(weeks=8) - timedelta(days=6)).replace(day=fecha3.day) + timedelta(days=1)
+
+    try:
+        fecha = (fecha3 - timedelta(weeks=8) - timedelta(days=6)).replace(day=fecha3.day) + timedelta(days=1)
+    except ValueError:
+        fecha = (fecha3 - timedelta(weeks=8) - timedelta(days=6))
+
     query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(5, round(query,2))
     promediosDesde.insert(5, fecha)
     promediosHasta.insert(5, fecha2)
+
+#     print 'mes anterior'
+#     print fecha3 - fecha
+#     print ''
 
     ''' Precio Promedio estacion actual '''
 #     db = MongoClient(host=CONN_HOST).mercadodiario
@@ -148,11 +210,17 @@ def estadisticasPrecios():
 #     fecha2 = parser.parse(my_date_str)
     fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
 #     fecha = fecha2.replace(month=fecha2.month - 3)
-    fecha = (fecha2 - timedelta(weeks=13)).replace(day=fecha2.day) + timedelta(days=1)
+    # fecha = (fecha2 - timedelta(weeks=13)).replace(day=fecha2.day) + timedelta(days=1)
+    fecha = (fecha2 - timedelta(weeks=13)) - timedelta(days=1)
+
     query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(6, round(query,2))
     promediosDesde.insert(6, fecha)
     promediosHasta.insert(6, fecha2)
+
+#     print 'estacion actual'
+#     print fecha2 - fecha
+#     print ''
 
     ''' Precio Promedio estacion anterior '''
 #     db = MongoClient(host=CONN_HOST).mercadodiario
@@ -160,13 +228,20 @@ def estadisticasPrecios():
 #     fecha3 = parser.parse(my_date_str)
     fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
 #     fecha2 = fecha3.replace(month=fecha3.month - 1)
-    fecha2 = (fecha3 - timedelta(weeks=13)).replace(day=fecha3.day)
+    # fecha2 = (fecha3 - timedelta(weeks=13)).replace(day=fecha3.day)
+    fecha2 = (fecha3 - timedelta(weeks=13)) - timedelta(days=1)
 #     fecha = fecha2.replace(month=fecha2.month - 3)
-    fecha = (fecha3 - timedelta(weeks=26)).replace(day=fecha3.day) + timedelta(days=1)
+    # fecha = (fecha3 - timedelta(weeks=26)).replace(day=fecha3.day) + timedelta(days=1)
+    fecha = (fecha3 - timedelta(weeks=26)) - timedelta(days=2)
+
     query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(7, round(query,2))
     promediosDesde.insert(7, fecha)
     promediosHasta.insert(7, fecha2)
+
+#     print 'estacion anterior'
+#     print fecha3 - fecha
+#     print ''
 
     ''' Precio Promedio año actual '''
 #     db = MongoClient(host=CONN_HOST).mercadodiario
@@ -174,11 +249,17 @@ def estadisticasPrecios():
 #     fecha2 = parser.parse(my_date_str)
     fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
 #     fecha = fecha2.replace(year=fecha2.year - 1)
-    fecha = (fecha2 - timedelta(weeks=52)).replace(day=fecha2.day) + timedelta(days=1)
+    # fecha = (fecha2 - timedelta(weeks=52)).replace(day=fecha2.day) + timedelta(days=1)
+    fecha = (fecha2 - timedelta(weeks=52)) - timedelta(days=1)
+
     query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(8, round(query,2))
     promediosDesde.insert(8, fecha)
     promediosHasta.insert(8, fecha2)
+
+#     print 'año actual'
+#     print fecha2 - fecha
+#     print ''
 
     ''' Precio Promedio año anterior '''
 #     db = MongoClient(host=CONN_HOST).mercadodiario
@@ -186,13 +267,20 @@ def estadisticasPrecios():
 #     fecha3 = parser.parse(my_date_str)
     fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
 #     fecha2 = fecha3.replace(year=fecha3.year - 1)
-    fecha2 = (fecha3 - timedelta(weeks=52)).replace(day=fecha3.day)
+    # fecha2 = (fecha3 - timedelta(weeks=52)).replace(day=fecha3.day)
+    fecha2 = (fecha3 - timedelta(weeks=52)) - timedelta(days=1)
 #     fecha = fecha2.replace(year=fecha2.year - 1)
-    fecha = (fecha3 - timedelta(weeks=104)).replace(day=fecha3.day) + timedelta(days=1)
+    # fecha = (fecha3 - timedelta(weeks=104)).replace(day=fecha3.day) + timedelta(days=1)
+    fecha = (fecha3 - timedelta(weeks=104)) - timedelta(days=2)
+
     query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(9, round(query,2))
     promediosDesde.insert(9, fecha)
     promediosHasta.insert(9, fecha2)
+
+#     print 'año anterior'
+#     print fecha3 - fecha
+#     print ''
 
     ''' Intervalo de variacion del precio del ultimo dia '''
 #     db = MongoClient().mercadodiario
@@ -243,7 +331,6 @@ def estadisticasPrecios():
 def estadisticasTecnologias():
     '''
     '''
-
     promediosNuclear = list()
     promediosRegimenEspecial = list()
     promediosHidraulicaConvencional = list()

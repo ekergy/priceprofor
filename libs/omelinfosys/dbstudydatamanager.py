@@ -127,7 +127,7 @@ def populateStudyData(startDate=None, endDate=None):
 
                 if iterDate not in listDT:
                     ins_study.ENERGIA_GESTIONADA = ins_raw.ProduccionyDemandaES['TOTAL_DEMANDA'][i]
-                    # ins_study.REGIMEN_ESPECIAL = ins_raw.ProduccionyDemandaES['REGIMEN_ESPECIAL_A_DISTRIBUCION'][i]
+                    ins_study.REGIMEN_ESPECIAL_A_DISTRIBUCION = ins_raw.ProduccionyDemandaES['REGIMEN_ESPECIAL_A_DISTRIBUCION'][i]
                     ins_study.FUEL_GAS = ins_raw.ProduccionyDemandaES['FUEL_+_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA)'][i]
                     ins_study.UNIDADES_GENERICAS = ins_raw.ProduccionyDemandaES['UNIDADES_GENERICAS_SUBASTAS_DISTRIBUCION'][i]
 
@@ -368,6 +368,7 @@ def populateStudyDataLocal(startDate=None, endDate=None):
                 ''' PRODUCCION '''
                 ins_study.NUCLEAR = ins_raw.ProduccionyDemandaES['NUCLEAR'][i]
                 ins_study.HIDRAULICA_CONVENCIONAL = ins_raw.ProduccionyDemandaES['HIDRAULICA_CONVENCIONAL'][i]
+                ins_study.REGIMEN_ESPECIAL = ins_raw.ProduccionyDemandaES['REGIMEN_ESPECIAL_A_MERCADO'][i]
                 ins_study.CARBON = ins_raw.ProduccionyDemandaES['CARBON_IMPORTACION'][i]
                 ins_study.CICLO_COMBINADO = ins_raw.ProduccionyDemandaES['CICLO_COMBINADO'][i]
                 ins_study.HIDRAULICA_BOMBEO = ins_raw.ProduccionyDemandaES['CONSUMO_DE_BOMBEO'][i]
@@ -379,7 +380,7 @@ def populateStudyDataLocal(startDate=None, endDate=None):
 
                 if iterDate not in listDT:
                     ins_study.ENERGIA_GESTIONADA = ins_raw.ProduccionyDemandaES['TOTAL_DEMANDA'][i]
-                    ins_study.REGIMEN_ESPECIAL = ins_raw.ProduccionyDemandaES['REGIMEN_ESPECIAL_A_DISTRIBUCION'][i]
+                    ins_study.REGIMEN_ESPECIAL_A_DISTRIBUCION = ins_raw.ProduccionyDemandaES['REGIMEN_ESPECIAL_A_DISTRIBUCION'][i]
                     ins_study.FUEL_GAS = ins_raw.ProduccionyDemandaES['FUEL_+_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA)'][i]
                     ins_study.UNIDADES_GENERICAS = ins_raw.ProduccionyDemandaES['UNIDADES_GENERICAS_SUBASTAS_DISTRIBUCION'][i]
 
@@ -500,6 +501,8 @@ class DBStudyData():
     "IMPORTACION_ANDORRA":,
     "IMPORTACION_MARRUECOS":,
 
+    "REGIMEN_ESPECIAL_A_DISTRIBUCION:"
+
     -> Demanda
     La demanda tambien es importante ya que una demanda fuera del comun puede hacer subir los precios un monton
     Las centrales de bombeo pueden demandar energia y ademas con precio alto y asi inflacionar los precios de mercado
@@ -557,6 +560,8 @@ class DBStudyData():
             self.TOTAL_CONSUMO_BOMBEO = 0
             self.TOTAL_EXPORTACIONES = 0
             self.TOTAL_GENERICAS = 0
+
+            self.REGIMEN_ESPECIAL_A_DISTRIBUCION = 0
 
     def getCollection(self):
         '''
@@ -653,6 +658,8 @@ class DBStudyData():
                 self.TOTAL_EXPORTACIONES = result['TOTAL_EXPORTACIONES']
                 self.TOTAL_GENERICAS = result['TOTAL_GENERICAS']
 
+                self.REGIMEN_ESPECIAL_A_DISTRIBUCION = result["REGIMEN_ESPECIAL_A_DISTRIBUCION"]
+
         except:
             raise
         else:
@@ -696,6 +703,8 @@ class DBStudyData():
             jsontoinsert["TOTAL_CONSUMO_BOMBEO"] = self.TOTAL_CONSUMO_BOMBEO
             jsontoinsert["TOTAL_EXPORTACIONES"] = self.TOTAL_EXPORTACIONES
             jsontoinsert["TOTAL_GENERICAS"] = self.TOTAL_GENERICAS
+
+            jsontoinsert["REGIMEN_ESPECIAL_A_DISTRIBUCION"] = self.REGIMEN_ESPECIAL_A_DISTRIBUCION
 
             if results.count() == 0:
                 # construct the json to insert
@@ -751,6 +760,8 @@ class DBStudyData():
             jsontoinsert["TOTAL_CONSUMO_BOMBEO"] = self.TOTAL_CONSUMO_BOMBEO
             jsontoinsert["TOTAL_EXPORTACIONES"] = self.TOTAL_EXPORTACIONES
             jsontoinsert["TOTAL_GENERICAS"] = self.TOTAL_GENERICAS
+
+            jsontoinsert["REGIMEN_ESPECIAL_A_DISTRIBUCION"] = self.REGIMEN_ESPECIAL_A_DISTRIBUCION
 
             if results.count() == 0:
                 # construct the json to insert
