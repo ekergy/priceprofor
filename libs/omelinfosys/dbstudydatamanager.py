@@ -115,6 +115,7 @@ def populateStudyData(startDate=None, endDate=None):
                 ''' PRODUCCION '''
                 ins_study.NUCLEAR = ins_raw.ProduccionyDemandaES['NUCLEAR'][i]
                 ins_study.HIDRAULICA_CONVENCIONAL = ins_raw.ProduccionyDemandaES['HIDRAULICA_CONVENCIONAL'][i]
+                ins_study.REGIMEN_ESPECIAL = ins_raw.ProduccionyDemandaES['REGIMEN_ESPECIAL_A_MERCADO'][i]
                 ins_study.CARBON = ins_raw.ProduccionyDemandaES['CARBON_IMPORTACION'][i]
                 ins_study.CICLO_COMBINADO = ins_raw.ProduccionyDemandaES['CICLO_COMBINADO'][i]
                 ins_study.HIDRAULICA_BOMBEO = ins_raw.ProduccionyDemandaES['CONSUMO_DE_BOMBEO'][i]
@@ -126,7 +127,7 @@ def populateStudyData(startDate=None, endDate=None):
 
                 if iterDate not in listDT:
                     ins_study.ENERGIA_GESTIONADA = ins_raw.ProduccionyDemandaES['TOTAL_DEMANDA'][i]
-                    ins_study.REGIMEN_ESPECIAL = ins_raw.ProduccionyDemandaES['REGIMEN_ESPECIAL_A_DISTRIBUCION'][i]
+                    # ins_study.REGIMEN_ESPECIAL = ins_raw.ProduccionyDemandaES['REGIMEN_ESPECIAL_A_DISTRIBUCION'][i]
                     ins_study.FUEL_GAS = ins_raw.ProduccionyDemandaES['FUEL_+_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA)'][i]
                     ins_study.UNIDADES_GENERICAS = ins_raw.ProduccionyDemandaES['UNIDADES_GENERICAS_SUBASTAS_DISTRIBUCION'][i]
 
@@ -275,31 +276,6 @@ def findLastStudyDocument():
     return fecha
 
 ####################################################################################################
-
-''' populateStudyData ya tiene esta funcionalidad añadida '''
-
-# from sys import path
-# path.append('libs')
-
-# from omelinfosys.dbrawdatamanager import updateRawData
-# updateRawData()
-
-# from omelinfosys.dbstudydatamanager import updateStudyData
-# updateStudyData()
-def updateStudyData():
-    '''
-    Hace lo mismo que la funcion populateStudyData pero su fecha de entrada es la ultima que existe en BBDD
-    '''
-    try:
-        startDate = findLastStudyDocument()
-    except:
-        raise
-    else:
-        populateStudyData(startDate)
-
-####################################################################################################
-
-''' codigo no utilizado al menos en este mismo script '''
 
 def gettecnologiasesfromweb(fecha):
         '''
