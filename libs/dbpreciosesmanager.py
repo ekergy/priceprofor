@@ -12,16 +12,15 @@ from os import path
 direc = path.abspath(__file__)
 machine = direc[direc.find("e")+2:direc.find("w")-1]
 
+# from utilities import validafecha, omiepreciosurl, stringtofloat, cambiohoraverano, cambiohorainvierno
+# from utilities import stringtofloat
+# from csv import reader
+# from omelinfosys.dbrawdatamanager import DBRawData
 from pymongo import Connection
 from datetime import datetime, timedelta, date
-# from utilities import validafecha, omiepreciosurl, stringtofloat, cambiohoraverano, cambiohorainvierno
 from utilities import omiepreciosurl, cambiohoraverano, cambiohorainvierno
-# from utilities import stringtofloat
 from urllib2 import urlopen
-# from csv import reader
-from omelinfosys.omelhandlers import PreciosMibelHandler
-# from omelinfosys.dbrawdatamanager import DBRawData
-from omelinfosys.omelhandlers import getpreciosmibelfromweb
+from omelinfosys.omelhandlers import PreciosMibelHandler, getpreciosmibelfromweb
 
 '''
 URLError: <urlopen error [Errno 111] Connection refused>
@@ -87,13 +86,6 @@ def populatePrecios(startDate=None, endDate=None):
             del ins
             iterDate += ONEDAY
 
-'''
-var fecha = ISODate("2014-10-29 00:00:00.000Z");
-db.precioses.findOne();
-db.precioses.findOne({fecha: {$gte: fecha, $lte: fecha} });
-db.precioses.findOne({fecha: {$lte: fecha} });
-'''
-
 # from sys import path
 # path.append('libs')
 # from dbpreciosesmanager import findLastPriceDocument
@@ -113,8 +105,6 @@ def findLastPriceDocument():
     return lastelement['fecha']
 
 ####################################################################################################
-
-''' codigo no utilizado al menos en este mismo script '''
 
 # from sys import path
 # path.append('libs')
@@ -1095,3 +1085,36 @@ class DBPreciosES(object):
         else:
             self.delCollection()
         # return fechayprecio
+
+# from sys import path
+# path.append('libs')
+# from datetime import datetime
+# fechaIni = datetime(2014,9,1)
+# fechaFin = datetime(2014,10,28)
+# from dbpreciosesmanager import exploradorporenergiagestionada
+# exploradorporenergiagestionada(fechaIni,fechaFin)
+def exploradorporenergiagestionada(fechaIni,fechaFin):
+    '''
+    Esta funcion realiza la consulta a mongo a los registros de tecnologiases y ordenados por ENERGIA_GESTIONADA.
+    El objetivo de este metodo es alimentar el controlador "/exploradorporenergiagestionada".
+    El formato que tiene que tener este resultado es:
+    [ {--el registro tal cual sale de mongo} ]
+    '''
+
+    # rellenar este metodo con lo que haga falta para tener lo mismo que tenemos si en robo mongo si hacemos
+    #     var fechaStart = ISODate("2014-09-01 00:00:00.000Z");
+    #     var fechaEnd = ISODate("2014-10-28 00:00:00.000Z");
+    #     db.tecnologiases.find({fecha: {$gte: fechaStart, $lte: fechaEnd} }).sort({ENERGIA_GESTIONADA:1})
+
+    resultados = []
+
+    connec = Connection(host=None)
+    collection = connec.mercadodiario.tecnologiases
+
+    # ordenacion de menor a mayor con el positivo "1" y ordenacion de mayor a menor con el negativo "-1"
+    cursor = collection.find({'fecha': {'$gte': fechaIni, '$lte': fechaFin} }).sort([('ENERGIA_GESTIONADA',1)])
+
+    for element in cursor:
+        resultados.append(element)
+
+    return resultados
