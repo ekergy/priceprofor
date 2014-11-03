@@ -494,9 +494,9 @@ def estadisticasTecnologias():
     fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
     try:
 #         fecha2 = (fecha3 - timedelta(weeks=4) - timedelta(days=3)).replace(day=fecha3.day) + timedelta(days=1)
-        fecha2 = (fecha3 - timedelta(weeks=4) - timedelta(days=3)).replace(day=fecha3.day)
+        fecha2 = (fecha3 - timedelta(weeks=4) - timedelta(days=3)).replace(day=fecha3.day) - timedelta(days=1)
     except ValueError:
-        fecha2 = (fecha3 - timedelta(weeks=4) - timedelta(days=3))
+        fecha2 = (fecha3 - timedelta(weeks=4) - timedelta(days=3)) - timedelta(days=1)
     try:
 #         fecha = (fecha3 - timedelta(weeks=8) - timedelta(days=6)).replace(day=fecha3.day) + timedelta(days=1)
         fecha = (fecha3 - timedelta(weeks=8) - timedelta(days=6)).replace(day=fecha3.day)
@@ -557,7 +557,7 @@ def estadisticasTecnologias():
 #     fecha = (fecha3 - timedelta(weeks=26)).replace(day=fecha3.day) + timedelta(days=1)
 
     fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
-    fecha2 = (fecha3 - timedelta(weeks=13) - timedelta(2)).replace(day=fecha3.day)
+    fecha2 = (fecha3 - timedelta(weeks=13) - timedelta(2)).replace(day=fecha3.day) - timedelta(days=1)
 #     fecha = (fecha3 - timedelta(weeks=26) - timedelta(1)).replace(day=fecha3.day)
 
     try:
@@ -612,7 +612,7 @@ def estadisticasTecnologias():
 #     fecha2 = fecha3.replace(year=fecha3.year - 1)
 #     fecha = fecha2.replace(year=fecha2.year - 1)
     fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
-    fecha2 = (fecha3 - timedelta(weeks=52) - timedelta(days=1)).replace(day=fecha3.day)
+    fecha2 = (fecha3 - timedelta(weeks=52) - timedelta(days=1)).replace(day=fecha3.day) - timedelta(days=1)
     fecha = (fecha3 - timedelta(weeks=104) - timedelta(days=2)).replace(day=fecha3.day)
 
     indice = 9
