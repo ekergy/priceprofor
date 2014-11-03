@@ -493,11 +493,13 @@ def estadisticasTecnologias():
 
     fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
     try:
-        fecha2 = (fecha3 - timedelta(weeks=4) - timedelta(days=3)).replace(day=fecha3.day) + timedelta(days=1)
+#         fecha2 = (fecha3 - timedelta(weeks=4) - timedelta(days=3)).replace(day=fecha3.day) + timedelta(days=1)
+        fecha2 = (fecha3 - timedelta(weeks=4) - timedelta(days=3)).replace(day=fecha3.day)
     except ValueError:
         fecha2 = (fecha3 - timedelta(weeks=4) - timedelta(days=3))
     try:
-        fecha = (fecha3 - timedelta(weeks=8) - timedelta(days=6)).replace(day=fecha3.day) + timedelta(days=1)
+#         fecha = (fecha3 - timedelta(weeks=8) - timedelta(days=6)).replace(day=fecha3.day) + timedelta(days=1)
+        fecha = (fecha3 - timedelta(weeks=8) - timedelta(days=6)).replace(day=fecha3.day)
     except ValueError:
         fecha = (fecha3 - timedelta(weeks=8) - timedelta(days=6))
 
@@ -522,11 +524,11 @@ def estadisticasTecnologias():
 #     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
 #     fecha2 = parser.parse(my_date_str) - timedelta(3)
 #     fecha = fecha2.replace(month=fecha2.month - 3)
-    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
-    fecha = (fecha2 - timedelta(weeks=13)).replace(day=fecha2.day) + timedelta(days=1)
-
 #     fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
-#     fecha = (fecha2 - timedelta(weeks=13)) - timedelta(days=1)
+#     fecha = (fecha2 - timedelta(weeks=13)).replace(day=fecha2.day) + timedelta(days=1)
+
+    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
+    fecha = (fecha2 - timedelta(weeks=13)) - timedelta(days=1)
 
     indice = 6
     query = db.tecnologiases.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$NUCLEAR"}}}])["result"][0]["avg"]
@@ -550,9 +552,18 @@ def estadisticasTecnologias():
 #     fecha3 = parser.parse(my_date_str) - timedelta(3)
 #     fecha2 = fecha3.replace(month=fecha3.month - 1)
 #     fecha = fecha2.replace(month=fecha2.month - 3)
+#     fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
+#     fecha2 = (fecha3 - timedelta(weeks=13)).replace(day=fecha3.day)
+#     fecha = (fecha3 - timedelta(weeks=26)).replace(day=fecha3.day) + timedelta(days=1)
+
     fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
-    fecha2 = (fecha3 - timedelta(weeks=13)).replace(day=fecha3.day)
-    fecha = (fecha3 - timedelta(weeks=26)).replace(day=fecha3.day) + timedelta(days=1)
+    fecha2 = (fecha3 - timedelta(weeks=13) - timedelta(2)).replace(day=fecha3.day)
+#     fecha = (fecha3 - timedelta(weeks=26) - timedelta(1)).replace(day=fecha3.day)
+
+    try:
+        fecha = (fecha3 - timedelta(weeks=26) - timedelta(2)).replace(day=fecha3.day)
+    except ValueError:
+        fecha = (fecha3 - timedelta(weeks=26) - timedelta(2))
 
     indice = 7
     query = db.tecnologiases.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$NUCLEAR"}}}])["result"][0]["avg"]
@@ -576,7 +587,7 @@ def estadisticasTecnologias():
 #     fecha2 = parser.parse(my_date_str) - timedelta(3)
 #     fecha = fecha2.replace(year=fecha2.year - 1)
     fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
-    fecha = (fecha2 - timedelta(weeks=52) - timedelta(days=1)).replace(day=fecha2.day) + timedelta(days=1)
+    fecha = (fecha2 - timedelta(weeks=52) - timedelta(days=1)).replace(day=fecha2.day)
 
     indice = 8
     query = db.tecnologiases.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$NUCLEAR"}}}])["result"][0]["avg"]
