@@ -16,7 +16,6 @@ connectiondetails = dict(host=None)
 
 # from sys import path
 # path.append('libs')
-# path.append('wsgi')
 # from estadisticasgenericas import estadisticasPrecios
 # estadisticasPrecios()
 def estadisticasPrecios():
@@ -71,6 +70,7 @@ def estadisticasPrecios():
 #     fecha2 = parser.parse(my_date_str)
     fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
     fecha = fecha2
+
     query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(0, round(query,2))
     promediosDesde.insert(0, fecha)
@@ -87,6 +87,7 @@ def estadisticasPrecios():
     fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
     fecha2 = fecha3 - timedelta(days=1)
     fecha = fecha3 - timedelta(days=1)
+
     query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(1, round(query,2))
     promediosDesde.insert(1, fecha)
@@ -126,6 +127,7 @@ def estadisticasPrecios():
 #     fecha2 = parser.parse(my_date_str)
     fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
     fecha = fecha2 - timedelta(weeks=1) + timedelta(days=1)
+
     query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(2, round(query,2))
     promediosDesde.insert(2, fecha)
@@ -142,6 +144,7 @@ def estadisticasPrecios():
     fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
     fecha2 = fecha3 - timedelta(weeks=1)
     fecha = fecha3 - timedelta(weeks=2) + timedelta(days=1)
+
     query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
     promediosPrecios.insert(3, round(query,2))
     promediosDesde.insert(3, fecha)
@@ -177,19 +180,16 @@ def estadisticasPrecios():
 #     db = MongoClient(host=CONN_HOST).mercadodiario
 #     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
 #     fecha3 = parser.parse(my_date_str)
-    fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
 #     fecha2 = fecha3.replace(month=fecha3.month - 1)
-    # fecha2 = (fecha3 - timedelta(weeks=4) - timedelta(days=3)).replace(day=fecha3.day)
+#     fecha2 = (fecha3 - timedelta(weeks=4) - timedelta(days=3)).replace(day=fecha3.day)
+#     fecha = fecha2.replace(month=fecha2.month - 1)
+#     fecha = (fecha3 - timedelta(weeks=8) - timedelta(days=6)).replace(day=fecha3.day) + timedelta(days=1)
 
+    fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
     try:
         fecha2 = (fecha3 - timedelta(weeks=4) - timedelta(days=3)).replace(day=fecha3.day) + timedelta(days=1)
     except ValueError:
         fecha2 = (fecha3 - timedelta(weeks=4) - timedelta(days=3))
-
-#     fecha = fecha2.replace(month=fecha2.month - 1)
-    # fecha = (fecha3 - timedelta(weeks=8) - timedelta(days=4)).replace(day=fecha3.day) + timedelta(days=1)
-    # fecha = (fecha3 - timedelta(weeks=8) - timedelta(days=6)).replace(day=fecha3.day) + timedelta(days=1)
-
     try:
         fecha = (fecha3 - timedelta(weeks=8) - timedelta(days=6)).replace(day=fecha3.day) + timedelta(days=1)
     except ValueError:
@@ -208,9 +208,9 @@ def estadisticasPrecios():
 #     db = MongoClient(host=CONN_HOST).mercadodiario
 #     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
 #     fecha2 = parser.parse(my_date_str)
-    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
 #     fecha = fecha2.replace(month=fecha2.month - 3)
-    # fecha = (fecha2 - timedelta(weeks=13)).replace(day=fecha2.day) + timedelta(days=1)
+#     fecha = (fecha2 - timedelta(weeks=13)).replace(day=fecha2.day) + timedelta(days=1)
+    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
     fecha = (fecha2 - timedelta(weeks=13)) - timedelta(days=1)
 
     query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
@@ -226,12 +226,12 @@ def estadisticasPrecios():
 #     db = MongoClient(host=CONN_HOST).mercadodiario
 #     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
 #     fecha3 = parser.parse(my_date_str)
-    fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
 #     fecha2 = fecha3.replace(month=fecha3.month - 1)
-    # fecha2 = (fecha3 - timedelta(weeks=13)).replace(day=fecha3.day)
-    fecha2 = (fecha3 - timedelta(weeks=13)) - timedelta(days=1)
+#     fecha2 = (fecha3 - timedelta(weeks=13)).replace(day=fecha3.day)
 #     fecha = fecha2.replace(month=fecha2.month - 3)
-    # fecha = (fecha3 - timedelta(weeks=26)).replace(day=fecha3.day) + timedelta(days=1)
+#     fecha = (fecha3 - timedelta(weeks=26)).replace(day=fecha3.day) + timedelta(days=1)
+    fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
+    fecha2 = (fecha3 - timedelta(weeks=13)) - timedelta(days=1)
     fecha = (fecha3 - timedelta(weeks=26)) - timedelta(days=2)
 
     query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
@@ -247,9 +247,9 @@ def estadisticasPrecios():
 #     db = MongoClient(host=CONN_HOST).mercadodiario
 #     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
 #     fecha2 = parser.parse(my_date_str)
-    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
 #     fecha = fecha2.replace(year=fecha2.year - 1)
-    # fecha = (fecha2 - timedelta(weeks=52)).replace(day=fecha2.day) + timedelta(days=1)
+#     fecha = (fecha2 - timedelta(weeks=52)).replace(day=fecha2.day) + timedelta(days=1)
+    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
     fecha = (fecha2 - timedelta(weeks=52)) - timedelta(days=1)
 
     query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
@@ -265,12 +265,12 @@ def estadisticasPrecios():
 #     db = MongoClient(host=CONN_HOST).mercadodiario
 #     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
 #     fecha3 = parser.parse(my_date_str)
-    fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
 #     fecha2 = fecha3.replace(year=fecha3.year - 1)
-    # fecha2 = (fecha3 - timedelta(weeks=52)).replace(day=fecha3.day)
-    fecha2 = (fecha3 - timedelta(weeks=52)) - timedelta(days=1)
+#     fecha2 = (fecha3 - timedelta(weeks=52)).replace(day=fecha3.day)
 #     fecha = fecha2.replace(year=fecha2.year - 1)
-    # fecha = (fecha3 - timedelta(weeks=104)).replace(day=fecha3.day) + timedelta(days=1)
+#     fecha = (fecha3 - timedelta(weeks=104)).replace(day=fecha3.day) + timedelta(days=1)
+    fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
+    fecha2 = (fecha3 - timedelta(weeks=52)) - timedelta(days=1)
     fecha = (fecha3 - timedelta(weeks=104)) - timedelta(days=2)
 
     query = db.precioses.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$PreciosES"}}}])["result"][0]["avg"]
@@ -325,7 +325,6 @@ def estadisticasPrecios():
 
 # from sys import path
 # path.append('libs')
-# path.append('wsgi')
 # from estadisticasgenericas import estadisticasTecnologias
 # estadisticasTecnologias()
 def estadisticasTecnologias():
@@ -350,6 +349,10 @@ def estadisticasTecnologias():
 #     fecha2 = parser.parse(my_date_str) - timedelta(3)
     fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
     fecha = fecha2
+
+#     fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
+#     fecha = fecha2
+
     indice = 0
     query = db.tecnologiases.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$NUCLEAR"}}}])["result"][0]["avg"]
     promediosNuclear.insert(indice, round(query,2))
@@ -373,6 +376,11 @@ def estadisticasTecnologias():
     fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
     fecha2 = fecha3 - timedelta(days=1)
     fecha = fecha3 - timedelta(days=1)
+
+#     fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
+#     fecha2 = fecha3 - timedelta(days=1)
+#     fecha = fecha3 - timedelta(days=1)
+
     indice = 1
     query = db.tecnologiases.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$NUCLEAR"}}}])["result"][0]["avg"]
     promediosNuclear.insert(indice, round(query,2))
@@ -395,6 +403,10 @@ def estadisticasTecnologias():
 #     fecha2 = parser.parse(my_date_str) - timedelta(3)
     fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
     fecha = fecha2 - timedelta(weeks=1) + timedelta(days=1)
+
+#     fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
+#     fecha = fecha2 - timedelta(weeks=1) + timedelta(days=1)
+
     indice = 2
     query = db.tecnologiases.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$NUCLEAR"}}}])["result"][0]["avg"]
     promediosNuclear.insert(indice, round(query,2))
@@ -418,6 +430,11 @@ def estadisticasTecnologias():
     fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
     fecha2 = fecha3 - timedelta(weeks=1)
     fecha = fecha3 - timedelta(weeks=2) + timedelta(days=1)
+
+#     fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
+#     fecha2 = fecha3 - timedelta(weeks=1)
+#     fecha = fecha3 - timedelta(weeks=2) + timedelta(days=1)
+
     indice = 3
     query = db.tecnologiases.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$NUCLEAR"}}}])["result"][0]["avg"]
     promediosNuclear.insert(indice, round(query,2))
@@ -438,9 +455,16 @@ def estadisticasTecnologias():
 #     db = MongoClient(host=CONN_HOST).mercadodiario
 #     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
 #     fecha2 = parser.parse(my_date_str) - timedelta(3)
-    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
 #     fecha = fecha2.replace(month=fecha2.month - 1)
-    fecha = (fecha2 - timedelta(weeks=4) - timedelta(days=2)).replace(day=fecha2.day) + timedelta(days=1)
+#     fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
+#     fecha = (fecha2 - timedelta(weeks=4) - timedelta(days=2)).replace(day=fecha2.day) + timedelta(days=1)
+
+    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
+    try:
+        fecha = (fecha2 - timedelta(weeks=4) - timedelta(days=3)).replace(day=fecha2.day) + timedelta(days=1)
+    except ValueError:
+        fecha = (fecha2 - timedelta(weeks=4) - timedelta(days=3))
+
     indice = 4
     query = db.tecnologiases.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$NUCLEAR"}}}])["result"][0]["avg"]
     promediosNuclear.insert(indice, round(query,2))
@@ -461,11 +485,22 @@ def estadisticasTecnologias():
 #     db = MongoClient(host=CONN_HOST).mercadodiario
 #     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
 #     fecha3 = parser.parse(my_date_str) - timedelta(3)
-    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
 #     fecha2 = fecha3.replace(month=fecha3.month - 1)
-    fecha2 = (fecha3 - timedelta(weeks=4) - timedelta(days=2)).replace(day=fecha3.day)
 #     fecha = fecha2.replace(month=fecha2.month - 1)
-    fecha = (fecha3 - timedelta(weeks=8) - timedelta(days=4)).replace(day=fecha3.day) + timedelta(days=1)
+#     fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
+#     fecha2 = (fecha3 - timedelta(weeks=4) - timedelta(days=2)).replace(day=fecha3.day)
+#     fecha = (fecha3 - timedelta(weeks=8) - timedelta(days=4)).replace(day=fecha3.day) + timedelta(days=1)
+
+    fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
+    try:
+        fecha2 = (fecha3 - timedelta(weeks=4) - timedelta(days=3)).replace(day=fecha3.day) + timedelta(days=1)
+    except ValueError:
+        fecha2 = (fecha3 - timedelta(weeks=4) - timedelta(days=3))
+    try:
+        fecha = (fecha3 - timedelta(weeks=8) - timedelta(days=6)).replace(day=fecha3.day) + timedelta(days=1)
+    except ValueError:
+        fecha = (fecha3 - timedelta(weeks=8) - timedelta(days=6))
+
     indice = 5
     query = db.tecnologiases.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$NUCLEAR"}}}])["result"][0]["avg"]
     promediosNuclear.insert(indice, round(query,2))
@@ -486,9 +521,13 @@ def estadisticasTecnologias():
 #     db = MongoClient(host=CONN_HOST).mercadodiario
 #     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
 #     fecha2 = parser.parse(my_date_str) - timedelta(3)
-    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
 #     fecha = fecha2.replace(month=fecha2.month - 3)
+    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
     fecha = (fecha2 - timedelta(weeks=13)).replace(day=fecha2.day) + timedelta(days=1)
+
+#     fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
+#     fecha = (fecha2 - timedelta(weeks=13)) - timedelta(days=1)
+
     indice = 6
     query = db.tecnologiases.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$NUCLEAR"}}}])["result"][0]["avg"]
     promediosNuclear.insert(indice, round(query,2))
@@ -509,11 +548,12 @@ def estadisticasTecnologias():
 #     db = MongoClient(host=CONN_HOST).mercadodiario
 #     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
 #     fecha3 = parser.parse(my_date_str) - timedelta(3)
-    fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
 #     fecha2 = fecha3.replace(month=fecha3.month - 1)
-    fecha2 = (fecha3 - timedelta(weeks=13)).replace(day=fecha3.day)
 #     fecha = fecha2.replace(month=fecha2.month - 3)
+    fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
+    fecha2 = (fecha3 - timedelta(weeks=13)).replace(day=fecha3.day)
     fecha = (fecha3 - timedelta(weeks=26)).replace(day=fecha3.day) + timedelta(days=1)
+
     indice = 7
     query = db.tecnologiases.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$NUCLEAR"}}}])["result"][0]["avg"]
     promediosNuclear.insert(indice, round(query,2))
@@ -534,9 +574,10 @@ def estadisticasTecnologias():
 #     db = MongoClient(host=CONN_HOST).mercadodiario
 #     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
 #     fecha2 = parser.parse(my_date_str) - timedelta(3)
-    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
 #     fecha = fecha2.replace(year=fecha2.year - 1)
-    fecha = (fecha2 - timedelta(weeks=52)).replace(day=fecha2.day) + timedelta(days=1)
+    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
+    fecha = (fecha2 - timedelta(weeks=52) - timedelta(days=1)).replace(day=fecha2.day) + timedelta(days=1)
+
     indice = 8
     query = db.tecnologiases.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$NUCLEAR"}}}])["result"][0]["avg"]
     promediosNuclear.insert(indice, round(query,2))
@@ -557,11 +598,12 @@ def estadisticasTecnologias():
 #     db = MongoClient(host=CONN_HOST).mercadodiario
 #     my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
 #     fecha3 = parser.parse(my_date_str) - timedelta(3)
-    fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
 #     fecha2 = fecha3.replace(year=fecha3.year - 1)
-    fecha2 = (fecha3 - timedelta(weeks=52)).replace(day=fecha3.day)
 #     fecha = fecha2.replace(year=fecha2.year - 1)
-    fecha = (fecha3 - timedelta(weeks=104)).replace(day=fecha3.day) + timedelta(days=1)
+    fecha3 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(3)
+    fecha2 = (fecha3 - timedelta(weeks=52) - timedelta(days=1)).replace(day=fecha3.day)
+    fecha = (fecha3 - timedelta(weeks=104) - timedelta(days=2)).replace(day=fecha3.day)
+
     indice = 9
     query = db.tecnologiases.aggregate([{"$match": {"fecha": {"$gte": fecha, "$lte": fecha2}}}, {"$group": {"_id": "null", "avg": {"$avg": "$NUCLEAR"}}}])["result"][0]["avg"]
     promediosNuclear.insert(indice, round(query,2))
