@@ -1111,8 +1111,10 @@ def exploradorporenergiagestionada(fechaIni,fechaFin):
     # LOCAL
     # connec = Connection(host=None)
     # SERVIDOR
-    connec = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
+    # connec = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
 
+    ins = DBPreciosES()
+    connec = Connection(host=ins.connectiondetails['host'])
     collection = connec.mercadodiario.tecnologiases
 
     # ordenacion de menor a mayor con el positivo "1" y ordenacion de mayor a menor con el negativo "-1"
