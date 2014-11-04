@@ -16,16 +16,19 @@ except IOError:
 
 # from database import DatabaseUsers
 from priceprofor import myapplication
-from utilities import connectiondetails as connectiondetailsutilities
-from estadisticasgenericas import connectiondetails as connectiondetailsestadisticasgenericas
 from dbpreciosesmanager import DBPreciosES
 from omelinfosys.dbstudydatamanager import DBStudyData
+from utilities import connectiondetails as connectiondetailsutilities
+from estadisticasgenericas import connectiondetails as connectiondetailsestadisticasgenericas
+
+# hostLocalHost = None
+hostOpenShift = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
 
 ''' SERVIDOR '''
 # DatabaseUsers.connectiondetails['host'] = 'mongodb://sme:sme@ds035997.mongolab.com:35997/smehogar'
-DBPreciosES.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
-DBStudyData.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
-connectiondetailsutilities['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
-connectiondetailsestadisticasgenericas['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
+DBPreciosES.connectiondetails['host'] = hostOpenShift
+DBStudyData.connectiondetails['host'] = hostOpenShift
+connectiondetailsutilities['host'] = hostOpenShift
+connectiondetailsestadisticasgenericas['host'] = hostOpenShift
 
 application = myapplication

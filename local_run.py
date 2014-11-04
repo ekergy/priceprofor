@@ -19,6 +19,7 @@ from bottle import run
 from priceprofor import myapplication
 from dbpreciosesmanager import DBPreciosES
 from omelinfosys.dbstudydatamanager import DBStudyData
+# names redefine connections
 from utilities import connectiondetails as connectiondetailsutilities
 from estadisticasgenericas import connectiondetails as connectiondetailsestadisticasgenericas
 
@@ -26,17 +27,20 @@ if __name__ == '__main__':
 #     application.CONN_URI = None
 #     application.CONN_URI = 'mongodb://sme:sme@ds035997.mongolab.com:35997/smehogar'
 
+#     hostLocalHost = None
+    hostOpenShift = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
+
     ''' LOCAL '''
-    DBPreciosES.connectiondetails['host'] = None
-    DBStudyData.connectiondetails['host'] = None
-    connectiondetailsutilities['host'] = None
-    connectiondetailsestadisticasgenericas['host'] = None
+#     DBPreciosES.connectiondetails['host'] = hostLocalHost
+#     DBStudyData.connectiondetails['host'] = hostLocalHost
+#     connectiondetailsutilities['host'] = hostLocalHost
+#     connectiondetailsestadisticasgenericas['host'] = hostLocalHost
 
     ''' SERVIDOR '''
-#     DBPreciosES.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
-#     DBStudyData.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
-#     connectiondetailsutilities['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
-#     connectiondetailsestadisticasgenericas['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
+    DBPreciosES.connectiondetails['host'] = hostOpenShift
+    DBStudyData.connectiondetails['host'] = hostOpenShift
+    connectiondetailsutilities['host'] = hostOpenShift
+    connectiondetailsestadisticasgenericas['host'] = hostOpenShift
 
     run(myapplication,host='0.0.0.0', port='8000', reloader=False)
 #     run(application,host='0.0.0.0')
