@@ -98,11 +98,28 @@ def findLastPriceDocument():
     '''
     ins = DBPreciosES()
     collection = ins.getCollection()
-    currentDT = datetime.now()
-    cursor = collection.find({"fecha": {"$lte": currentDT}})
+
+#     currentDT = datetime.now()
+#     cursor = collection.find({"fecha": {"$lte": currentDT}})
+#     for element in cursor:
+#         lastelement = element
+
+    '''
+    DBPreciosES
+    findLastRecordInDB
+    '''
+
+    # cursor = collection.find().sort("fecha",-1).limit(1)
+    cursor = collection.find().sort([("fecha",-1),("hora",-1)]).limit(1)
     for element in cursor:
-        lastelement = element
-    return lastelement['fecha']
+        # print element
+        # print element['hora']
+        fecha = element['fecha']
+        # fecha.replace(hour=0, minute=0, second=0, microsecond=0)
+    del ins
+
+#     return lastelement['fecha']
+    return fecha
 
 ####################################################################################################
 
@@ -895,6 +912,7 @@ class DBPreciosES(object):
     '''
     '''
     connectiondetails = dict(host=None)
+#     connectiondetails = dict()
 
     def __init__(self):
         '''
@@ -912,7 +930,7 @@ class DBPreciosES(object):
         ''' LOCAL '''
 #         self.connectiondetails['host'] = None
         ''' SERVIDOR '''
-#             self.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
+#         self.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
 
         self.connectiondetails['host'] = self.connectiondetails['host']
         self.connectiondetails['db_name'] = 'mercadodiario'

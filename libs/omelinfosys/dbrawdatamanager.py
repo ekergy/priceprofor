@@ -41,10 +41,10 @@ def populateRawData(startDate, endDate=None):
         iterDate = startDate
         while (endDate >= iterDate):
             print iterDate.date()
-            ins = DBRawData()
-            ins.set_fecha(iterDate)
-            ins.getDataFromWeb()
-            ins.insertORupdateDataToDB()
+            ins_raw = DBRawData()
+            ins_raw.set_fecha(iterDate)
+            ins_raw.getDataFromWeb()
+            ins_raw.insertORupdateDataToDB()
             iterDate += ONEDAY
 
 # from sys import path
@@ -55,28 +55,30 @@ def findLastRawDocument():
     '''
     Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
     '''
-    ins = DBRawData()
-    collection = ins.get_connection()
-    currentDT = datetime.now()
-    cursor = collection.find({"fecha": {"$lte": currentDT}})
-    for element in cursor:
-        lastelement = element
-    return lastelement['fecha']
+    ins_raw = DBRawData()
+    collection = ins_raw.getCollection()
 
-# from sys import path
-# path.append('libs')
-# from omelinfosys.dbrawdatamanager import updateRawData
-# updateRawData()
-def updateRawData():
+#     currentDT = datetime.now()
+#     cursor = collection.find({"fecha": {"$lte": currentDT}})
+#     for element in cursor:
+#         lastelement = element
+
     '''
-    Hace lo mismo que la funcion populateRawData pero su fecha de entrada es la ultima que existe en BBDD
+    DBRawData
+    findLastRecordInDB
     '''
-    try:
-        startDate = findLastRawDocument()
-    except:
-        raise
-    else:
-        populateRawData(startDate)
+
+    # cursor = collection.find().sort("fecha",-1).limit(1)
+    cursor = collection.find().sort([("fecha",-1),("hora",-1)]).limit(1)
+    for element in cursor:
+        # print element
+        # print element['hora']
+        fecha = element['fecha']
+        # fecha.replace(hour=0, minute=0, second=0, microsecond=0)
+    del ins_raw
+
+#     return lastelement['fecha']
+    return fecha
 
 class DBRawData():
     '''
@@ -95,34 +97,30 @@ class DBRawData():
     # self._indatabase = False
 
     connectiondetails = dict(host=None)
+#     connectiondetails = dict()
 
     def __init__(self,fecha=None):
         '''
         '''
         try:
             ''' LOCAL '''
-#             self.connection = Connection(host=None)
-
-            ''' SERVIDOR '''
-            self.connection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
-
-            self.db = self.connection.mercadodiario
-            self.collection = self.db.tecnologiases
-
-            ''' LOCAL '''
 #             self.connectiondetails['host'] = None
             ''' SERVIDOR '''
 #             self.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
 
-#             self.connectiondetails['host'] = self.connectiondetails['host']
-#             self.connectiondetails['db_name'] = 'mercadodiario'
-#             self.connectiondetails['coll_name'] = 'tecnologiases'
-#             self.setCollection()
+            self.connectiondetails['host'] = self.connectiondetails['host']
+            self.connectiondetails['db_name'] = 'mercadodiario'
+            self.connectiondetails['coll_name'] = 'tecnologiases'
+            self.setCollection()
+
+#             self.db = self.connection.mercadodiario
+#             self.collection = self.db.tecnologiases
 
             ''' la base de datos contiene 24 registros por cada dia, uno correspondiente a cada hora del dia '''
             if fecha is not None:
                 self.fecha = fecha
-                results = self.collection.find({ "fecha": {"$in": [self.fecha]} })
+#                 results = self.collection.find({ "fecha": {"$in": [self.fecha]} })
+                results = self._collection.find({ "fecha": {"$in": [self.fecha]} })
 #                 if results.count() == 1:
 #                     self._indatabase = True
                 if results.count() == 24:
@@ -131,7 +129,8 @@ class DBRawData():
 #                     raise Exception('La base de datos tiene mas de un registro para la dada fecha.')
                 elif results.count() > 24:
                     raise Exception('La base de datos tiene mas de un registro para la dada fecha.')
-                self.connection.close()
+#                 self.connection.close()
+                self._connection.close()
         except:
             raise
         else:
@@ -147,8 +146,31 @@ class DBRawData():
             self.setPrevisionEolicaES(list())
             self.setPrevisionEolicaPT(list())
 
-    def get_connection(self):
-        return self.collection
+    def getCollection(self):
+        '''
+        Get mongo collection cursor
+        '''
+        return self._collection
+
+    def setCollection(self, connectiondetails=None):
+        '''
+        Sets collection to be used
+        '''
+        self._connection = Connection(host=self.connectiondetails['host'])
+        self._db = self._connection[self.connectiondetails['db_name']]
+        self._collection = self._db[self.connectiondetails['coll_name']]
+
+    def delCollection(self):
+        '''
+        Remove cursors from mongo database and collections
+        '''
+        self._connection.close()
+        del self._db, self._collection
+
+    Collection = property(getCollection,
+                          setCollection,
+                          delCollection,
+                          "La collection para hacer las queries")
 
     def set_fecha(self, fecha):
         self.fecha = fecha
@@ -507,10 +529,10 @@ class DBRawData():
 # endDate = datetime(2011,6,30)
 # from sys import path
 # path.append('libs')
-# from omelinfosys.dbrawdatamanager import populateRawData2
-# populateRawData2(startDate,endDate)
-# populateRawData2(startDate)
-def populateRawData2(startDate, endDate=None):
+# from omelinfosys.dbrawdatamanager import populateRawDataBis
+# populateRawDataBis(startDate,endDate)
+# populateRawDataBis(startDate)
+def populateRawDataBis(startDate, endDate=None):
     '''
     Metodos de usabilidad con las clases definidas
     This Method will performe the following operations:
@@ -536,8 +558,8 @@ def populateRawData2(startDate, endDate=None):
         iterDate = startDate
         while (endDate >= iterDate):
             print iterDate.date()
-            ins = DBRawData()
-            ins.set_fecha(iterDate)
+            ins_raw = DBRawData()
+            ins_raw.set_fecha(iterDate)
 
             listCHV = list()
             listCHI = list()
@@ -547,61 +569,61 @@ def populateRawData2(startDate, endDate=None):
                 listCHI.append(fechaCHI)
 
             if iterDate in listDT:
-                ins.getDataFromWeb()
+                ins_raw.getDataFromWeb()
                 dic = datosEnFalta(iterDate)
                 if dic['PreciosES']:
-                    ins.setPreciosES(dic['PreciosES'])
+                    ins_raw.setPreciosES(dic['PreciosES'])
                 if dic['PrevisionEolicaES']:
-                    ins.setPrevisionEolicaES(dic['PrevisionEolicaES'])
+                    ins_raw.setPrevisionEolicaES(dic['PrevisionEolicaES'])
                 if dic['PrevisionDemandaES']:
-                    ins.setPrevisionDemandaES(dic['PrevisionDemandaES'])
+                    ins_raw.setPrevisionDemandaES(dic['PrevisionDemandaES'])
                 if dic['ProduccionyDemandaES']:
-                    ins.setProduccionyDemandaES(dic['ProduccionyDemandaES'])
+                    ins_raw.setProduccionyDemandaES(dic['ProduccionyDemandaES'])
 
             elif iterDate in listCHV:
                 ''' VERANO '''
-                ins.getDataFromWeb()
+                ins_raw.getDataFromWeb()
                 # Al cambiar de hora a verano pasamos de la hora 2:00 a la 3:00 (haremos ambos datos iguales)
                 horaCHV = 3
-                preci = ins.getPreciosES()
+                preci = ins_raw.getPreciosES()
                 if len(preci) == 23:
                     preci.insert(horaCHV,preci[horaCHV-1])
-                    ins.setPreciosES(preci)
+                    ins_raw.setPreciosES(preci)
                     del preci
-                eoli = ins.getPrevisionEolicaES()
+                eoli = ins_raw.getPrevisionEolicaES()
                 if len(eoli) == 23:
                     eoli.insert(horaCHV,eoli[horaCHV-1])
-                    ins.setPrevisionEolicaES(eoli)
+                    ins_raw.setPrevisionEolicaES(eoli)
                     del eoli
-                deman = ins.getPrevisionDemandaES()
+                deman = ins_raw.getPrevisionDemandaES()
                 if len(deman) == 23:
                     deman.insert(horaCHV,deman[horaCHV-1])
-                    ins.setPrevisionDemandaES(deman)
+                    ins_raw.setPrevisionDemandaES(deman)
                     del deman
 
             elif iterDate in listCHI:
                 ''' INVIERNO '''
-                ins.getDataFromWeb()
+                ins_raw.getDataFromWeb()
                 # Al cambiar de hora a invierno pasamos de la hora 3:00 a la 2:00 (eliminamos el dato 3:00)
                 horaCHI = 3
-                preci = ins.getPreciosES()
+                preci = ins_raw.getPreciosES()
                 if len(preci) == 25:
                     preci.pop(horaCHI)
-                    ins.setPreciosES(preci)
+                    ins_raw.setPreciosES(preci)
                     del preci
-                eoli = ins.getPrevisionEolicaES()
+                eoli = ins_raw.getPrevisionEolicaES()
                 if len(eoli) == 25:
                     eoli.pop(horaCHI)
-                    ins.setPrevisionEolicaES(eoli)
+                    ins_raw.setPrevisionEolicaES(eoli)
                     del eoli
-                deman = ins.getPrevisionDemandaES()
+                deman = ins_raw.getPrevisionDemandaES()
                 if len(deman) == 25:
                     deman.pop(horaCHI)
-                    ins.setPrevisionDemandaES(deman)
+                    ins_raw.setPrevisionDemandaES(deman)
                     del deman
 
             else:
-                ins.getDataFromWeb()
+                ins_raw.getDataFromWeb()
 
-            ins.insertORupdateDataToDB()
+            ins_raw.insertORupdateDataToDB()
             iterDate += ONEDAY

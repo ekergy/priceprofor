@@ -98,15 +98,12 @@ def populateStudyData(startDate=None, endDate=None):
         while (endDate >= iterDate):
             print iterDate.date()
 
-            ins = DBRawData()
-            ins.set_fecha(iterDate)
-            ins.getDataFromWeb()
-            ins_raw = ins
-            # ins_raw = DBRawData(iterDate)
-            '''
-            si no hay datos en la base de datos falla
-            '''
-            # ins_raw.getRawDataFromDB()
+            ins_raw = DBRawData()
+            ins_raw.set_fecha(iterDate)
+            ins_raw.getDataFromWeb()
+
+            ''' si no hay datos en la base de datos falla '''
+
             for i in range(24):
                 ins_study = DBStudyData()
                 ins_study.fecha = iterDate
@@ -250,8 +247,8 @@ def findLastStudyDocument():
     '''
     Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
     '''
-    ins = DBStudyData()
-    collection = ins.getCollection()
+    ins_study = DBStudyData()
+    collection = ins_study.getCollection()
 
 #     currentDT = datetime.now()
 #     cursor = collection.find({"fecha": {"$lte": currentDT}})
@@ -270,7 +267,7 @@ def findLastStudyDocument():
         # print element['hora']
         fecha = element['fecha']
         # fecha.replace(hour=0, minute=0, second=0, microsecond=0)
-    del ins
+    del ins_study
 
 #     return lastelement['fecha']
     return fecha
@@ -346,19 +343,16 @@ def populateStudyDataLocal(startDate=None, endDate=None):
         iterDate = startDate
         while (endDate >= iterDate):
             print iterDate.date()
-            ins = DBRawData()
+            ins_raw = DBRawData()
 
             ''' BASE DE DATOS LOCAL '''
-            ins.connection = Connection(host=None)
+            ins_raw.connection = Connection(host=None)
 
-            ins.set_fecha(iterDate)
-            ins.getDataFromWeb()
-            ins_raw = ins
-            # ins_raw = DBRawData(iterDate)
-            '''
-            si no hay datos en la base de datos falla
-            '''
-            # ins_raw.getRawDataFromDB()
+            ins_raw.set_fecha(iterDate)
+            ins_raw.getDataFromWeb()
+
+            ''' si no hay datos en la base de datos falla '''
+
             for i in range(24):
                 ins_study = DBStudyData()
 
@@ -458,13 +452,13 @@ def findLastStudyDocumentLocal():
     '''
     Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
     '''
-    ins = DBStudyData()
+    ins_study = DBStudyData()
 
     ''' BASE DE DATOS LOCAL '''
-    ins.connectiondetails['host'] = None
-    ins.setCollection()
+    ins_study.connectiondetails['host'] = None
+    ins_study.setCollection()
 
-    collection = ins.getCollection()
+    collection = ins_study.getCollection()
 
     currentDT = datetime.now()
     cursor = collection.find({"fecha": {"$lte": currentDT}})
@@ -511,12 +505,16 @@ class DBStudyData():
 
 # from sys import path
 # path.append('libs')
+# from omelinfosys.dbstudydatamanager import DBStudyData
+# hostOpenShift = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
+# DBStudyData.connectiondetails['host'] = hostOpenShift
 # from datetime import datetime
 # startDate = datetime(2014,10,1)
 # from omelinfosys.dbstudydatamanager import populateStudyData
 # populateStudyData(startDate)
 
     connectiondetails = dict(host=None)
+#     connectiondetails = dict()
 
     def __init__(self):
         '''
