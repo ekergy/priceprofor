@@ -18,6 +18,7 @@ except IOError:
 from priceprofor import myapplication
 from dbpreciosesmanager import DBPreciosES
 from omelinfosys.dbstudydatamanager import DBStudyData
+from omelinfosys.dbrawdatamanager import DBRawData
 from utilities import connectiondetails as connectiondetailsutilities
 from estadisticasgenericas import connectiondetails as connectiondetailsestadisticasgenericas
 
@@ -28,6 +29,7 @@ hostOpenShift = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodi
 # DatabaseUsers.connectiondetails['host'] = 'mongodb://sme:sme@ds035997.mongolab.com:35997/smehogar'
 DBPreciosES.connectiondetails['host'] = hostOpenShift
 DBStudyData.connectiondetails['host'] = hostOpenShift
+DBRawData.connectiondetails['host'] = hostOpenShift
 connectiondetailsutilities['host'] = hostOpenShift
 connectiondetailsestadisticasgenericas['host'] = hostOpenShift
 

@@ -246,8 +246,10 @@ def estadisticasprecios():
     periodoTemporal = ["Dia actual", "Dia anterior", "Semana actual", "Semana anterior", "Mes actual", "Mes anterior",
                        "Estacion actual", "Estacion anterior", "Año actual", "Año anterior"]
 
-    promediosDesde = estadisticasPrecios()[1]
-    promediosHasta = estadisticasPrecios()[2]
+    promedios = estadisticasPrecios()
+
+    promediosDesde = promedios[1]
+    promediosHasta = promedios[2]
 
     periodoDesde = [promediosDesde[0].date(), promediosDesde[1].date(), promediosDesde[2].date(), promediosDesde[3].date(), promediosDesde[4].date(),
                     promediosDesde[5].date(), promediosDesde[6].date(), promediosDesde[7].date(), promediosDesde[8].date(), promediosDesde[9].date()]
@@ -255,7 +257,7 @@ def estadisticasprecios():
     periodoHasta = [promediosHasta[0].date(), promediosHasta[1].date(), promediosHasta[2].date(), promediosHasta[3].date(), promediosHasta[4].date(),
                     promediosHasta[5].date(), promediosHasta[6].date(), promediosHasta[7].date(), promediosHasta[8].date(), promediosHasta[9].date()]
 
-    promediosPrecios = estadisticasPrecios()[0]
+    promediosPrecios = promedios[0]
 
 #     print periodoTemporal
 #     print promediosPrecios
@@ -311,8 +313,10 @@ def estadisticastecnologias():
     periodoTemporal = ["Dia actual", "Dia anterior", "Semana actual", "Semana anterior", "Mes actual", "Mes anterior",
                        "Estacion actual", "Estacion anterior", "Año actual", "Año anterior"]
 
-    promediosDesde = estadisticasTecnologias()[6]
-    promediosHasta = estadisticasTecnologias()[7]
+    promedios = estadisticasTecnologias()
+
+    promediosDesde = promedios[6]
+    promediosHasta = promedios[7]
 
     periodoDesde = [promediosDesde[0].date(), promediosDesde[1].date(), promediosDesde[2].date(), promediosDesde[3].date(), promediosDesde[4].date(),
                     promediosDesde[5].date(), promediosDesde[6].date(), promediosDesde[7].date(), promediosDesde[8].date(), promediosDesde[9].date()]
@@ -320,7 +324,7 @@ def estadisticastecnologias():
     periodoHasta = [promediosHasta[0].date(), promediosHasta[1].date(), promediosHasta[2].date(), promediosHasta[3].date(), promediosHasta[4].date(),
                     promediosHasta[5].date(), promediosHasta[6].date(), promediosHasta[7].date(), promediosHasta[8].date(), promediosHasta[9].date()]
 
-    promediosTecnologias = estadisticasTecnologias()[0:6]
+    promediosTecnologias = promedios[0:6]
 
 #     print periodoTemporal
 #     print promediosPrecios
