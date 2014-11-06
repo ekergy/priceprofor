@@ -539,9 +539,9 @@ def graphicpredictionmodelsGET():
     dateString = str(str(dateTime.day)+'/'+str(dateTime.month)+'/'+str(dateTime.year))
 
     ''' LOCAL '''
-#     collection = Connection(host=None).mercadodiario.modelosHTES
+#     collection = Connection(host=None).mercadodiario.modelosHWTES
     ''' SERVIDOR '''
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHTES
+    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
 
     ''' el dia relevante a graficar es el dayahead y sus predicciones de precio '''
     # dayahead = datetime(2014,6,1)
@@ -757,9 +757,9 @@ def forecastArrayTDT():
     '''
 
     ''' LOCAL '''
-#     collection = Connection(host=None).mercadodiario.modelosHTES
+#     collection = Connection(host=None).mercadodiario.modelosHWTES
     ''' SERVIDOR '''
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHTES
+    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
 
 #     dayahead = datetime(2014,7,14)
 #     dayahead = datetime(2014,6,1)
@@ -848,7 +848,7 @@ def forecastArrayTDT():
     return arrayTDT
 
 '''
-collection = Connection(host=None).mercadodiario.modelosHTES
+collection = Connection(host=None).mercadodiario.modelosHWTES
 /usr/bin/python2.7 /home/david/workspace/electraPROFOR/ElectricityMarket/ExponentialSmoothing/testeHWTES_robjects.py
 '''
 
@@ -866,9 +866,9 @@ def graphicpredictionmodelshwtesrealGET():
     dateString = str(str(dateTime.day)+'/'+str(dateTime.month)+'/'+str(dateTime.year))
 
     ''' LOCAL '''
-#     collection = Connection(host=None).mercadodiario.modelosHTES
+#     collection = Connection(host=None).mercadodiario.modelosHWTES
     ''' SERVIDOR '''
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHTES
+    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
 
     ''' el dia relevante a graficar es el dayahead y sus predicciones de precio '''
     currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)

@@ -452,9 +452,9 @@ def forecastAppli():
     # currentDate = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
 
     ''' LOCAL '''
-#     collection = Connection(host=None).mercadodiario.modelosHTES
+#     collection = Connection(host=None).mercadodiario.modelosHWTES
     ''' SERVIDOR '''
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHTES
+    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
 
     dayahead = findLastForecastDocument()
     twodayahead = dayahead + timedelta(1)
@@ -536,18 +536,23 @@ def findLastForecastDocument():
     '''
 
     ''' LOCAL '''
-#     collection = Connection(host=None).mercadodiario.modelosHTES
+#     collection = Connection(host=None).mercadodiario.modelosHWTES
     ''' SERVIDOR '''
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHTES
+    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
 
-#     ins = DBPreciosES()
-#     collection = ins.getCollection()
+#     currentDT = datetime.now() + timedelta(1)
+#     cursor = collection.find({"dayahead": {"$lte": currentDT}})
+#     for element in cursor:
+#         lastelement = element
 
-    currentDT = datetime.now() + timedelta(1)
-    cursor = collection.find({"dayahead": {"$lte": currentDT}})
+    cursor = collection.find().sort([("dayahead",-1)]).limit(1)
     for element in cursor:
-        lastelement = element
-    return lastelement['dayahead']
+        # print element
+        dayahead = element['dayahead']
+        # dayahead.replace(hour=0, minute=0, second=0, microsecond=0)
+
+#     return lastelement['dayahead']
+    return dayahead
 
 ####################################################################################################
 
@@ -560,12 +565,12 @@ def findPredictionDayahead():
     '''
     currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
     DAYAHEAD = currentDate + timedelta(1)
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHTES
+    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
     cursor = collection.find({ "dayahead" : {"$in": [DAYAHEAD]}, "tipo": {"$in": ["teste"]}})
     vector = list()
     for element in cursor:
         if element['fecha'] == DAYAHEAD:
-            vector.append(element['PreciosES'])
+            vector.append(round(element['PreciosES'],2))
     return vector
 
 # from sys import path
@@ -636,7 +641,7 @@ def testeMongo():
     '''
     '''
 #     from pymongo import Connection
-    collection = Connection(host=None).mercadodiario.modelosHTES
+    collection = Connection(host=None).mercadodiario.modelosHWTES
 #     from datetime import datetime, timedelta
     fecha_aux = datetime.now()
 
@@ -742,9 +747,9 @@ def errorMongo():
     print ''
 
     ''' LOCAL '''
-    collection = Connection(host=None).mercadodiario.modelosHTES
+    collection = Connection(host=None).mercadodiario.modelosHWTES
     ''' SERVIDOR '''
-#     collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHTES
+#     collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
 
     cursor = collection.find({ "dayahead": {"$in": [dayahead]}, "tipo": {"$in": ["teste"]} })
     testeHW = list()
@@ -922,6 +927,9 @@ class DBPreciosES(object):
 
 # from sys import path
 # path.append('libs')
+# from dbpreciosesmanager import DBPreciosES
+# hostOpenShift = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
+# DBPreciosES.connectiondetails['host'] = hostOpenShift
 # from datetime import datetime
 # startDT = datetime(2014,10,1)
 # from dbpreciosesmanager import populatePrecios
