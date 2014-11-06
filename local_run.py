@@ -19,6 +19,8 @@ from bottle import run
 from priceprofor import myapplication
 from dbpreciosesmanager import DBPreciosES
 from omelinfosys.dbstudydatamanager import DBStudyData
+from omelinfosys.dbrawdatamanager import DBRawData
+
 # names redefine connections
 from utilities import connectiondetails as connectiondetailsutilities
 from estadisticasgenericas import connectiondetails as connectiondetailsestadisticasgenericas
@@ -33,12 +35,14 @@ if __name__ == '__main__':
     ''' LOCAL '''
 #     DBPreciosES.connectiondetails['host'] = hostLocalHost
 #     DBStudyData.connectiondetails['host'] = hostLocalHost
+#     DBRawData.connectiondetails['host'] = hostLocalHost
 #     connectiondetailsutilities['host'] = hostLocalHost
 #     connectiondetailsestadisticasgenericas['host'] = hostLocalHost
 
     ''' SERVIDOR '''
     DBPreciosES.connectiondetails['host'] = hostOpenShift
     DBStudyData.connectiondetails['host'] = hostOpenShift
+    DBRawData.connectiondetails['host'] = hostOpenShift
     connectiondetailsutilities['host'] = hostOpenShift
     connectiondetailsestadisticasgenericas['host'] = hostOpenShift
 
