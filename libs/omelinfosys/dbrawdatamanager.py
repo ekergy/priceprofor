@@ -63,11 +63,6 @@ def findLastRawDocument():
 #     for element in cursor:
 #         lastelement = element
 
-    '''
-    DBRawData
-    findLastRecordInDB
-    '''
-
     # cursor = collection.find().sort("fecha",-1).limit(1)
     cursor = collection.find().sort([("fecha",-1),("hora",-1)]).limit(1)
     for element in cursor:
@@ -524,106 +519,106 @@ class DBRawData():
         '''
         pass
 
-# from datetime import datetime
-# startDate = datetime(2011,1,1)
-# endDate = datetime(2011,6,30)
-# from sys import path
-# path.append('libs')
-# from omelinfosys.dbrawdatamanager import populateRawDataBis
-# populateRawDataBis(startDate,endDate)
-# populateRawDataBis(startDate)
-def populateRawDataBis(startDate, endDate=None):
-    '''
-    Metodos de usabilidad con las clases definidas
-    This Method will performe the following operations:
-    1st:    Gathering informacion of StudyDataES collection. Last data inserted.
-    2nd:    Gathering informacion of RawData collection. Last data available.
-    3rd:    Study data won't take into account the change of hour days with the following logic:
-            23 hours day: hour 3 will be replicated.
-            25 hours day: hour 3 will be removed.
-    '''
-    try:
-        from datosEnFaltaEnergias import centralEuropeanTime, datosEnFalta, diasEnFalta
-        emptyPD, zeroPD = diasEnFalta()
-        listDT = emptyPD + zeroPD
-        # ONEHOUR = timedelta(seconds=3600)
-        ONEDAY = timedelta(1)
-        # Disponemos de los datos de la web "http://www.omie.es/inicio" con 3 dias de retraso
-        if endDate == None:
-            currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
-            endDate = currentDate - timedelta(3)
-    except:
-        raise
-    else:
-        iterDate = startDate
-        while (endDate >= iterDate):
-            print iterDate.date()
-            ins_raw = DBRawData()
-            ins_raw.set_fecha(iterDate)
-
-            listCHV = list()
-            listCHI = list()
-            for indi in range(endDate.year - startDate.year + 1):
-                fechaCHV, fechaCHI = centralEuropeanTime(startDate.year + indi)
-                listCHV.append(fechaCHV)
-                listCHI.append(fechaCHI)
-
-            if iterDate in listDT:
-                ins_raw.getDataFromWeb()
-                dic = datosEnFalta(iterDate)
-                if dic['PreciosES']:
-                    ins_raw.setPreciosES(dic['PreciosES'])
-                if dic['PrevisionEolicaES']:
-                    ins_raw.setPrevisionEolicaES(dic['PrevisionEolicaES'])
-                if dic['PrevisionDemandaES']:
-                    ins_raw.setPrevisionDemandaES(dic['PrevisionDemandaES'])
-                if dic['ProduccionyDemandaES']:
-                    ins_raw.setProduccionyDemandaES(dic['ProduccionyDemandaES'])
-
-            elif iterDate in listCHV:
-                ''' VERANO '''
-                ins_raw.getDataFromWeb()
-                # Al cambiar de hora a verano pasamos de la hora 2:00 a la 3:00 (haremos ambos datos iguales)
-                horaCHV = 3
-                preci = ins_raw.getPreciosES()
-                if len(preci) == 23:
-                    preci.insert(horaCHV,preci[horaCHV-1])
-                    ins_raw.setPreciosES(preci)
-                    del preci
-                eoli = ins_raw.getPrevisionEolicaES()
-                if len(eoli) == 23:
-                    eoli.insert(horaCHV,eoli[horaCHV-1])
-                    ins_raw.setPrevisionEolicaES(eoli)
-                    del eoli
-                deman = ins_raw.getPrevisionDemandaES()
-                if len(deman) == 23:
-                    deman.insert(horaCHV,deman[horaCHV-1])
-                    ins_raw.setPrevisionDemandaES(deman)
-                    del deman
-
-            elif iterDate in listCHI:
-                ''' INVIERNO '''
-                ins_raw.getDataFromWeb()
-                # Al cambiar de hora a invierno pasamos de la hora 3:00 a la 2:00 (eliminamos el dato 3:00)
-                horaCHI = 3
-                preci = ins_raw.getPreciosES()
-                if len(preci) == 25:
-                    preci.pop(horaCHI)
-                    ins_raw.setPreciosES(preci)
-                    del preci
-                eoli = ins_raw.getPrevisionEolicaES()
-                if len(eoli) == 25:
-                    eoli.pop(horaCHI)
-                    ins_raw.setPrevisionEolicaES(eoli)
-                    del eoli
-                deman = ins_raw.getPrevisionDemandaES()
-                if len(deman) == 25:
-                    deman.pop(horaCHI)
-                    ins_raw.setPrevisionDemandaES(deman)
-                    del deman
-
-            else:
-                ins_raw.getDataFromWeb()
-
-            ins_raw.insertORupdateDataToDB()
-            iterDate += ONEDAY
+# # from datetime import datetime
+# # startDate = datetime(2011,1,1)
+# # endDate = datetime(2011,6,30)
+# # from sys import path
+# # path.append('libs')
+# # from omelinfosys.dbrawdatamanager import populateRawDataBis
+# # populateRawDataBis(startDate,endDate)
+# # populateRawDataBis(startDate)
+# def populateRawDataBis(startDate, endDate=None):
+#     '''
+#     Metodos de usabilidad con las clases definidas
+#     This Method will performe the following operations:
+#     1st:    Gathering informacion of StudyDataES collection. Last data inserted.
+#     2nd:    Gathering informacion of RawData collection. Last data available.
+#     3rd:    Study data won't take into account the change of hour days with the following logic:
+#             23 hours day: hour 3 will be replicated.
+#             25 hours day: hour 3 will be removed.
+#     '''
+#     try:
+#         from datosEnFaltaEnergias import centralEuropeanTime, datosEnFalta, diasEnFalta
+#         emptyPD, zeroPD = diasEnFalta()
+#         listDT = emptyPD + zeroPD
+#         # ONEHOUR = timedelta(seconds=3600)
+#         ONEDAY = timedelta(1)
+#         # Disponemos de los datos de la web "http://www.omie.es/inicio" con 3 dias de retraso
+#         if endDate == None:
+#             currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
+#             endDate = currentDate - timedelta(3)
+#     except:
+#         raise
+#     else:
+#         iterDate = startDate
+#         while (endDate >= iterDate):
+#             print iterDate.date()
+#             ins_raw = DBRawData()
+#             ins_raw.set_fecha(iterDate)
+# 
+#             listCHV = list()
+#             listCHI = list()
+#             for indi in range(endDate.year - startDate.year + 1):
+#                 fechaCHV, fechaCHI = centralEuropeanTime(startDate.year + indi)
+#                 listCHV.append(fechaCHV)
+#                 listCHI.append(fechaCHI)
+# 
+#             if iterDate in listDT:
+#                 ins_raw.getDataFromWeb()
+#                 dic = datosEnFalta(iterDate)
+#                 if dic['PreciosES']:
+#                     ins_raw.setPreciosES(dic['PreciosES'])
+#                 if dic['PrevisionEolicaES']:
+#                     ins_raw.setPrevisionEolicaES(dic['PrevisionEolicaES'])
+#                 if dic['PrevisionDemandaES']:
+#                     ins_raw.setPrevisionDemandaES(dic['PrevisionDemandaES'])
+#                 if dic['ProduccionyDemandaES']:
+#                     ins_raw.setProduccionyDemandaES(dic['ProduccionyDemandaES'])
+# 
+#             elif iterDate in listCHV:
+#                 ''' VERANO '''
+#                 ins_raw.getDataFromWeb()
+#                 # Al cambiar de hora a verano pasamos de la hora 2:00 a la 3:00 (haremos ambos datos iguales)
+#                 horaCHV = 3
+#                 preci = ins_raw.getPreciosES()
+#                 if len(preci) == 23:
+#                     preci.insert(horaCHV,preci[horaCHV-1])
+#                     ins_raw.setPreciosES(preci)
+#                     del preci
+#                 eoli = ins_raw.getPrevisionEolicaES()
+#                 if len(eoli) == 23:
+#                     eoli.insert(horaCHV,eoli[horaCHV-1])
+#                     ins_raw.setPrevisionEolicaES(eoli)
+#                     del eoli
+#                 deman = ins_raw.getPrevisionDemandaES()
+#                 if len(deman) == 23:
+#                     deman.insert(horaCHV,deman[horaCHV-1])
+#                     ins_raw.setPrevisionDemandaES(deman)
+#                     del deman
+# 
+#             elif iterDate in listCHI:
+#                 ''' INVIERNO '''
+#                 ins_raw.getDataFromWeb()
+#                 # Al cambiar de hora a invierno pasamos de la hora 3:00 a la 2:00 (eliminamos el dato 3:00)
+#                 horaCHI = 3
+#                 preci = ins_raw.getPreciosES()
+#                 if len(preci) == 25:
+#                     preci.pop(horaCHI)
+#                     ins_raw.setPreciosES(preci)
+#                     del preci
+#                 eoli = ins_raw.getPrevisionEolicaES()
+#                 if len(eoli) == 25:
+#                     eoli.pop(horaCHI)
+#                     ins_raw.setPrevisionEolicaES(eoli)
+#                     del eoli
+#                 deman = ins_raw.getPrevisionDemandaES()
+#                 if len(deman) == 25:
+#                     deman.pop(horaCHI)
+#                     ins_raw.setPrevisionDemandaES(deman)
+#                     del deman
+# 
+#             else:
+#                 ins_raw.getDataFromWeb()
+# 
+#             ins_raw.insertORupdateDataToDB()
+#             iterDate += ONEDAY

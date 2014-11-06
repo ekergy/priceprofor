@@ -104,11 +104,6 @@ def findLastPriceDocument():
 #     for element in cursor:
 #         lastelement = element
 
-    '''
-    DBPreciosES
-    findLastRecordInDB
-    '''
-
     # cursor = collection.find().sort("fecha",-1).limit(1)
     cursor = collection.find().sort([("fecha",-1),("hora",-1)]).limit(1)
     for element in cursor:
@@ -858,8 +853,6 @@ def populatePreciosLocal(startDate=None, endDate=None):
         while (endDate >= iterDate):
             print iterDate.date()
             ins = DBPreciosES()
-
-            ''' BASE DE DATOS LOCAL '''
             ins.connectiondetails['host'] = None
             ins.setCollection()
 
@@ -878,9 +871,8 @@ def populatePreciosLocal(startDate=None, endDate=None):
             for i in range(len(priceDay)):
                 ins.hora = i
                 ins.priceHour = priceDay[ins.hora]
-
-                ''' BASE DE DATOS LOCAL '''
-                ins.updatedbprecioseslocal()
+                # ins.connectiondetails['host'] = None
+                ins.updatedbprecioses()
 
             del ins
             iterDate += ONEDAY
@@ -953,36 +945,6 @@ class DBPreciosES(object):
         try:
             self.setCollection()
             collection = self.getCollection()
-            results = collection.find({ "fecha": {"$in" : [self.fecha]}, "hora": {"$in": [self.hora]} })
-            jsontoinsert = dict()
-            jsontoinsert['fecha'] = self.fecha
-            jsontoinsert['hora'] = self.hora
-            jsontoinsert['PreciosES'] = self.priceHour
-            # print jsontoinsert
-            if results.count() == 0:
-                collection.insert(jsontoinsert)
-            if results.count() == 1:
-                collection.update({"fecha": {"$in": [self.fecha]} , "hora" : {"$in" : [self.hora]} }, {"$set": jsontoinsert})
-            if results.count() > 1:
-                raise Exception('La base de datos tiene mas de un registro para la fecha dada')
-        except:
-            raise
-        else:
-            self.setCollection(), jsontoinsert
-
-    def updatedbprecioseslocal(self):
-        '''
-        # insert or update
-        # no olvidar de poner un sort por fecha y luego por hora
-        '''
-        try:
-
-            ''' BASE DE DATOS LOCAL '''
-            self.connectiondetails['host'] = None
-
-            self.setCollection()
-            collection = self.getCollection()
-
             results = collection.find({ "fecha": {"$in" : [self.fecha]}, "hora": {"$in": [self.hora]} })
             jsontoinsert = dict()
             jsontoinsert['fecha'] = self.fecha

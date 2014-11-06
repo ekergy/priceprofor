@@ -255,11 +255,6 @@ def findLastStudyDocument():
 #     for element in cursor:
 #         lastelement = element
 
-    '''
-    DBStudyData
-    findLastRecordInDB
-    '''
-
     # cursor = collection.find().sort("fecha",-1).limit(1)
     cursor = collection.find().sort([("fecha",-1),("hora",-1)]).limit(1)
     for element in cursor:
@@ -295,7 +290,6 @@ def gettecnologiasesfromweb(fecha):
 
 # from sys import path
 # path.append('libs')
-# from datetime import datetime
 # from omelinfosys.dbstudydatamanager import populateStudyDataLocal
 # populateStudyDataLocal()
 def populateStudyDataLocal(startDate=None, endDate=None):
@@ -344,15 +338,12 @@ def populateStudyDataLocal(startDate=None, endDate=None):
         while (endDate >= iterDate):
             print iterDate.date()
             ins_raw = DBRawData()
-
-            ''' BASE DE DATOS LOCAL '''
-            ins_raw.connection = Connection(host=None)
-
+            # ins_raw.connection = Connection(host=None)
+            ins_raw.connectiondetails['host'] = None
             ins_raw.set_fecha(iterDate)
             ins_raw.getDataFromWeb()
 
             ''' si no hay datos en la base de datos falla '''
-
             for i in range(24):
                 ins_study = DBStudyData()
 
@@ -436,8 +427,8 @@ def populateStudyDataLocal(startDate=None, endDate=None):
                     ins_study.PrevisionEolica = ins_raw.PrevisionEolicaES[i]
                     ins_study.PrevisionDemanda = ins_raw.PrevisionDemandaES[i]
 
-                ''' BASE DE DATOS LOCAL '''
-                ins_study.insertorupdatedataintodblocal()
+                ins_study.connectiondetails['host'] = None
+                ins_study.insertorupdatedataintodb()
 
             if currentDate == iterDate + timedelta(3):
                 raise Exception('En la web del OMIE no hay datos de hoy, ayer y antes de ayer')
@@ -587,22 +578,6 @@ class DBStudyData():
                           delCollection,
                           "La collection para hacer las queries")
 
-    def findLastRecordInDB(self):
-        """
-        Devuelve el ultimo registro que se encuentra en la base de datos:
-        """
-        try:
-            self.setCollection()
-            collection = self.getCollection()
-            results = collection.find().sort([("fecha",-1),("hora",-1)]).limit(1)
-            for element in results:
-                result = element
-            return result
-        except:
-            raise
-        else:
-            self.delCollection()
-
     # from sys import path
     # path.append('libs')
     # from datetime import datetime
@@ -718,64 +693,28 @@ class DBStudyData():
         else:
             self.setCollection(), jsontoinsert
 
-    def insertorupdatedataintodblocal(self):
-        '''
-        '''
-        try:
-            ''' BASE DE DATOS LOCAL '''
-            self.connectiondetails['host'] = None
+class DBManagerStudyDataES(DBStudyData):
+    '''
+    '''
+    def __init__(self,fecha,hour = None):
+        #DBStudyData.__init__(self)
+        super(DBManagerStudyDataES,self).__init__(fecha,hour,'StudyDataES')
 
-            self.setCollection()
-            collection = self.getCollection()
+class DBManagerStudyDataPT(DBStudyData):
+    '''
+    '''
+    def __init__(self,fecha,hour = None):
+        #DBStudyData.__init__(self)
+        super(DBManagerStudyDataPT,self).__init__(fecha,hour,'StudyDataPT')
 
-            # collection = db[self.collectionName]
-            results = collection.find({"fecha" : {"$in": [self.fecha]}, "hora": {"$in": [self.hora]}})
-            jsontoinsert = dict()
-            jsontoinsert["fecha"] = self.fecha
-            jsontoinsert["hora"] = self.hora
+class DBManagerStudyDataMIBEL(DBStudyData):
+    '''
+    '''
+    def __init__(self,fecha,hour = None):
+        #DBStudyData.__init__(self)
+        super(DBManagerStudyDataMIBEL,self).__init__(fecha,hour,'StudyDataMIBEL')
 
-            ''' PRODUCCION '''
-            jsontoinsert["Precios"] = self.Precios
-            jsontoinsert["PrevisionDemanda"] = self.PrevisionDemanda
-            jsontoinsert["PrevisionEolica"] = self.PrevisionEolica
-            jsontoinsert["ENERGIA_GESTIONADA"] = self.ENERGIA_GESTIONADA
-            jsontoinsert["NUCLEAR"] = self.NUCLEAR
-            jsontoinsert["REGIMEN_ESPECIAL"] = self.REGIMEN_ESPECIAL
-            jsontoinsert["HIDRAULICA_CONVENCIONAL"] = self.HIDRAULICA_CONVENCIONAL
-            jsontoinsert["HIDRAULICA_BOMBEO"] = self.HIDRAULICA_BOMBEO
-            jsontoinsert["CARBON"] = self.CARBON
-            jsontoinsert["CICLO_COMBINADO"] = self.CICLO_COMBINADO
-            jsontoinsert["FUEL_GAS"] = self.FUEL_GAS
-            jsontoinsert["TERMICO_CON_PRIMA"] = self.TERMICO_CON_PRIMA
-            jsontoinsert["UNIDADES_GENERICAS"] = self.UNIDADES_GENERICAS
-            jsontoinsert["IMPORTACION_PORTUGAL"] = self.IMPORTACION_PORTUGAL
-            jsontoinsert["IMPORTACION_FRANCIA"] = self.IMPORTACION_FRANCIA
-            jsontoinsert["IMPORTACION_ANDORRA"] = self.IMPORTACION_ANDORRA
-            jsontoinsert["IMPORTACION_MARRUECOS"] = self.IMPORTACION_MARRUECOS
-
-            ''' DEMANDA '''
-            jsontoinsert["TOTAL_DEMANDA_NACIONAL_CLIENTES"] = self.TOTAL_DEMANDA_NACIONAL_CLIENTES
-            jsontoinsert["TOTAL_CONSUMO_BOMBEO"] = self.TOTAL_CONSUMO_BOMBEO
-            jsontoinsert["TOTAL_EXPORTACIONES"] = self.TOTAL_EXPORTACIONES
-            jsontoinsert["TOTAL_GENERICAS"] = self.TOTAL_GENERICAS
-
-            jsontoinsert["REGIMEN_ESPECIAL_A_DISTRIBUCION"] = self.REGIMEN_ESPECIAL_A_DISTRIBUCION
-
-            if results.count() == 0:
-                # construct the json to insert
-                collection.insert(jsontoinsert)
-            if results.count() == 1:
-                collection.update({"fecha" : {"$in" : [self.fecha]},
-                                        "hora" : {"$in" : [self.hora]}},
-                                       {"$set" : jsontoinsert })
-            if results.count() > 1:
-                raise Exception('La base de datos tiene mas de un registro para la dada fecha.')
-        except:
-            raise
-        else:
-            self.setCollection(), jsontoinsert
-
-# def populateStudyData2(startDate, endDate=None):
+# def populateStudyDataBis(startDate, endDate=None):
 #     '''
 #     Study data won't take into account the change of hour days with the following logic:
 #     23 hours day: hour 3 will be replicated.
@@ -814,7 +753,7 @@ class DBStudyData():
 #             ins_study.insertorupdatedataintodb()
 #         iterDate += ONEDAY
 
-# def updateStudyData2(startDate, endDate=None):
+# def updateStudyDataBis(startDate, endDate=None):
 #     '''
 #     el campo "fecha" va variando el valor de CET o CSET, en vez de el valor real del campo "hora",
 #     por lo que la "fecha" esta mal y al seleccionar dias de la base de datos obtenemos otros dias
@@ -869,24 +808,3 @@ class DBStudyData():
 # 
 #             ins_study.insertorupdatedataintodb()
 #         iterDate += ONEDAY
-
-class DBManagerStudyDataES(DBStudyData):
-    '''
-    '''
-    def __init__(self,fecha,hour = None):
-        #DBStudyData.__init__(self)
-        super(DBManagerStudyDataES,self).__init__(fecha,hour,'StudyDataES')
-
-class DBManagerStudyDataPT(DBStudyData):
-    '''
-    '''
-    def __init__(self,fecha,hour = None):
-        #DBStudyData.__init__(self)
-        super(DBManagerStudyDataPT,self).__init__(fecha,hour,'StudyDataPT')
-
-class DBManagerStudyDataMIBEL(DBStudyData):
-    '''
-    '''
-    def __init__(self,fecha,hour = None):
-        #DBStudyData.__init__(self)
-        super(DBManagerStudyDataMIBEL,self).__init__(fecha,hour,'StudyDataMIBEL')

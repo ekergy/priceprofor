@@ -460,11 +460,6 @@ def graficaTecnologiasDiariasGET():
     ''' se grafica en el GET el ultimo dia en base de datos '''
     dateTime = findLastDayDocumentTechnology()
 
-    ''' instancia al metodo de clase DBStudyData '''
-#     ins = DBStudyData()
-#     dateTime = ins.findLastRecordInDB()['fecha']
-#     del ins
-
 #     dic = preciosDiarios(dateTime)
     dic = tecnologiasDiarias(dateTime)
     dateString = str(str(dateTime.day)+'/'+str(dateTime.month)+'/'+str(dateTime.year))
