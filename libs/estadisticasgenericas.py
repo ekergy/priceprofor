@@ -158,9 +158,9 @@ def estadisticasPrecios():
     # db = MongoClient(host=CONN_HOST).mercadodiario
     # my_date_str = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
     # fecha2 = parser.parse(my_date_str)
-    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
     # fecha = fecha2.replace(month=fecha2.month - 1)
     # fecha = (fecha2 - timedelta(weeks=4) - timedelta(days=2)).replace(day=fecha2.day) + timedelta(days=1)
+    fecha2 = fecha_aux.replace(hour=0, minute=0, second=0, microsecond=0)
 
     try:
         fecha = (fecha2 - timedelta(weeks=4) - timedelta(days=3)).replace(day=fecha2.day)
