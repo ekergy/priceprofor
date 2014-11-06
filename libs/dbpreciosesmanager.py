@@ -67,6 +67,7 @@ def populatePrecios(startDate=None, endDate=None):
         while (endDate >= iterDate):
             print iterDate.date()
             ins = DBPreciosES()
+            # print ins.getCollection()
             ins.fecha = iterDate
             priceDay = getpreciosmibelfromweb(ins.fecha)['PreciosES']
 
@@ -815,91 +816,91 @@ def errorCuadraticoMedio(working, teste):
 #                     self.preciospt.append(preciopt)
 #                     self.preciosmibel.append(min(precioes, preciopt))
 
-# from sys import path
-# path.append('libs')
-# from dbpreciosesmanager import populatePreciosLocal
-# populatePreciosLocal()
-def populatePreciosLocal(startDate=None, endDate=None):
-    '''
-    PRECIOS actualiza la base de datos de PRECIOS del servidor
-    recordar que el metodo populatePrecios esta gobernado por una clase (cofirmar la conexion)
+# # from sys import path
+# # path.append('libs')
+# # from dbpreciosesmanager import populatePreciosLocal
+# # populatePreciosLocal()
+# def populatePreciosLocal(startDate=None, endDate=None):
+#     '''
+#     PRECIOS actualiza la base de datos de PRECIOS del servidor
+#     recordar que el metodo populatePrecios esta gobernado por una clase (cofirmar la conexion)
+# 
+#     populatePrecios por si solo gestiona la actualizacion de base de datos en LOCAL o SERVIDOR
+#     '''
+#     try:
+#         ONEDAY = timedelta(1)
+#         if startDate == None:
+#             ''' BASE DE DATOS LOCAL '''
+#             startDate = findLastPriceDocumentLocal()
+#         if endDate == None:
+#             currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
+#             # endDate = currentDate - timedelta(3)
+#             ''' no se seleccionan los precios "day ahead" de mañana publicados hoy a las 13:00 '''
+# #             endDate = currentDate
+#             ''' en desarrollo para dayahead '''
+#             endDate = currentDate + timedelta(1)
+#     except:
+#         raise
+#     else:
+#         listCHV = list()
+#         listCHI = list()
+#         for indi in range(endDate.year - startDate.year + 1):
+#             fechaCHV = cambiohoraverano(startDate.year + indi)
+#             fechaCHI = cambiohorainvierno(startDate.year + indi)
+#             listCHV.append(fechaCHV)
+#             listCHI.append(fechaCHI)
+# 
+#         iterDate = startDate
+#         while (endDate >= iterDate):
+#             print iterDate.date()
+#             ins = DBPreciosES()
+#             ins.connectiondetails['host'] = None
+#             ins.setCollection()
+# 
+#             ins.fecha = iterDate
+#             priceDay = getpreciosmibelfromweb(ins.fecha)['PreciosES']
+# 
+#             if len(priceDay) == 24:
+#                 pass
+#             elif len(priceDay) == 23:
+#                 horaCHV = 3
+#                 priceDay.insert(horaCHV,priceDay[horaCHV-1])
+#             elif len(priceDay) == 25:
+#                 horaCHI = 3
+#                 priceDay.pop(horaCHI)
+# 
+#             for i in range(len(priceDay)):
+#                 ins.hora = i
+#                 ins.priceHour = priceDay[ins.hora]
+#                 # ins.connectiondetails['host'] = None
+#                 ins.updatedbprecioses()
+# 
+#             del ins
+#             iterDate += ONEDAY
 
-    populatePrecios por si solo gestiona la actualizacion de base de datos en LOCAL o SERVIDOR
-    '''
-    try:
-        ONEDAY = timedelta(1)
-        if startDate == None:
-            ''' BASE DE DATOS LOCAL '''
-            startDate = findLastPriceDocumentLocal()
-        if endDate == None:
-            currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
-            # endDate = currentDate - timedelta(3)
-            ''' no se seleccionan los precios "day ahead" de mañana publicados hoy a las 13:00 '''
-#             endDate = currentDate
-            ''' en desarrollo para dayahead '''
-            endDate = currentDate + timedelta(1)
-    except:
-        raise
-    else:
-        listCHV = list()
-        listCHI = list()
-        for indi in range(endDate.year - startDate.year + 1):
-            fechaCHV = cambiohoraverano(startDate.year + indi)
-            fechaCHI = cambiohorainvierno(startDate.year + indi)
-            listCHV.append(fechaCHV)
-            listCHI.append(fechaCHI)
-
-        iterDate = startDate
-        while (endDate >= iterDate):
-            print iterDate.date()
-            ins = DBPreciosES()
-            ins.connectiondetails['host'] = None
-            ins.setCollection()
-
-            ins.fecha = iterDate
-            priceDay = getpreciosmibelfromweb(ins.fecha)['PreciosES']
-
-            if len(priceDay) == 24:
-                pass
-            elif len(priceDay) == 23:
-                horaCHV = 3
-                priceDay.insert(horaCHV,priceDay[horaCHV-1])
-            elif len(priceDay) == 25:
-                horaCHI = 3
-                priceDay.pop(horaCHI)
-
-            for i in range(len(priceDay)):
-                ins.hora = i
-                ins.priceHour = priceDay[ins.hora]
-                # ins.connectiondetails['host'] = None
-                ins.updatedbprecioses()
-
-            del ins
-            iterDate += ONEDAY
-
-# from sys import path
-# path.append('libs')
-# from dbpreciosesmanager import findLastPriceDocumentLocal
-# findLastPriceDocumentLocal()
-def findLastPriceDocumentLocal():
-    '''
-    Extraemos de la base de datos el ultimo documento
-    (en funcion de la fecha interna del propio documento)
-    Hacer la query sin la fecha como input
-    '''
-    ins = DBPreciosES()
-
-    ''' BASE DE DATOS LOCAL '''
-    ins.connectiondetails['host'] = None
-    ins.setCollection()
-
-    collection = ins.getCollection()
-
-    currentDT = datetime.now()
-    cursor = collection.find({"fecha": {"$lte": currentDT}})
-    for element in cursor:
-        lastelement = element
-    return lastelement['fecha']
+# # from sys import path
+# # path.append('libs')
+# # from dbpreciosesmanager import findLastPriceDocumentLocal
+# # findLastPriceDocumentLocal()
+# def findLastPriceDocumentLocal():
+#     '''
+#     Extraemos de la base de datos el ultimo documento
+#     (en funcion de la fecha interna del propio documento)
+#     Hacer la query sin la fecha como input
+#     '''
+#     ins = DBPreciosES()
+# 
+#     ''' BASE DE DATOS LOCAL '''
+#     ins.connectiondetails['host'] = None
+#     ins.setCollection()
+# 
+#     collection = ins.getCollection()
+# 
+#     currentDT = datetime.now()
+#     cursor = collection.find({"fecha": {"$lte": currentDT}})
+#     for element in cursor:
+#         lastelement = element
+#     return lastelement['fecha']
 
 # from sys import path
 # path.append('libs')

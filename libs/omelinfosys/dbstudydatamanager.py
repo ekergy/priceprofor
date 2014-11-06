@@ -99,6 +99,7 @@ def populateStudyData(startDate=None, endDate=None):
             print iterDate.date()
 
             ins_raw = DBRawData()
+            # print ins_raw.getCollection()
             ins_raw.set_fecha(iterDate)
             ins_raw.getDataFromWeb()
 
@@ -106,6 +107,7 @@ def populateStudyData(startDate=None, endDate=None):
 
             for i in range(24):
                 ins_study = DBStudyData()
+                # print ins_study.getCollection()
                 ins_study.fecha = iterDate
                 ins_study.hora = i
 
@@ -288,174 +290,174 @@ def gettecnologiasesfromweb(fecha):
 
 ####################################################################################################
 
-# from sys import path
-# path.append('libs')
-# from omelinfosys.dbstudydatamanager import populateStudyDataLocal
-# populateStudyDataLocal()
-def populateStudyDataLocal(startDate=None, endDate=None):
-    '''
-    TECNOLOGIAS actualiza la base de datos de TECNOLOGIAS del servidor
-
-    Metodos de usabilidad con las clases definidas
-    This Method will performe the following operations:data = response.read()
-    1st:    Gathering informacion of StudyDataES collection. Last data inserted.
-    2nd:    Gathering informacion of RawData collection. Last data available.
-    3rd:    Study data won't take into account the change of hour days with the following logic:
-            23 hours day: hour 3 will be replicated.
-            25 hours day: hour 3 will be removed.
-    Sustituimos el nombre TOTAL_DEMANDA por el de ENERGIA_GESTIONADA segun se define en la web de
-    http://www.esios.ree.es/web-publica/
-    '''
-    try:
-        # ONEHOUR = timedelta(seconds=3600)
-        ONEDAY = timedelta(1)
-        if startDate == None:
-            startDate = findLastStudyDocumentLocal()
-        # Disponemos de los datos de la web de la "REE" con 3 dias de retraso
-        currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
-        if endDate == None:
-            if startDate == currentDate:
-                endDate = currentDate
-            elif startDate == currentDate - timedelta(1):
-                endDate = startDate - timedelta(1)
-            elif startDate == currentDate - timedelta(2):
-                endDate = startDate - timedelta(2)
-            else:
-                endDate = currentDate - timedelta(3)
-    except:
-        raise
-    else:
-        listCHV = list()
-        listCHI = list()
-        for indi in range(endDate.year - startDate.year + 1):
-            fechaCHV, fechaCHI = centralEuropeanTime(startDate.year + indi)
-            listCHV.append(fechaCHV)
-            listCHI.append(fechaCHI)
-
-        emptyPD, zeroPD = diasEnFalta()
-        listDT = emptyPD + zeroPD
-        iterDate = startDate
-        while (endDate >= iterDate):
-            print iterDate.date()
-            ins_raw = DBRawData()
-            # ins_raw.connection = Connection(host=None)
-            ins_raw.connectiondetails['host'] = None
-            ins_raw.set_fecha(iterDate)
-            ins_raw.getDataFromWeb()
-
-            ''' si no hay datos en la base de datos falla '''
-            for i in range(24):
-                ins_study = DBStudyData()
-
-                ins_study.fecha = iterDate
-                ins_study.hora = i
-
-                ''' PRODUCCION '''
-                ins_study.NUCLEAR = ins_raw.ProduccionyDemandaES['NUCLEAR'][i]
-                ins_study.HIDRAULICA_CONVENCIONAL = ins_raw.ProduccionyDemandaES['HIDRAULICA_CONVENCIONAL'][i]
-                ins_study.REGIMEN_ESPECIAL = ins_raw.ProduccionyDemandaES['REGIMEN_ESPECIAL_A_MERCADO'][i]
-                ins_study.CARBON = ins_raw.ProduccionyDemandaES['CARBON_IMPORTACION'][i]
-                ins_study.CICLO_COMBINADO = ins_raw.ProduccionyDemandaES['CICLO_COMBINADO'][i]
-                ins_study.HIDRAULICA_BOMBEO = ins_raw.ProduccionyDemandaES['CONSUMO_DE_BOMBEO'][i]
-                ins_study.TERMICO_CON_PRIMA = ins_raw.ProduccionyDemandaES['TOTAL_TERMICA_(3+4+5+6+7+8)'][i]
-                ins_study.IMPORTACION_FRANCIA = ins_raw.ProduccionyDemandaES['IMPORTACION_FRANCIA'][i]
-                ins_study.IMPORTACION_PORTUGAL = ins_raw.ProduccionyDemandaES['IMPORTACION_PORTUGAL'][i]
-                ins_study.IMPORTACION_MARRUECOS = ins_raw.ProduccionyDemandaES['IMPORTACION_MARRUECOS'][i]
-                ins_study.IMPORTACION_ANDORRA = ins_raw.ProduccionyDemandaES['IMPORTACION_ANDORRA'][i]
-
-                if iterDate not in listDT:
-                    ins_study.ENERGIA_GESTIONADA = ins_raw.ProduccionyDemandaES['TOTAL_DEMANDA'][i]
-                    ins_study.REGIMEN_ESPECIAL_A_DISTRIBUCION = ins_raw.ProduccionyDemandaES['REGIMEN_ESPECIAL_A_DISTRIBUCION'][i]
-                    ins_study.FUEL_GAS = ins_raw.ProduccionyDemandaES['FUEL_+_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA)'][i]
-                    ins_study.UNIDADES_GENERICAS = ins_raw.ProduccionyDemandaES['UNIDADES_GENERICAS_SUBASTAS_DISTRIBUCION'][i]
-
-                    ''' DEMANDA '''
-                    ins_study.TOTAL_DEMANDA_NACIONAL_CLIENTES = ins_raw.ProduccionyDemandaES['TOTAL_DEMANDA_NACIONAL_CLIENTES_(21+22+23)'][i]
-                    ins_study.TOTAL_CONSUMO_BOMBEO = ins_raw.ProduccionyDemandaES['TOTAL_CONSUMO_BOMBEO_(24)'][i]
-                    ins_study.TOTAL_EXPORTACIONES = ins_raw.ProduccionyDemandaES['TOTAL_EXPORTACIONES_(25+26+27+28+29)'][i]
-                    ins_study.TOTAL_GENERICAS = ins_raw.ProduccionyDemandaES['TOTAL_GENERICAS_(30+31)'][i]
-
-                if iterDate in listCHV:
-                    chVERANO(ins_raw, ins_study)
-                elif iterDate in listCHI:
-                    chINVIERNO(ins_raw, ins_study)
-                elif iterDate in listDT:
-                    dic = datosEnFalta(iterDate)
-
-                    # if i == 0:
-                    #     print dic
-                    if dic['PreciosES']:
-                        ins_study.Precios = dic['PreciosES'][i]
-                    else:
-                        ins_study.Precios = ins_raw.PreciosES[i]
-                    if dic['PrevisionEolicaES']:
-                        ins_study.PrevisionEolica = dic['PrevisionEolicaES'][i]
-                    else:
-                        ins_study.PrevisionEolica = ins_raw.PrevisionEolicaES[i]
-                    if dic['PrevisionDemandaES']:
-                        ins_study.PrevisionDemanda = dic['PrevisionDemandaES'][i]
-                    else:
-                        ins_study.PrevisionDemanda = ins_raw.PrevisionDemandaES[i]
-
-#                         if dic['ProduccionyDemandaES']:
-#                             ins_study.NUCLEAR = ins_raw.dic['ProduccionyDemandaES']['NUCLEAR'][i]
-#                             ins_study.HIDRAULICA_CONVENCIONAL = ins_raw.dic['ProduccionyDemandaES']['HIDRAULICA_CONVENCIONAL'][i]
-#                             ins_study.CARBON = ins_raw.dic['ProduccionyDemandaES']['CARBON_IMPORTACION'][i]
-#                             ins_study.CICLO_COMBINADO = ins_raw.dic['ProduccionyDemandaES']['CICLO_COMBINADO'][i]
-#                             ins_study.HIDRAULICA_BOMBEO = ins_raw.dic['ProduccionyDemandaES']['CONSUMO_DE_BOMBEO'][i]
-#                             ins_study.TERMICO_CON_PRIMA = ins_raw.dic['ProduccionyDemandaES']['TOTAL_TERMICA_(3+4+5+6+7+8)'][i]
-#                             ins_study.IMPORTACION_FRANCIA = ins_raw.dic['ProduccionyDemandaES']['IMPORTACION_FRANCIA'][i]
-#                             ins_study.IMPORTACION_PORTUGAL = ins_raw.dic['ProduccionyDemandaES']['IMPORTACION_PORTUGAL'][i]
-#                             ins_study.IMPORTACION_MARRUECOS = ins_raw.dic['ProduccionyDemandaES']['IMPORTACION_MARRUECOS'][i]
-#                             ins_study.IMPORTACION_ANDORRA = ins_raw.dic['ProduccionyDemandaES']['IMPORTACION_ANDORRA'][i]
-#
-#                             if iterDate not in listDT:
-#                                 ins_study.ENERGIA_GESTIONADA = ins_raw.dic['ProduccionyDemandaES']['TOTAL_DEMANDA'][i]
-#                                 ins_study.REGIMEN_ESPECIAL = ins_raw.dic['ProduccionyDemandaES']['REGIMEN_ESPECIAL_A_DISTRIBUCION'][i]
-#                                 ins_study.FUEL_GAS = ins_raw.dic['ProduccionyDemandaES']['FUEL_+_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA)'][i]
-#                                 ins_study.UNIDADES_GENERICAS = ins_raw.dic['ProduccionyDemandaES']['UNIDADES_GENERICAS_SUBASTAS_DISTRIBUCION'][i]
+# # from sys import path
+# # path.append('libs')
+# # from omelinfosys.dbstudydatamanager import populateStudyDataLocal
+# # populateStudyDataLocal()
+# def populateStudyDataLocal(startDate=None, endDate=None):
+#     '''
+#     TECNOLOGIAS actualiza la base de datos de TECNOLOGIAS del servidor
 # 
-#                                 ins_study.TOTAL_DEMANDA_NACIONAL_CLIENTES = ins_raw.dic['ProduccionyDemandaES']['TOTAL_DEMANDA_NACIONAL_CLIENTES_(21+22+23)'][i]
-#                                 ins_study.TOTAL_CONSUMO_BOMBEO = ins_raw.dic['ProduccionyDemandaES']['TOTAL_CONSUMO_BOMBEO_(24)'][i]
-#                                 ins_study.TOTAL_EXPORTACIONES = ins_raw.dic['ProduccionyDemandaES']['TOTAL_EXPORTACIONES_(25+26+27+28+29)'][i]
-#                                 ins_study.TOTAL_GENERICAS = ins_raw.dic['ProduccionyDemandaES']['TOTAL_GENERICAS_(30+31)'][i]
-#                         else:
-#                             pass
+#     Metodos de usabilidad con las clases definidas
+#     This Method will performe the following operations:data = response.read()
+#     1st:    Gathering informacion of StudyDataES collection. Last data inserted.
+#     2nd:    Gathering informacion of RawData collection. Last data available.
+#     3rd:    Study data won't take into account the change of hour days with the following logic:
+#             23 hours day: hour 3 will be replicated.
+#             25 hours day: hour 3 will be removed.
+#     Sustituimos el nombre TOTAL_DEMANDA por el de ENERGIA_GESTIONADA segun se define en la web de
+#     http://www.esios.ree.es/web-publica/
+#     '''
+#     try:
+#         # ONEHOUR = timedelta(seconds=3600)
+#         ONEDAY = timedelta(1)
+#         if startDate == None:
+#             startDate = findLastStudyDocumentLocal()
+#         # Disponemos de los datos de la web de la "REE" con 3 dias de retraso
+#         currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
+#         if endDate == None:
+#             if startDate == currentDate:
+#                 endDate = currentDate
+#             elif startDate == currentDate - timedelta(1):
+#                 endDate = startDate - timedelta(1)
+#             elif startDate == currentDate - timedelta(2):
+#                 endDate = startDate - timedelta(2)
+#             else:
+#                 endDate = currentDate - timedelta(3)
+#     except:
+#         raise
+#     else:
+#         listCHV = list()
+#         listCHI = list()
+#         for indi in range(endDate.year - startDate.year + 1):
+#             fechaCHV, fechaCHI = centralEuropeanTime(startDate.year + indi)
+#             listCHV.append(fechaCHV)
+#             listCHI.append(fechaCHI)
+# 
+#         emptyPD, zeroPD = diasEnFalta()
+#         listDT = emptyPD + zeroPD
+#         iterDate = startDate
+#         while (endDate >= iterDate):
+#             print iterDate.date()
+#             ins_raw = DBRawData()
+#             # ins_raw.connection = Connection(host=None)
+#             ins_raw.connectiondetails['host'] = None
+#             ins_raw.set_fecha(iterDate)
+#             ins_raw.getDataFromWeb()
+# 
+#             ''' si no hay datos en la base de datos falla '''
+#             for i in range(24):
+#                 ins_study = DBStudyData()
+# 
+#                 ins_study.fecha = iterDate
+#                 ins_study.hora = i
+# 
+#                 ''' PRODUCCION '''
+#                 ins_study.NUCLEAR = ins_raw.ProduccionyDemandaES['NUCLEAR'][i]
+#                 ins_study.HIDRAULICA_CONVENCIONAL = ins_raw.ProduccionyDemandaES['HIDRAULICA_CONVENCIONAL'][i]
+#                 ins_study.REGIMEN_ESPECIAL = ins_raw.ProduccionyDemandaES['REGIMEN_ESPECIAL_A_MERCADO'][i]
+#                 ins_study.CARBON = ins_raw.ProduccionyDemandaES['CARBON_IMPORTACION'][i]
+#                 ins_study.CICLO_COMBINADO = ins_raw.ProduccionyDemandaES['CICLO_COMBINADO'][i]
+#                 ins_study.HIDRAULICA_BOMBEO = ins_raw.ProduccionyDemandaES['CONSUMO_DE_BOMBEO'][i]
+#                 ins_study.TERMICO_CON_PRIMA = ins_raw.ProduccionyDemandaES['TOTAL_TERMICA_(3+4+5+6+7+8)'][i]
+#                 ins_study.IMPORTACION_FRANCIA = ins_raw.ProduccionyDemandaES['IMPORTACION_FRANCIA'][i]
+#                 ins_study.IMPORTACION_PORTUGAL = ins_raw.ProduccionyDemandaES['IMPORTACION_PORTUGAL'][i]
+#                 ins_study.IMPORTACION_MARRUECOS = ins_raw.ProduccionyDemandaES['IMPORTACION_MARRUECOS'][i]
+#                 ins_study.IMPORTACION_ANDORRA = ins_raw.ProduccionyDemandaES['IMPORTACION_ANDORRA'][i]
+# 
+#                 if iterDate not in listDT:
+#                     ins_study.ENERGIA_GESTIONADA = ins_raw.ProduccionyDemandaES['TOTAL_DEMANDA'][i]
+#                     ins_study.REGIMEN_ESPECIAL_A_DISTRIBUCION = ins_raw.ProduccionyDemandaES['REGIMEN_ESPECIAL_A_DISTRIBUCION'][i]
+#                     ins_study.FUEL_GAS = ins_raw.ProduccionyDemandaES['FUEL_+_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA)'][i]
+#                     ins_study.UNIDADES_GENERICAS = ins_raw.ProduccionyDemandaES['UNIDADES_GENERICAS_SUBASTAS_DISTRIBUCION'][i]
+# 
+#                     ''' DEMANDA '''
+#                     ins_study.TOTAL_DEMANDA_NACIONAL_CLIENTES = ins_raw.ProduccionyDemandaES['TOTAL_DEMANDA_NACIONAL_CLIENTES_(21+22+23)'][i]
+#                     ins_study.TOTAL_CONSUMO_BOMBEO = ins_raw.ProduccionyDemandaES['TOTAL_CONSUMO_BOMBEO_(24)'][i]
+#                     ins_study.TOTAL_EXPORTACIONES = ins_raw.ProduccionyDemandaES['TOTAL_EXPORTACIONES_(25+26+27+28+29)'][i]
+#                     ins_study.TOTAL_GENERICAS = ins_raw.ProduccionyDemandaES['TOTAL_GENERICAS_(30+31)'][i]
+# 
+#                 if iterDate in listCHV:
+#                     chVERANO(ins_raw, ins_study)
+#                 elif iterDate in listCHI:
+#                     chINVIERNO(ins_raw, ins_study)
+#                 elif iterDate in listDT:
+#                     dic = datosEnFalta(iterDate)
+# 
+#                     # if i == 0:
+#                     #     print dic
+#                     if dic['PreciosES']:
+#                         ins_study.Precios = dic['PreciosES'][i]
+#                     else:
+#                         ins_study.Precios = ins_raw.PreciosES[i]
+#                     if dic['PrevisionEolicaES']:
+#                         ins_study.PrevisionEolica = dic['PrevisionEolicaES'][i]
+#                     else:
+#                         ins_study.PrevisionEolica = ins_raw.PrevisionEolicaES[i]
+#                     if dic['PrevisionDemandaES']:
+#                         ins_study.PrevisionDemanda = dic['PrevisionDemandaES'][i]
+#                     else:
+#                         ins_study.PrevisionDemanda = ins_raw.PrevisionDemandaES[i]
+# 
+# #                         if dic['ProduccionyDemandaES']:
+# #                             ins_study.NUCLEAR = ins_raw.dic['ProduccionyDemandaES']['NUCLEAR'][i]
+# #                             ins_study.HIDRAULICA_CONVENCIONAL = ins_raw.dic['ProduccionyDemandaES']['HIDRAULICA_CONVENCIONAL'][i]
+# #                             ins_study.CARBON = ins_raw.dic['ProduccionyDemandaES']['CARBON_IMPORTACION'][i]
+# #                             ins_study.CICLO_COMBINADO = ins_raw.dic['ProduccionyDemandaES']['CICLO_COMBINADO'][i]
+# #                             ins_study.HIDRAULICA_BOMBEO = ins_raw.dic['ProduccionyDemandaES']['CONSUMO_DE_BOMBEO'][i]
+# #                             ins_study.TERMICO_CON_PRIMA = ins_raw.dic['ProduccionyDemandaES']['TOTAL_TERMICA_(3+4+5+6+7+8)'][i]
+# #                             ins_study.IMPORTACION_FRANCIA = ins_raw.dic['ProduccionyDemandaES']['IMPORTACION_FRANCIA'][i]
+# #                             ins_study.IMPORTACION_PORTUGAL = ins_raw.dic['ProduccionyDemandaES']['IMPORTACION_PORTUGAL'][i]
+# #                             ins_study.IMPORTACION_MARRUECOS = ins_raw.dic['ProduccionyDemandaES']['IMPORTACION_MARRUECOS'][i]
+# #                             ins_study.IMPORTACION_ANDORRA = ins_raw.dic['ProduccionyDemandaES']['IMPORTACION_ANDORRA'][i]
+# #
+# #                             if iterDate not in listDT:
+# #                                 ins_study.ENERGIA_GESTIONADA = ins_raw.dic['ProduccionyDemandaES']['TOTAL_DEMANDA'][i]
+# #                                 ins_study.REGIMEN_ESPECIAL = ins_raw.dic['ProduccionyDemandaES']['REGIMEN_ESPECIAL_A_DISTRIBUCION'][i]
+# #                                 ins_study.FUEL_GAS = ins_raw.dic['ProduccionyDemandaES']['FUEL_+_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA)'][i]
+# #                                 ins_study.UNIDADES_GENERICAS = ins_raw.dic['ProduccionyDemandaES']['UNIDADES_GENERICAS_SUBASTAS_DISTRIBUCION'][i]
+# # 
+# #                                 ins_study.TOTAL_DEMANDA_NACIONAL_CLIENTES = ins_raw.dic['ProduccionyDemandaES']['TOTAL_DEMANDA_NACIONAL_CLIENTES_(21+22+23)'][i]
+# #                                 ins_study.TOTAL_CONSUMO_BOMBEO = ins_raw.dic['ProduccionyDemandaES']['TOTAL_CONSUMO_BOMBEO_(24)'][i]
+# #                                 ins_study.TOTAL_EXPORTACIONES = ins_raw.dic['ProduccionyDemandaES']['TOTAL_EXPORTACIONES_(25+26+27+28+29)'][i]
+# #                                 ins_study.TOTAL_GENERICAS = ins_raw.dic['ProduccionyDemandaES']['TOTAL_GENERICAS_(30+31)'][i]
+# #                         else:
+# #                             pass
+# 
+#                 else:
+#                     ins_study.Precios = ins_raw.PreciosES[i]
+#                     ins_study.PrevisionEolica = ins_raw.PrevisionEolicaES[i]
+#                     ins_study.PrevisionDemanda = ins_raw.PrevisionDemandaES[i]
+# 
+#                 ins_study.connectiondetails['host'] = None
+#                 ins_study.insertorupdatedataintodb()
+# 
+#             if currentDate == iterDate + timedelta(3):
+#                 raise Exception('En la web del OMIE no hay datos de hoy, ayer y antes de ayer')
+# 
+#             iterDate += ONEDAY
 
-                else:
-                    ins_study.Precios = ins_raw.PreciosES[i]
-                    ins_study.PrevisionEolica = ins_raw.PrevisionEolicaES[i]
-                    ins_study.PrevisionDemanda = ins_raw.PrevisionDemandaES[i]
-
-                ins_study.connectiondetails['host'] = None
-                ins_study.insertorupdatedataintodb()
-
-            if currentDate == iterDate + timedelta(3):
-                raise Exception('En la web del OMIE no hay datos de hoy, ayer y antes de ayer')
-
-            iterDate += ONEDAY
-
-# from sys import path
-# path.append('libs')
-# from omelinfosys.dbstudydatamanager import findLastStudyDocumentLocal
-# findLastStudyDocumentLocal()
-def findLastStudyDocumentLocal():
-    '''
-    Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
-    '''
-    ins_study = DBStudyData()
-
-    ''' BASE DE DATOS LOCAL '''
-    ins_study.connectiondetails['host'] = None
-    ins_study.setCollection()
-
-    collection = ins_study.getCollection()
-
-    currentDT = datetime.now()
-    cursor = collection.find({"fecha": {"$lte": currentDT}})
-    for element in cursor:
-        lastelement = element
-    return lastelement['fecha']
+# # from sys import path
+# # path.append('libs')
+# # from omelinfosys.dbstudydatamanager import findLastStudyDocumentLocal
+# # findLastStudyDocumentLocal()
+# def findLastStudyDocumentLocal():
+#     '''
+#     Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
+#     '''
+#     ins_study = DBStudyData()
+# 
+#     ''' BASE DE DATOS LOCAL '''
+#     ins_study.connectiondetails['host'] = None
+#     ins_study.setCollection()
+# 
+#     collection = ins_study.getCollection()
+# 
+#     currentDT = datetime.now()
+#     cursor = collection.find({"fecha": {"$lte": currentDT}})
+#     for element in cursor:
+#         lastelement = element
+#     return lastelement['fecha']
 
 class DBStudyData():
     '''
