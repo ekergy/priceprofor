@@ -257,7 +257,8 @@ class ProduccionMibelHandler(object):
         for row in self.toparseTECNOLOGIAS:
             if row.__len__() == 9:
                 # This is the first row. Let get date from it.
-                self.fecha = datetime.strptime(row[3],'%d/%M/%Y')
+                self.fecha = datetime.strptime(row[3],'%d/%m/%Y')
+                self.fecha = datetime(self.fecha.year,self.fecha.month,self.fecha.day)
             if row.__len__()!=0 and row.__len__()>26:
                 tomibel = self.PARSEABLETOMIBEL.get(row[0],False)
                 toes = self.PARSEABLETOES.get(row[0],False)

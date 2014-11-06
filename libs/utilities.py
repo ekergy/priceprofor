@@ -300,9 +300,9 @@ def diasconcambiodehora(StartDate,EndDate):
     for i in range(EndDate.year - StartDate.year +1):
         candidatoInvierno = cambiohorainvierno(StartDate.year+i)
         candidatoVerano = cambiohoraverano(StartDate.year+i)
-        if EndDate > candidatoVerano > StartDate:
+        if EndDate >= candidatoVerano >= StartDate:
             DiasCambioDeHoraAverano.append(candidatoVerano)
-        if EndDate > candidatoInvierno > StartDate:
+        if EndDate >= candidatoInvierno >= StartDate:
             DiasCambioDeHoraAinvierno.append(candidatoInvierno)
     return {'DiasCambioDeHoraAverano':DiasCambioDeHoraAverano,
             'DiasCambioDeHoraAinvierno':DiasCambioDeHoraAinvierno}
