@@ -285,6 +285,13 @@ def cambiohorainvierno(anho=None):
             fechacandidato = fechacandidato - timedelta(1)
     return resultdate
 
+# from sys import path
+# path.append('libs')
+# from utilities import diasconcambiodehora
+# from datetime import datetime
+# startDate = datetime(2011,1,1)
+# endDate = datetime(2015,1,1)
+# diasconcambiodehora(startDate,endDate)
 def diasconcambiodehora(StartDate,EndDate):
     '''
     diasconcambiodehora(datetime.datetime,datetime.datetime)
