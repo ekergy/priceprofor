@@ -3,15 +3,25 @@
 Created on 02/2013
 @author: hmarrao & david
 '''
+
+# from datosEnFaltaEnergias import centralEuropeanTime
 from pymongo import Connection
 from datetime import datetime, timedelta
 from dbrawdatamanager import DBRawData
-from datosEnFaltaEnergias import centralEuropeanTime, datosEnFalta, diasEnFalta
+from datosEnFaltaEnergias import datosEnFalta, diasEnFalta
 from omelinfosys.omelhandlers import ProduccionMibelHandler
-from utilities import omieproduccionurl,diasconcambiodehora
+from utilities import omieproduccionurl, diasconcambiodehora
 from urllib2 import urlopen
 
-
+# from sys import path
+# path.append('libs')
+# from omelinfosys.dbstudydatamanager import DBStudyData
+# hostOpenShift = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
+# DBStudyData.connectiondetails['host'] = hostOpenShift
+# from datetime import datetime
+# startDate = datetime(2014,10,1)
+# from omelinfosys.dbstudydatamanager import populateStudyData
+# populateStudyData(startDate)
 def populateStudyData(startDate=None, endDate=None):
     '''
     Requirements:
@@ -23,10 +33,10 @@ def populateStudyData(startDate=None, endDate=None):
     3rd:    Study data will take into account the change of hour days with the following logic:
             23 hours day: hour 3 will be replicated.
             25 hours day: hour 3 will be removed.
-            
+
     Working flow:
         populateStudyData must take into account the missing data and identify the days with 23hours and 25hours.
-        
+
     Input data:
     startDate as by default the last available data in the Study collection
     endDate as by default the last available data omel server (for now it cames with 3 days delay.)
@@ -36,12 +46,11 @@ def populateStudyData(startDate=None, endDate=None):
         currentDate = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
         availableDate = currentDate - timedelta(3)
         if startDate == None:
-            # ultimo documento en studydata:
             doc = findLastStudyDocument()
             startDate = doc['fecha']
         if startDate > availableDate:
                 startDate = availableDate
-                # Disponemos de los datos de la web de la "REE" con 3 dias de retraso
+                # Disponemos de los datos de la web de la "OMIE" con 3 dias de retraso
         if endDate == None:
             endDate = availableDate
         if endDate > availableDate:
@@ -52,25 +61,25 @@ def populateStudyData(startDate=None, endDate=None):
         listaux = diasconcambiodehora(startDate,endDate)
         listCHV = listaux['DiasCambioDeHoraAverano']
         listCHI = listaux['DiasCambioDeHoraAinvierno']
-        
 
         emptyPD, zeroPD = diasEnFalta()
         listDT = emptyPD + zeroPD
         iterDate = startDate
         ONEDAY = timedelta(1)
         while (endDate >= iterDate):
-            print "Updating ",iterDate
+            print 'Updating',iterDate.date()
             ins_raw = DBRawData()
             ins_raw.set_fecha(iterDate)
             ins_raw.getDataFromWeb()
-            # arreglar los dias de horas 25 y 23 antes de entrar en el for:
+            # VERANO: arreglar dias con 23 horas y dejarlos en 24
             if iterDate in listCHV:
-                ins_raw.PreciosES.insert(3,ins_raw.PreciosES[3])
-                ins_raw.PrevisionDemandaES.insert(3,ins_raw.PrevisionDemandaES[3])
-                ins_raw.PrevisionEolicaES.insert(3,ins_raw.PrevisionEolicaES[3])
+                ins_raw.PreciosES.insert(3,ins_raw.PreciosES[2])
+                ins_raw.PrevisionDemandaES.insert(3,ins_raw.PrevisionDemandaES[2])
+                ins_raw.PrevisionEolicaES.insert(3,ins_raw.PrevisionEolicaES[2])
                 for key,value in ins_raw.ProduccionyDemandaES.iteritems():
                     if isinstance(value,list):
-                        value.insert(3,value[3])
+                        value.insert(3,value[2])
+            # INVIERNO: arreglar dias con 25 horas y dejarlos en 24
             if iterDate in listCHI:
                 ins_raw.PreciosES.pop(3)
                 ins_raw.PrevisionDemandaES.pop(3)
@@ -82,7 +91,7 @@ def populateStudyData(startDate=None, endDate=None):
                 ins_study = DBStudyData()
                 ins_study.fecha = iterDate
                 ins_study.hora = i
-                # PRODUCCION:
+                # PRODUCCION
                 ins_study.NUCLEAR = ins_raw.ProduccionyDemandaES['NUCLEAR'][i]
                 ins_study.HIDRAULICA_CONVENCIONAL = ins_raw.ProduccionyDemandaES['HIDRAULICA_CONVENCIONAL'][i]
                 ins_study.REGIMEN_ESPECIAL = ins_raw.ProduccionyDemandaES['REGIMEN_ESPECIAL_A_MERCADO'][i]
@@ -100,12 +109,11 @@ def populateStudyData(startDate=None, endDate=None):
                     ins_study.REGIMEN_ESPECIAL_A_DISTRIBUCION = ins_raw.ProduccionyDemandaES['REGIMEN_ESPECIAL_A_DISTRIBUCION'][i]
                     ins_study.FUEL_GAS = ins_raw.ProduccionyDemandaES['FUEL_+_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA)'][i]
                     ins_study.UNIDADES_GENERICAS = ins_raw.ProduccionyDemandaES['UNIDADES_GENERICAS_SUBASTAS_DISTRIBUCION'][i]
-                    # DEMANDA:
+                    # DEMANDA
                     ins_study.TOTAL_DEMANDA_NACIONAL_CLIENTES = ins_raw.ProduccionyDemandaES['TOTAL_DEMANDA_NACIONAL_CLIENTES_(21+22+23)'][i]
                     ins_study.TOTAL_CONSUMO_BOMBEO = ins_raw.ProduccionyDemandaES['TOTAL_CONSUMO_BOMBEO_(24)'][i]
                     ins_study.TOTAL_EXPORTACIONES = ins_raw.ProduccionyDemandaES['TOTAL_EXPORTACIONES_(25+26+27+28+29)'][i]
                     ins_study.TOTAL_GENERICAS = ins_raw.ProduccionyDemandaES['TOTAL_GENERICAS_(30+31)'][i]
-
 
                 if iterDate in listDT:
                     dic = datosEnFalta(iterDate)
@@ -137,21 +145,52 @@ def populateStudyData(startDate=None, endDate=None):
 
             iterDate += ONEDAY
 
-
+# from sys import path
+# path.append('libs')
+# from omelinfosys.dbstudydatamanager import findLastStudyDocument
+# findLastStudyDocument()
 def findLastStudyDocument():
     '''
     Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
     '''
     ins_study = DBStudyData()
     collection = ins_study.getCollection()
+    # cursor = collection.find().sort("fecha",-1).limit(1)
     cursor = collection.find().sort([("fecha",-1),("hora",-1)]).limit(1)
     for element in cursor:
-        documento = element
+        # print element['hora']
+        # fecha = element['fecha']
+        docu = element
     del ins_study
-    return documento
+    return docu
 
+# from sys import path
+# path.append('libs')
+# from omelinfosys.dbstudydatamanager import findFirstStudyDocument
+# findFirstStudyDocument()
+def findFirstStudyDocument():
+    '''
+    Extraemos de la base de datos el ultimo documento (en funcion de la fecha interna del propio documento)
+    '''
+    ins_study = DBStudyData()
+    collection = ins_study.getCollection()
+    # cursor = collection.find().sort("fecha",-1).limit(1)
+    cursor = collection.find().sort([("fecha",1),("hora",1)]).limit(1)
+    for element in cursor:
+        # print element['hora']
+        # fecha = element['fecha']
+        docu = element
+    del ins_study
+    return docu
 
+####################################################################################################
 
+# from sys import path
+# path.append('libs')
+# from datetime import datetime
+# fecha = datetime(2014,1,1)
+# from omelinfosys.dbstudydatamanager import gettecnologiasesfromweb
+# gettecnologiasesfromweb(fecha)
 def gettecnologiasesfromweb(fecha):
         '''
         This is the main method so the usage of PreciosMibelHandler is more strainfoward.
@@ -167,6 +206,7 @@ def gettecnologiasesfromweb(fecha):
             # return {"ProduccionyDemandaMIBEL":Produccion.ProduccionyDemandaMIBEL,"ProduccionyDemandaES":Produccion.ProduccionyDemandaES,"ProduccionyDemandaPT":Produccion.ProduccionyDemandaPT}
             return {"ProduccionyDemandaES":Produccion.ProduccionyDemandaES}
 
+####################################################################################################
 
 class DBStudyData():
     '''
@@ -277,7 +317,16 @@ class DBStudyData():
                           delCollection,
                           "La collection para hacer las queries")
 
-    
+
+    # from sys import path
+    # path.append('libs')
+    # from datetime import datetime
+    # fecha = datetime(2012,1,1)
+    # from omelinfosys.DBStudyData import DBStudyData
+    # ins = DBStudyData()
+    # ins.getStudyDataFromDB(fecha)
+    # hora = 6
+    # ins.getStudyDataFromDB(fecha,hora)
     def getStudyDataFromDB(self,fecha,hora=None):
         '''
         Get Study data from db.
@@ -288,12 +337,12 @@ class DBStudyData():
                 results = self.collection.find({ "fecha": {"$in" : [fecha]} })
             else:
                 results = self.collection.find({ "fecha": {"$in" : [fecha]}, "hora": {"$in": [hora]} })
-            
+
             for result in results:
                 # print result
                 self.fecha = result["fecha"]
                 self.hora = result["hora"]
-                
+
                 ##############
                 # PRODUCCION #
                 ##############
@@ -315,7 +364,9 @@ class DBStudyData():
                 self.IMPORTACION_ANDORRA = result["IMPORTACION_ANDORRA"]
                 self.IMPORTACION_MARRUECOS = result["IMPORTACION_MARRUECOS"]
 
-                ''' DEMANDA '''
+                ##############
+                # DEMANDA #
+                ##############
                 self.TOTAL_DEMANDA_NACIONAL_CLIENTES = result['TOTAL_DEMANDA_NACIONAL_CLIENTES']
                 self.TOTAL_CONSUMO_BOMBEO = result['TOTAL_CONSUMO_BOMBEO']
                 self.TOTAL_EXPORTACIONES = result['TOTAL_EXPORTACIONES']

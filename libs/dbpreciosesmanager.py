@@ -4,11 +4,8 @@ Created on 05/2014
 @author: hmarrao & david
 '''
 
-'''
-Cuenta en mongolab y cambiar URL de base de datos precioses a mi cuenta con el nombre actual
-'''
-
 from os import path
+from dbmodelosesmanager import DBModelosES
 direc = path.abspath(__file__)
 machine = direc[direc.find("e")+2:direc.find("w")-1]
 
@@ -21,21 +18,17 @@ from datetime import datetime, timedelta, date
 from utilities import omiepreciosurl, cambiohoraverano, cambiohorainvierno
 from urllib2 import urlopen
 from omelinfosys.omelhandlers import PreciosMibelHandler, getpreciosmibelfromweb
-
-'''
-URLError: <urlopen error [Errno 111] Connection refused>
-
-este error suele ocurrir si la pagina web de red electrica (esios) esta en tareas de mantenimiento
-'''
+from omelinfosys.dbstudydatamanager import DBStudyData
 
 # from sys import path
 # path.append('libs')
-# # from datetime import datetime
-# # startDT = datetime(2014,1,1)
-# # endDT = datetime(2014,2,1)
+# from dbpreciosesmanager import DBPreciosES
+# hostOpenShift = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
+# DBPreciosES.connectiondetails['host'] = hostOpenShift
+# from datetime import datetime
+# startDT = datetime(2014,10,1)
 # from dbpreciosesmanager import populatePrecios
-# # populatePrecios(startDT,endDT)
-# populatePrecios()
+# populatePrecios(startDT)
 def populatePrecios(startDate=None, endDate=None):
     '''
     PRECIOS actualiza la base de datos de PRECIOS del servidor
@@ -44,14 +37,20 @@ def populatePrecios(startDate=None, endDate=None):
     populatePrecios por si solo gestiona la actualizacion de base de datos en LOCAL o SERVIDOR
     '''
     try:
-        ONEDAY = timedelta(1)
+        currentDate = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        availableDate = currentDate - timedelta(3)
         if startDate == None:
-            startDate = findLastPriceDocument()
+            docu = findLastPriceDocument()
+            startDate = docu['fecha']
+        if startDate > availableDate:
+                startDate = availableDate
+                # Disponemos de los datos de la web de la "OMIE" del dia actual
         if endDate == None:
             currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
-            # endDate = currentDate - timedelta(3)
-            ''' no se seleccionan los precios "day ahead" de mañana publicados hoy a las 13:00 '''
+            # no se actualizan los precios "dayahead" de mañana publicados hoy a las 13:00
             endDate = currentDate
+        if endDate > availableDate:
+                endDate = availableDate
     except:
         raise
     else:
@@ -64,8 +63,9 @@ def populatePrecios(startDate=None, endDate=None):
             listCHI.append(fechaCHI)
 
         iterDate = startDate
+        ONEDAY = timedelta(1)
         while (endDate >= iterDate):
-            print iterDate.date()
+            print 'Updating',iterDate.date()
             ins = DBPreciosES()
             # print ins.getCollection()
             ins.fecha = iterDate
@@ -85,6 +85,10 @@ def populatePrecios(startDate=None, endDate=None):
                 ins.priceHour = priceDay[ins.hora]
                 ins.updatedbprecioses()
             del ins
+
+            if currentDate == iterDate:
+                raise Exception('En la web del OMIE no hay datos nuevos')
+
             iterDate += ONEDAY
 
 # from sys import path
@@ -99,23 +103,35 @@ def findLastPriceDocument():
     '''
     ins = DBPreciosES()
     collection = ins.getCollection()
-
-#     currentDT = datetime.now()
-#     cursor = collection.find({"fecha": {"$lte": currentDT}})
-#     for element in cursor:
-#         lastelement = element
-
     # cursor = collection.find().sort("fecha",-1).limit(1)
     cursor = collection.find().sort([("fecha",-1),("hora",-1)]).limit(1)
     for element in cursor:
-        # print element
         # print element['hora']
-        fecha = element['fecha']
-        # fecha.replace(hour=0, minute=0, second=0, microsecond=0)
+        # fecha = element['fecha']
+        docu = element
     del ins
+    return docu
 
-#     return lastelement['fecha']
-    return fecha
+# from sys import path
+# path.append('libs')
+# from dbpreciosesmanager import findFirstPriceDocument
+# findFirstPriceDocument()
+def findFirstPriceDocument():
+    '''
+    Extraemos de la base de datos el ultimo documento
+    (en funcion de la fecha interna del propio documento)
+    Hacer la query sin la fecha como input
+    '''
+    ins = DBPreciosES()
+    collection = ins.getCollection()
+    # cursor = collection.find().sort("fecha",-1).limit(1)
+    cursor = collection.find().sort([("fecha",1),("hora",1)]).limit(1)
+    for element in cursor:
+        # print element['hora']
+        # fecha = element['fecha']
+        docu = element
+    del ins
+    return docu
 
 ####################################################################################################
 
@@ -222,10 +238,13 @@ def preciosDiarios(fechayhora=None):
     # noneList = [0, 0]
     noneList = []
 
-    ''' LOCAL '''
-#     collection = Connection(host=None).mercadodiario.precioses
-    ''' SERVIDOR '''
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
+    # LOCAL
+    # collection = Connection(host=None).mercadodiario.precioses
+    # SERVIDOR
+    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
+
+    ins = DBPreciosES()
+    collection = ins.getCollection()
 
     cursor = collection.find({ "fecha": {"$in": [fechayhora]} })
     if fechayhora == None:
@@ -244,43 +263,8 @@ def preciosDiarios(fechayhora=None):
     dic['fecha'] = fechayhora
     dic['precios'] = priceList
     dic['mensaje'] = messageList
+    del ins
     return dic
-
-####################################################################################################
-
-''' el metodo siguiente esta en desarrollo '''
-
-# # from sys import path
-# # path.append('libs')
-# # from dbpreciosesmanager import preciosSemanales
-# # preciosSemanales()
-# def preciosSemanales(fechayhora=None):
-#     '''
-#     '''
-#     dataHourList = list()
-#     dataDayList = list()
-#     dataWeekList = list()
-#     # from pymongo import Connection
-#     collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
-#     # from datetime import datetime
-#     fechayhora = datetime(2014,7,19)
-#     cursor = collection.find({ "fecha": {"$in": [fechayhora]} })
-# #     from datetime import timedelta
-#     for element in cursor:
-# #         dataDayList = [ element['fecha'], element['hora'], element['PreciosES'] ]
-#         dataHourList = [ element['fecha'] + timedelta(hours=element['hora']), element['PreciosES'] ]
-#         dataDayList.append(dataHourList)
-#     print dataDayList
-#     dataWeekList.append(dataDayList)
-
-'''
-dividir todo entre la prevision demanda
-buscar fechas distintas de verano, donde la energia gestionada supere a la prevision demanda
-ya que esto suele significar que el precio es muy bajo porque se ha cubierto toda la demanda
-leer priceprofor
-'''
-
-####################################################################################################
 
 # from sys import path
 # path.append('libs')
@@ -301,10 +285,13 @@ def tecnologiasDiarias(fecha=None, hora=None):
     messageList = ''
     noneList = []
 
-    ''' LOCAL '''
-#     collection = Connection(host=None).OMIEData.OMIEStudyData
-    ''' SERVIDOR '''
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.tecnologiases
+    # LOCAL
+    # collection = Connection(host=None).OMIEData.OMIEStudyData
+    # SERVIDOR
+    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.tecnologiases
+
+    ins_study = DBStudyData()
+    collection = ins_study.getCollection()
 
     ''' un dia '''
     cursor = collection.find({ "fecha": {"$in": [fecha]} })
@@ -344,6 +331,7 @@ def tecnologiasDiarias(fecha=None, hora=None):
 #     print dic['tecnologias']
 #     print dic['tecnologias'][0]
 #     print dic['tecnologias'][1]
+    del ins_study
     return dic
 
 # from sys import path
@@ -384,12 +372,17 @@ def priceAppli():
     priceDic = dict()
     # currentDate = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
 
-    ''' LOCAL '''
-#     collection = Connection(host=None).mercadodiario.precioses
-    ''' SERVIDOR '''
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
+    # LOCAL
+    # collection = Connection(host=None).mercadodiario.precioses
+    # SERVIDOR
+    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
 
-    today = findLastPriceDocument()
+    ins = DBPreciosES()
+    collection = ins.getCollection()
+
+    docu = findLastPriceDocument()
+
+    today = docu['fecha']
     yesterday = today - timedelta(1)
     beforeyesterday = today - timedelta(2)
 
@@ -417,6 +410,7 @@ def priceAppli():
                                                    'horamax': maxList(priceList),
                                                    'horamin': minList(priceList) }
 
+    del ins
     return priceDic
 
 ####################################################################################################
@@ -447,10 +441,13 @@ def forecastAppli():
     forecastDic = dict()
     # currentDate = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
 
-    ''' LOCAL '''
-#     collection = Connection(host=None).mercadodiario.modelosHWTES
-    ''' SERVIDOR '''
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
+    # LOCAL
+    # collection = Connection(host=None).mercadodiario.modelosHWTES
+    # SERVIDOR
+    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
+
+    ins_modelos = DBModelosES()
+    collection = ins_modelos.getCollection()
 
     dayahead = findLastForecastDocument()
     twodayahead = dayahead + timedelta(1)
@@ -518,6 +515,7 @@ def forecastAppli():
     forecastDic[date.strftime(twodayahead, '%Y-%m-%d')] = {'prevision': forecastList,
                                                            'confianza': confidenceList }
 
+    del ins_modelos
     return forecastDic
 
 # from sys import path
@@ -531,23 +529,20 @@ def findLastForecastDocument():
     Hacer la query sin la fecha como input
     '''
 
-    ''' LOCAL '''
-#     collection = Connection(host=None).mercadodiario.modelosHWTES
-    ''' SERVIDOR '''
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
+    # LOCAL
+    # collection = Connection(host=None).mercadodiario.modelosHWTES
+    # SERVIDOR
+    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
 
-#     currentDT = datetime.now() + timedelta(1)
-#     cursor = collection.find({"dayahead": {"$lte": currentDT}})
-#     for element in cursor:
-#         lastelement = element
+    ins_modelos = DBModelosES()
+    collection = ins_modelos.getCollection()
 
     cursor = collection.find().sort([("dayahead",-1)]).limit(1)
     for element in cursor:
         # print element
         dayahead = element['dayahead']
-        # dayahead.replace(hour=0, minute=0, second=0, microsecond=0)
 
-#     return lastelement['dayahead']
+    del ins_modelos
     return dayahead
 
 ####################################################################################################
@@ -561,12 +556,17 @@ def findPredictionDayahead():
     '''
     currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
     DAYAHEAD = currentDate + timedelta(1)
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
+
+    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
+    ins_modelos = DBModelosES()
+    collection = ins_modelos.getCollection()
+
     cursor = collection.find({ "dayahead" : {"$in": [DAYAHEAD]}, "tipo": {"$in": ["teste"]}})
     vector = list()
     for element in cursor:
         if element['fecha'] == DAYAHEAD:
             vector.append(round(element['PreciosES'],2))
+    del ins_modelos
     return vector
 
 # from sys import path
@@ -577,12 +577,17 @@ def findPriceCurrentDate():
     '''
     '''
     currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
+
+    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
+    ins = DBPreciosES()
+    collection = ins.getCollection()
+
     cursor = collection.find({ "fecha" : {"$in": [currentDate]}})
     vector = list()
     for element in cursor:
         if element['fecha'] == currentDate:
             vector.append(element['PreciosES'])
+    del ins
     return vector
 
 ####################################################################################################
@@ -594,9 +599,10 @@ def findPriceCurrentDate():
 def realMongo():
     '''
     '''
-#     from pymongo import Connection
-    collection = Connection(host=None).mercadodiario.precioses
-#     from datetime import datetime, timedelta
+    # collection = Connection(host=None).mercadodiario.precioses
+    ins = DBPreciosES()
+    collection = ins.getCollection()
+
     fecha_aux = datetime.now()
 
     'today'
@@ -627,6 +633,7 @@ def realMongo():
 #         realPrices = [None] * horasEnUnDia
 #         print 'web precios dayahead vacia'
 
+    del ins
     return realPrices
 
 # from sys import path
@@ -636,9 +643,10 @@ def realMongo():
 def testeMongo():
     '''
     '''
-#     from pymongo import Connection
-    collection = Connection(host=None).mercadodiario.modelosHWTES
-#     from datetime import datetime, timedelta
+    # collection = Connection(host=None).mercadodiario.modelosHWTES
+    ins_modelos = DBModelosES()
+    collection = ins_modelos.getCollection()
+
     fecha_aux = datetime.now()
 
     'today'
@@ -671,6 +679,7 @@ def testeMongo():
     print ''
     print len(testePrices)
 
+    del ins_modelos
 #     return testePrices
 
 # from sys import path
@@ -691,10 +700,13 @@ def errorMongo():
     # var fecha = ISODate("2014-10-07 00:00:00.000Z");
     # db.precioses.find({dayaheadNN: {$in: [fecha]} });
 
-    ''' LOCAL '''
-    collection = Connection(host=None).mercadodiario.precioses
-    ''' SERVIDOR '''
-#     collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
+    # LOCAL
+    # collection = Connection(host=None).mercadodiario.precioses
+    # SERVIDOR
+    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
+
+    ins = DBPreciosES()
+    collection = ins.getCollection()
 
     '''
     dayahead
@@ -723,10 +735,13 @@ def errorMongo():
     print len(working)
     print ''
 
-    ''' LOCAL '''
-    collection = Connection(host=None).mercadodiario.modelosARNN
-    ''' SERVIDOR '''
-#     collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosARNN
+    # LOCAL
+    # collection = Connection(host=None).mercadodiario.modelosARNN
+    # SERVIDOR
+    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosARNN
+
+    ins_modelos = DBModelosES()
+    collection = ins_modelos.getCollection()
 
     cursor = collection.find({ "dayaheadNN": {"$in": [dayahead]}, "tipo": {"$in": ["teste"]} })
     testeNN = list()
@@ -742,10 +757,15 @@ def errorMongo():
     print len(testeNN)
     print ''
 
-    ''' LOCAL '''
-    collection = Connection(host=None).mercadodiario.modelosHWTES
-    ''' SERVIDOR '''
-#     collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
+    del ins_modelos
+
+    # LOCAL
+    # collection = Connection(host=None).mercadodiario.modelosHWTES
+    # SERVIDOR
+    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
+
+    ins_modelos = DBModelosES()
+    collection = ins_modelos.getCollection()
 
     cursor = collection.find({ "dayahead": {"$in": [dayahead]}, "tipo": {"$in": ["teste"]} })
     testeHW = list()
@@ -770,6 +790,9 @@ def errorMongo():
     print 'rootECM_ARNN'
     print rootECM_ARNN
 
+    del ins_modelos
+    del ins
+
 def errorCuadraticoMedio(working, teste):
     '''
     calcula la raiz del error cuadratico medio sqrtECM
@@ -788,8 +811,6 @@ def errorCuadraticoMedio(working, teste):
     return rootECM
 
 ####################################################################################################
-
-
 
 ''' PROFOR necesitaba esta clase para que funcionara de manera independiente al resto de codigo '''
 # class PreciosMibelHandler(object):
@@ -816,92 +837,6 @@ def errorCuadraticoMedio(working, teste):
 #                     self.preciospt.append(preciopt)
 #                     self.preciosmibel.append(min(precioes, preciopt))
 
-# # from sys import path
-# # path.append('libs')
-# # from dbpreciosesmanager import populatePreciosLocal
-# # populatePreciosLocal()
-# def populatePreciosLocal(startDate=None, endDate=None):
-#     '''
-#     PRECIOS actualiza la base de datos de PRECIOS del servidor
-#     recordar que el metodo populatePrecios esta gobernado por una clase (cofirmar la conexion)
-# 
-#     populatePrecios por si solo gestiona la actualizacion de base de datos en LOCAL o SERVIDOR
-#     '''
-#     try:
-#         ONEDAY = timedelta(1)
-#         if startDate == None:
-#             ''' BASE DE DATOS LOCAL '''
-#             startDate = findLastPriceDocumentLocal()
-#         if endDate == None:
-#             currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
-#             # endDate = currentDate - timedelta(3)
-#             ''' no se seleccionan los precios "day ahead" de mañana publicados hoy a las 13:00 '''
-# #             endDate = currentDate
-#             ''' en desarrollo para dayahead '''
-#             endDate = currentDate + timedelta(1)
-#     except:
-#         raise
-#     else:
-#         listCHV = list()
-#         listCHI = list()
-#         for indi in range(endDate.year - startDate.year + 1):
-#             fechaCHV = cambiohoraverano(startDate.year + indi)
-#             fechaCHI = cambiohorainvierno(startDate.year + indi)
-#             listCHV.append(fechaCHV)
-#             listCHI.append(fechaCHI)
-# 
-#         iterDate = startDate
-#         while (endDate >= iterDate):
-#             print iterDate.date()
-#             ins = DBPreciosES()
-#             ins.connectiondetails['host'] = None
-#             ins.setCollection()
-# 
-#             ins.fecha = iterDate
-#             priceDay = getpreciosmibelfromweb(ins.fecha)['PreciosES']
-# 
-#             if len(priceDay) == 24:
-#                 pass
-#             elif len(priceDay) == 23:
-#                 horaCHV = 3
-#                 priceDay.insert(horaCHV,priceDay[horaCHV-1])
-#             elif len(priceDay) == 25:
-#                 horaCHI = 3
-#                 priceDay.pop(horaCHI)
-# 
-#             for i in range(len(priceDay)):
-#                 ins.hora = i
-#                 ins.priceHour = priceDay[ins.hora]
-#                 # ins.connectiondetails['host'] = None
-#                 ins.updatedbprecioses()
-# 
-#             del ins
-#             iterDate += ONEDAY
-
-# # from sys import path
-# # path.append('libs')
-# # from dbpreciosesmanager import findLastPriceDocumentLocal
-# # findLastPriceDocumentLocal()
-# def findLastPriceDocumentLocal():
-#     '''
-#     Extraemos de la base de datos el ultimo documento
-#     (en funcion de la fecha interna del propio documento)
-#     Hacer la query sin la fecha como input
-#     '''
-#     ins = DBPreciosES()
-# 
-#     ''' BASE DE DATOS LOCAL '''
-#     ins.connectiondetails['host'] = None
-#     ins.setCollection()
-# 
-#     collection = ins.getCollection()
-# 
-#     currentDT = datetime.now()
-#     cursor = collection.find({"fecha": {"$lte": currentDT}})
-#     for element in cursor:
-#         lastelement = element
-#     return lastelement['fecha']
-
 # from sys import path
 # path.append('libs')
 # from dbpreciosesmanager import DBPreciosES
@@ -917,16 +852,6 @@ class DBPreciosES(object):
         SET COLLECTION NAME IN MONGO
         No need for user uname or coopid
         '''
-
-# from sys import path
-# path.append('libs')
-# from dbpreciosesmanager import DBPreciosES
-# hostOpenShift = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
-# DBPreciosES.connectiondetails['host'] = hostOpenShift
-# from datetime import datetime
-# startDT = datetime(2014,10,1)
-# from dbpreciosesmanager import populatePrecios
-# populatePrecios(startDT)
 
         ''' LOCAL '''
 #         self.connectiondetails['host'] = None
@@ -1113,3 +1038,39 @@ def exploradorporenergiagestionada(fechaIni,fechaFin):
         resultados.append(element)
 
     return resultados
+
+####################################################################################################
+
+''' el metodo siguiente esta en desarrollo '''
+
+# # from sys import path
+# # path.append('libs')
+# # from dbpreciosesmanager import preciosSemanales
+# # preciosSemanales()
+# def preciosSemanales(fechayhora=None):
+#     '''
+#     '''
+#     dataHourList = list()
+#     dataDayList = list()
+#     dataWeekList = list()
+#     # from pymongo import Connection
+#     collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
+#     # from datetime import datetime
+#     fechayhora = datetime(2014,7,19)
+#     cursor = collection.find({ "fecha": {"$in": [fechayhora]} })
+# #     from datetime import timedelta
+#     for element in cursor:
+# #         dataDayList = [ element['fecha'], element['hora'], element['PreciosES'] ]
+#         dataHourList = [ element['fecha'] + timedelta(hours=element['hora']), element['PreciosES'] ]
+#         dataDayList.append(dataHourList)
+#     print dataDayList
+#     dataWeekList.append(dataDayList)
+
+'''
+dividir todo entre la prevision demanda
+buscar fechas distintas de verano, donde la energia gestionada supere a la prevision demanda
+ya que esto suele significar que el precio es muy bajo porque se ha cubierto toda la demanda
+leer priceprofor
+'''
+
+####################################################################################################
