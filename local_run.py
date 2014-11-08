@@ -14,10 +14,16 @@ try:
 except:
     raise
 
+# fix change of hour
+from utilities import diasconcambiodehora
+from dbpreciosesmanager import populatePrecios, findLastPriceDocument, findFirstPriceDocument
+from omelinfosys.dbstudydatamanager import populateStudyData, findLastStudyDocument, findFirstStudyDocument
+
 # importing models to setting the db URI
 from bottle import run
 from priceprofor import myapplication
 from dbpreciosesmanager import DBPreciosES
+from dbmodelosesmanager import DBModelosES
 from omelinfosys.dbstudydatamanager import DBStudyData
 from omelinfosys.dbrawdatamanager import DBRawData
 
@@ -25,15 +31,72 @@ from omelinfosys.dbrawdatamanager import DBRawData
 from utilities import connectiondetails as connectiondetailsutilities
 from estadisticasgenericas import connectiondetails as connectiondetailsestadisticasgenericas
 
+# from sys import path
+# path.append('libs')
+# from local_run import fixChangeOfHourInPrices
+# fixChangeOfHourInPrices()
+def fixChangeOfHourInPrices():
+    """
+    get all days different from 24 hours using as date the smalest in db collection and the biggest in db collection
+    delete those days from collection PRECIOS (no need populate overwrite db info)
+    execute a populate for each day
+    """
+
+    startDate = findFirstPriceDocument()['fecha']
+    endDate = findLastPriceDocument()['fecha']
+
+    dictio = diasconcambiodehora(startDate,endDate)
+
+    print 'tecnologias verano'
+    dictio['DiasCambioDeHoraAverano']
+    for element in dictio['DiasCambioDeHoraAverano']:
+        populatePrecios(element,element)
+
+    print ''
+
+    print 'tecnologias invierno'
+    dictio['DiasCambioDeHoraAinvierno']
+    for element in dictio['DiasCambioDeHoraAinvierno']:
+        populatePrecios(element,element)
+
+# from sys import path
+# path.append('libs')
+# from local_run import fixChangeOfHourInTechnologies
+# fixChangeOfHourInTechnologies()
+def fixChangeOfHourInTechnologies():
+    """
+    get all days different from 24 hours using as date the smalest in db collection and the biggest in db collection
+    delete those days from collection TECNOLOGIAS (no need populate overwrite db info)
+    execute a populate for each day
+    """
+
+    startDate = findFirstStudyDocument()['fecha']
+    endDate = findLastStudyDocument()['fecha']
+
+    dictio = diasconcambiodehora(startDate,endDate)
+
+    print 'precios verano'
+    dictio['DiasCambioDeHoraAverano']
+    for element in dictio['DiasCambioDeHoraAverano']:
+        populateStudyData(element,element)
+
+    print ''
+
+    print 'precios invierno'
+    dictio['DiasCambioDeHoraAinvierno']
+    for element in dictio['DiasCambioDeHoraAinvierno']:
+        populateStudyData(element,element)
+
 if __name__ == '__main__':
 #     application.CONN_URI = None
 #     application.CONN_URI = 'mongodb://sme:sme@ds035997.mongolab.com:35997/smehogar'
 
-#     hostLocalHost = None
+    hostLocalHost = None
     hostOpenShift = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
 
     ''' LOCAL '''
 #     DBPreciosES.connectiondetails['host'] = hostLocalHost
+#     DBModelosES.connectiondetails['host'] = hostLocalHost
 #     DBStudyData.connectiondetails['host'] = hostLocalHost
 #     DBRawData.connectiondetails['host'] = hostLocalHost
 #     connectiondetailsutilities['host'] = hostLocalHost
@@ -41,6 +104,7 @@ if __name__ == '__main__':
 
     ''' SERVIDOR '''
     DBPreciosES.connectiondetails['host'] = hostOpenShift
+    DBModelosES.connectiondetails['host'] = hostOpenShift
     DBStudyData.connectiondetails['host'] = hostOpenShift
     DBRawData.connectiondetails['host'] = hostOpenShift
     connectiondetailsutilities['host'] = hostOpenShift
