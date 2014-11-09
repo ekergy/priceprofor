@@ -17,6 +17,7 @@ from dbpreciosesmanager import populatePrecios
 from omelinfosys.dbstudydatamanager import populateStudyData
 from dbpreciosesmanager import realMongo, exploradorporenergiagestionada
 from utilities import findLastDayDocumentPrice, findLastDayDocumentTechnology
+from dbmodelosesmanager import DBModelosES
 
 @route('/exploradorporenergiagestionada')
 def exploradorporenergiagestionadaGET():
@@ -533,10 +534,13 @@ def graphicpredictionmodelsGET():
     dic = tecnologiasDiarias(dateTime)
     dateString = str(str(dateTime.day)+'/'+str(dateTime.month)+'/'+str(dateTime.year))
 
-    ''' LOCAL '''
-#     collection = Connection(host=None).mercadodiario.modelosHWTES
-    ''' SERVIDOR '''
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
+    # LOCAL
+    # collection = Connection(host=None).mercadodiario.modelosHWTES
+    # SERVIDOR
+    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
+
+    ins_modelos = DBModelosES()
+    collection = ins_modelos.getCollection()
 
     ''' el dia relevante a graficar es el dayahead y sus predicciones de precio '''
     # dayahead = datetime(2014,6,1)
@@ -623,6 +627,8 @@ def graphicpredictionmodelsGET():
     # print arrayTDT
     # print ''
 
+    del ins_modelos
+
     ''' json.dumps interpreta "None" de python como "null" para google '''
     return template('priceprofor_modelo_prediccion',
                     modelosPrediccionList=dumps(arrayTDT),
@@ -643,10 +649,13 @@ def graphicpredictionmodelsarnnGET():
     dic = tecnologiasDiarias(dateTime)
     dateString = str(str(dateTime.day)+'/'+str(dateTime.month)+'/'+str(dateTime.year))
 
-    ''' LOCAL '''
-    collection = Connection(host=None).mercadodiario.modelosARNN
-    ''' SERVIDOR '''
-#     collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosARNN
+    # LOCAL
+    # collection = Connection(host=None).mercadodiario.modelosARNN
+    # SERVIDOR
+    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosARNN
+
+    ins_modelos = DBModelosES()
+    collection = ins_modelos.getCollection()
 
     ''' el dia relevante a graficar es el dayahead y sus predicciones de precio '''
     # dayahead = datetime(2014,6,1)
@@ -735,6 +744,8 @@ def graphicpredictionmodelsarnnGET():
     # print arrayTDT
     # print ''
 
+    del ins_modelos
+
     ''' json.dumps interpreta "None" de python como "null" para google '''
     return template('priceprofor_modelo_prediccion_ARNN',
                     modelosPrediccionList=dumps(arrayTDT),
@@ -751,10 +762,13 @@ def forecastArrayTDT():
     '''
     '''
 
-    ''' LOCAL '''
-#     collection = Connection(host=None).mercadodiario.modelosHWTES
-    ''' SERVIDOR '''
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
+    # LOCAL
+    # collection = Connection(host=None).mercadodiario.modelosHWTES
+    # SERVIDOR
+    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
+
+    ins_modelos = DBModelosES()
+    collection = ins_modelos.getCollection()
 
 #     dayahead = datetime(2014,7,14)
 #     dayahead = datetime(2014,6,1)
@@ -840,6 +854,8 @@ def forecastArrayTDT():
 #     print arrayTDT
 #     print ''
 
+    del ins_modelos
+
     return arrayTDT
 
 '''
@@ -860,10 +876,13 @@ def graphicpredictionmodelshwtesrealGET():
     dic = tecnologiasDiarias(dateTime)
     dateString = str(str(dateTime.day)+'/'+str(dateTime.month)+'/'+str(dateTime.year))
 
-    ''' LOCAL '''
-#     collection = Connection(host=None).mercadodiario.modelosHWTES
-    ''' SERVIDOR '''
-    collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
+    # LOCAL
+    # collection = Connection(host=None).mercadodiario.modelosHWTES
+    # SERVIDOR
+    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
+
+    ins_modelos = DBModelosES()
+    collection = ins_modelos.getCollection()
 
     ''' el dia relevante a graficar es el dayahead y sus predicciones de precio '''
     currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
@@ -997,6 +1016,8 @@ def graphicpredictionmodelshwtesrealGET():
     print ''
     # print arrayTDT
     # print ''
+
+    del ins_modelos
 
     ''' json.dumps interpreta "None" de python como "null" para google '''
     return template('priceprofor_modelo_prediccion_HWTES_real',
