@@ -534,11 +534,6 @@ def graphicpredictionmodelsGET():
     dic = tecnologiasDiarias(dateTime)
     dateString = str(str(dateTime.day)+'/'+str(dateTime.month)+'/'+str(dateTime.year))
 
-    # LOCAL
-    # collection = Connection(host=None).mercadodiario.modelosHWTES
-    # SERVIDOR
-    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
-
     ins_modelos = DBModelosES()
     collection = ins_modelos.getCollection()
 
@@ -762,11 +757,6 @@ def forecastArrayTDT():
     '''
     '''
 
-    # LOCAL
-    # collection = Connection(host=None).mercadodiario.modelosHWTES
-    # SERVIDOR
-    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
-
     ins_modelos = DBModelosES()
     collection = ins_modelos.getCollection()
 
@@ -858,11 +848,6 @@ def forecastArrayTDT():
 
     return arrayTDT
 
-'''
-collection = Connection(host=None).mercadodiario.modelosHWTES
-/usr/bin/python2.7 /home/david/workspace/electraPROFOR/ElectricityMarket/ExponentialSmoothing/testeHWTES_robjects.py
-'''
-
 @route('/PredictionModelsHWTESreal', method='GET')
 @enable_cors
 def graphicpredictionmodelshwtesrealGET():
@@ -875,11 +860,6 @@ def graphicpredictionmodelshwtesrealGET():
     dateTime = findLastDayDocumentTechnology()
     dic = tecnologiasDiarias(dateTime)
     dateString = str(str(dateTime.day)+'/'+str(dateTime.month)+'/'+str(dateTime.year))
-
-    # LOCAL
-    # collection = Connection(host=None).mercadodiario.modelosHWTES
-    # SERVIDOR
-    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
 
     ins_modelos = DBModelosES()
     collection = ins_modelos.getCollection()

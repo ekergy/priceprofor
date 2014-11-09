@@ -238,11 +238,6 @@ def preciosDiarios(fechayhora=None):
     # noneList = [0, 0]
     noneList = []
 
-    # LOCAL
-    # collection = Connection(host=None).mercadodiario.precioses
-    # SERVIDOR
-    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
-
     ins = DBPreciosES()
     collection = ins.getCollection()
 
@@ -284,11 +279,6 @@ def tecnologiasDiarias(fecha=None, hora=None):
                 '12-13','13-14','14-15','15-16','16-17','17-18','18-19','19-20','20-21','21-22','22-23','23-00']
     messageList = ''
     noneList = []
-
-    # LOCAL
-    # collection = Connection(host=None).OMIEData.OMIEStudyData
-    # SERVIDOR
-    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.tecnologiases
 
     ins_study = DBStudyData()
     collection = ins_study.getCollection()
@@ -372,11 +362,6 @@ def priceAppli():
     priceDic = dict()
     # currentDate = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
 
-    # LOCAL
-    # collection = Connection(host=None).mercadodiario.precioses
-    # SERVIDOR
-    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
-
     ins = DBPreciosES()
     collection = ins.getCollection()
 
@@ -440,11 +425,6 @@ def forecastAppli():
 
     forecastDic = dict()
     # currentDate = datetime(datetime.now().year, datetime.now().month, datetime.now().day)
-
-    # LOCAL
-    # collection = Connection(host=None).mercadodiario.modelosHWTES
-    # SERVIDOR
-    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
 
     ins_modelos = DBModelosES()
     collection = ins_modelos.getCollection()
@@ -528,12 +508,6 @@ def findLastForecastDocument():
     (en funcion de la fecha interna del propio documento)
     Hacer la query sin la fecha como input
     '''
-
-    # LOCAL
-    # collection = Connection(host=None).mercadodiario.modelosHWTES
-    # SERVIDOR
-    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
-
     ins_modelos = DBModelosES()
     collection = ins_modelos.getCollection()
 
@@ -557,7 +531,6 @@ def findPredictionDayahead():
     currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
     DAYAHEAD = currentDate + timedelta(1)
 
-    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
     ins_modelos = DBModelosES()
     collection = ins_modelos.getCollection()
 
@@ -578,7 +551,6 @@ def findPriceCurrentDate():
     '''
     currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
 
-    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
     ins = DBPreciosES()
     collection = ins.getCollection()
 
@@ -599,7 +571,6 @@ def findPriceCurrentDate():
 def realMongo():
     '''
     '''
-    # collection = Connection(host=None).mercadodiario.precioses
     ins = DBPreciosES()
     collection = ins.getCollection()
 
@@ -643,7 +614,6 @@ def realMongo():
 def testeMongo():
     '''
     '''
-    # collection = Connection(host=None).mercadodiario.modelosHWTES
     ins_modelos = DBModelosES()
     collection = ins_modelos.getCollection()
 
@@ -700,11 +670,6 @@ def errorMongo():
     # var fecha = ISODate("2014-10-07 00:00:00.000Z");
     # db.precioses.find({dayaheadNN: {$in: [fecha]} });
 
-    # LOCAL
-    # collection = Connection(host=None).mercadodiario.precioses
-    # SERVIDOR
-    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
-
     ins = DBPreciosES()
     collection = ins.getCollection()
 
@@ -735,11 +700,6 @@ def errorMongo():
     print len(working)
     print ''
 
-    # LOCAL
-    # collection = Connection(host=None).mercadodiario.modelosARNN
-    # SERVIDOR
-    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosARNN
-
     ins_modelos = DBModelosES()
     collection = ins_modelos.getCollection()
 
@@ -758,11 +718,6 @@ def errorMongo():
     print ''
 
     del ins_modelos
-
-    # LOCAL
-    # collection = Connection(host=None).mercadodiario.modelosHWTES
-    # SERVIDOR
-    # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosHWTES
 
     ins_modelos = DBModelosES()
     collection = ins_modelos.getCollection()
@@ -1022,11 +977,6 @@ def exploradorporenergiagestionada(fechaIni,fechaFin):
 
     resultados = []
 
-    # LOCAL
-    # connec = Connection(host=None)
-    # SERVIDOR
-    # connec = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
-
     ins_study = DBStudyData()
     collection = ins_study.getCollection()
 
@@ -1044,8 +994,6 @@ def exploradorporenergiagestionada(fechaIni,fechaFin):
     return resultados
 
 ####################################################################################################
-
-''' el metodo siguiente esta en desarrollo '''
 
 # # from sys import path
 # # path.append('libs')
@@ -1069,12 +1017,5 @@ def exploradorporenergiagestionada(fechaIni,fechaFin):
 #         dataDayList.append(dataHourList)
 #     print dataDayList
 #     dataWeekList.append(dataDayList)
-
-'''
-dividir todo entre la prevision demanda
-buscar fechas distintas de verano, donde la energia gestionada supere a la prevision demanda
-ya que esto suele significar que el precio es muy bajo porque se ha cubierto toda la demanda
-leer priceprofor
-'''
 
 ####################################################################################################
