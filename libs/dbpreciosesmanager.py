@@ -767,30 +767,76 @@ def errorCuadraticoMedio(working, teste):
 
 ####################################################################################################
 
-''' PROFOR necesitaba esta clase para que funcionara de manera independiente al resto de codigo '''
-# class PreciosMibelHandler(object):
-#     '''
-#     Class to parse the Spanish and Portguese Electric Market Prices.
-#     Introduced the concept of Mibel Price as the market price set before market split operation.
-#     What is used here is not the concept only an aproximation. Because the split can occur in both markets and not only one.
-#     But it is a good aproximation to assume that the mibel price is the lower price from the Spanish and Portguese Electric Market Prices
-#     '''
-#     def __init__(self, thefile=None):
-#         try:
-#             self.toparsePRECIOS = reader(thefile, delimiter=';')
-#             self.precioses = list()
-#             self.preciospt = list()
-#             self.preciosmibel = list()
-#         except:
-#             raise
-#         else:
-#             for row in self.toparsePRECIOS:
-#                 if row.__len__() != 0 and row.__len__() > 3:
-#                     precioes = stringtofloat(row[5], decimalsep='.', groupsep='')
-#                     preciopt = stringtofloat(row[4], decimalsep='.', groupsep='')
-#                     self.precioses.append(precioes)
-#                     self.preciospt.append(preciopt)
-#                     self.preciosmibel.append(min(precioes, preciopt))
+# from sys import path
+# path.append('libs')
+# from dbpreciosesmanager import preciosSemanales
+# preciosSemanales()
+def preciosSemanales(fechayhora=None):
+    '''
+    buscar fechas distintas de verano, donde la energia gestionada supere a la prevision demanda
+    ya que esto suele significar que el precio es muy bajo porque se ha cubierto toda la demanda
+    dividir todo entre la prevision demanda
+    funcion actualmente en desarrollo
+    '''
+    dataHourList = list()
+    dataDayList = list()
+    dataWeekList = list()
+
+    ins = DBPreciosES()
+    collection = ins.getCollection()
+
+    # fecha dummty
+    fechayhora = datetime(2014,7,19)
+
+    cursor = collection.find({ "fecha": {"$in": [fechayhora]} })
+    for element in cursor:
+        # dataDayList = [ element['fecha'], element['hora'], element['PreciosES'] ]
+        dataHourList = [ element['fecha'] + timedelta(hours=element['hora']), element['PreciosES'] ]
+        dataDayList.append(dataHourList)
+
+    print ''
+    print 'vector de fechas'
+    print ''
+    print dataDayList
+    dataWeekList.append(dataDayList)
+
+####################################################################################################
+
+# from sys import path
+# path.append('libs')
+# from datetime import datetime
+# fechaIni = datetime(2014,9,1)
+# fechaFin = datetime(2014,10,28)
+# from dbpreciosesmanager import exploradorporenergiagestionada
+# exploradorporenergiagestionada(fechaIni,fechaFin)
+def exploradorporenergiagestionada(fechaIni,fechaFin):
+    '''
+    Esta funcion realiza la consulta a mongo a los registros de tecnologiases y ordenados por ENERGIA_GESTIONADA.
+    El objetivo de este metodo es alimentar el controlador "/exploradorporenergiagestionada".
+    El formato que tiene que tener este resultado es:
+    [ {el registro tal cual sale de mongo} ]
+    '''
+
+    # rellenar este metodo con lo que haga falta para tener lo mismo que tenemos si en robo mongo si hacemos
+    #     var fechaStart = ISODate("2014-09-01 00:00:00.000Z");
+    #     var fechaEnd = ISODate("2014-10-28 00:00:00.000Z");
+    #     db.tecnologiases.find({fecha: {$gte: fechaStart, $lte: fechaEnd} }).sort({ENERGIA_GESTIONADA:1})
+
+    browserResults = []
+
+    ins_study = DBStudyData()
+    collection = ins_study.getCollection()
+
+    # ordenacion de menor a mayor con el positivo "1" y ordenacion de mayor a menor con el negativo "-1"
+    cursor = collection.find({'fecha': {'$gte': fechaIni, '$lte': fechaFin} }).sort([('ENERGIA_GESTIONADA',1)])
+
+    for element in cursor:
+        browserResults.append(element)
+
+    del ins_study
+    return browserResults
+
+####################################################################################################
 
 # from sys import path
 # path.append('libs')
@@ -954,68 +1000,3 @@ class DBPreciosES(object):
         else:
             self.delCollection()
         # return fechayprecio
-
-# from sys import path
-# path.append('libs')
-# from datetime import datetime
-# fechaIni = datetime(2014,9,1)
-# fechaFin = datetime(2014,10,28)
-# from dbpreciosesmanager import exploradorporenergiagestionada
-# exploradorporenergiagestionada(fechaIni,fechaFin)
-def exploradorporenergiagestionada(fechaIni,fechaFin):
-    '''
-    Esta funcion realiza la consulta a mongo a los registros de tecnologiases y ordenados por ENERGIA_GESTIONADA.
-    El objetivo de este metodo es alimentar el controlador "/exploradorporenergiagestionada".
-    El formato que tiene que tener este resultado es:
-    [ {el registro tal cual sale de mongo} ]
-    '''
-
-    # rellenar este metodo con lo que haga falta para tener lo mismo que tenemos si en robo mongo si hacemos
-    #     var fechaStart = ISODate("2014-09-01 00:00:00.000Z");
-    #     var fechaEnd = ISODate("2014-10-28 00:00:00.000Z");
-    #     db.tecnologiases.find({fecha: {$gte: fechaStart, $lte: fechaEnd} }).sort({ENERGIA_GESTIONADA:1})
-
-    resultados = []
-
-    ins_study = DBStudyData()
-    collection = ins_study.getCollection()
-
-#     ins = DBPreciosES()
-#     connec = Connection(host=ins.connectiondetails['host'])
-#     collection = connec.mercadodiario.tecnologiases
-
-    # ordenacion de menor a mayor con el positivo "1" y ordenacion de mayor a menor con el negativo "-1"
-    cursor = collection.find({'fecha': {'$gte': fechaIni, '$lte': fechaFin} }).sort([('ENERGIA_GESTIONADA',1)])
-
-    for element in cursor:
-        resultados.append(element)
-
-    del ins_study
-    return resultados
-
-####################################################################################################
-
-# # from sys import path
-# # path.append('libs')
-# # from dbpreciosesmanager import preciosSemanales
-# # preciosSemanales()
-# def preciosSemanales(fechayhora=None):
-#     '''
-#     '''
-#     dataHourList = list()
-#     dataDayList = list()
-#     dataWeekList = list()
-#     # from pymongo import Connection
-#     collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.precioses
-#     # from datetime import datetime
-#     fechayhora = datetime(2014,7,19)
-#     cursor = collection.find({ "fecha": {"$in": [fechayhora]} })
-# #     from datetime import timedelta
-#     for element in cursor:
-# #         dataDayList = [ element['fecha'], element['hora'], element['PreciosES'] ]
-#         dataHourList = [ element['fecha'] + timedelta(hours=element['hora']), element['PreciosES'] ]
-#         dataDayList.append(dataHourList)
-#     print dataDayList
-#     dataWeekList.append(dataDayList)
-
-####################################################################################################
