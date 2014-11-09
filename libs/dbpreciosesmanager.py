@@ -1027,9 +1027,12 @@ def exploradorporenergiagestionada(fechaIni,fechaFin):
     # SERVIDOR
     # connec = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario')
 
-    ins = DBPreciosES()
-    connec = Connection(host=ins.connectiondetails['host'])
-    collection = connec.mercadodiario.tecnologiases
+    ins_study = DBStudyData()
+    collection = ins_study.getCollection()
+
+#     ins = DBPreciosES()
+#     connec = Connection(host=ins.connectiondetails['host'])
+#     collection = connec.mercadodiario.tecnologiases
 
     # ordenacion de menor a mayor con el positivo "1" y ordenacion de mayor a menor con el negativo "-1"
     cursor = collection.find({'fecha': {'$gte': fechaIni, '$lte': fechaFin} }).sort([('ENERGIA_GESTIONADA',1)])
@@ -1037,6 +1040,7 @@ def exploradorporenergiagestionada(fechaIni,fechaFin):
     for element in cursor:
         resultados.append(element)
 
+    del ins_study
     return resultados
 
 ####################################################################################################
