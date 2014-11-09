@@ -38,7 +38,7 @@ def populatePrecios(startDate=None, endDate=None):
     '''
     try:
         currentDate = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
-        availableDate = currentDate - timedelta(3)
+        availableDate = currentDate
         if startDate == None:
             docu = findLastPriceDocument()
             startDate = docu['fecha']
