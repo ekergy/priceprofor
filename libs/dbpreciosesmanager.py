@@ -800,6 +800,8 @@ def preciosSemanales(fechayhora=None):
     print dataDayList
     dataWeekList.append(dataDayList)
 
+    del ins
+
 ####################################################################################################
 
 # from sys import path
