@@ -33,7 +33,7 @@ class DBModelosES(object):
 
         self.connectiondetails['host'] = self.connectiondetails['host']
         self.connectiondetails['db_name'] = 'mercadodiario'
-        self.connectiondetails['coll_name'] = 'precioses'
+        self.connectiondetails['coll_name'] = 'modelosHWTES'
         self.setCollection()
 
     def getCollection(self):

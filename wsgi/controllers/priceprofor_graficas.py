@@ -537,6 +537,9 @@ def graphicpredictionmodelsGET():
     ins_modelos = DBModelosES()
     collection = ins_modelos.getCollection()
 
+    print collection
+    print ''
+
     ''' el dia relevante a graficar es el dayahead y sus predicciones de precio '''
     # dayahead = datetime(2014,6,1)
     currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
