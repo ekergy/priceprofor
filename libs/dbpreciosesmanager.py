@@ -596,13 +596,15 @@ def realMongo():
 
     horasEnUnDia = 24
     if realPrices == []:
+#         print 'web precios dayahead vacia'
+        ''' con None no funciona ni siquiera con la funcion dumps() '''
+        realPrices = [None] * horasEnUnDia
         ''' con valores cero funciona '''
 #         realPrices = [0] * horasEnUnDia
         ''' con valore -1 funciona y no se ve en la grafica '''
-        realPrices = [-1] * horasEnUnDia
-        ''' con None no funciona ni siquiera con la funcion dumps() '''
-#         realPrices = [None] * horasEnUnDia
-#         print 'web precios dayahead vacia'
+#         realPrices = [-1] * horasEnUnDia
+        ''' con valore -10 en un valor del vector de 24 horas funciona y no se ve ni detecta en la grafica '''
+#         realPrices = [-10] + [None] * (horasEnUnDia-1)
 
     del ins
     return realPrices

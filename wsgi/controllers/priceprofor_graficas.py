@@ -6,12 +6,12 @@ Created on 05/2014
 
 # from time import strptime
 # from omelinfosys.dbstudydatamanager import DBStudyData
+# from pymongo import Connection
 from bottle import route, template, response, request
 from kernelCaracterizacionEnergetica import temporadaConsumoVector
 from datautilities import toGoogleDataTable
 from dbpreciosesmanager import preciosDiarios, tecnologiasDiarias
 from datetime import datetime, timedelta, date
-from pymongo import Connection
 from json import dumps
 from dbpreciosesmanager import populatePrecios
 from omelinfosys.dbstudydatamanager import populateStudyData
@@ -537,9 +537,6 @@ def graphicpredictionmodelsGET():
     ins_modelos = DBModelosES()
     collection = ins_modelos.getCollection()
 
-    print collection
-    print ''
-
     ''' el dia relevante a graficar es el dayahead y sus predicciones de precio '''
     # dayahead = datetime(2014,6,1)
     currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
@@ -912,7 +909,7 @@ def graphicpredictionmodelshwtesrealGET():
     if realLine == 0:
         arrayTDT.append( ['Fechayhora', 'Datos', 'Modelo', 'Prediccion', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}] )
     elif realLine == 1:
-        arrayTDT.append( ['Fechayhora', 'Datos', 'Modelo', 'Prediccion', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, 'Real'] )
+        arrayTDT.append( ['Fechayhora', 'Datos', 'Modelo', 'Prediccion', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, {'label': 'Real', 'role': 'data', 'type': 'number'}] )
 
 #     arrayTDT.append( ['Fechayhora', 'Datos', 'Modelo', 'Prediccion', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}] )
 #     arrayTDT.append( ['Fechayhora', 'Datos', 'Modelo', 'Prediccion', {'type':'number', 'role':'interval'}, {'type':'number', 'role':'interval'}, 'Real'] )
