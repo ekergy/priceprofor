@@ -41,7 +41,7 @@ google.load("visualization", "1", {packages:["corechart"]});
 		
  		var options = {
 		//'is3D':true,
-		title: 'MERCADO DIARIO ELECTRICO',
+		title: 'MERCADO DIARIO ELECTRICO hwtes',
 		//pointSize: 6,
 		titleTextStyle:  {color: '#000000', fontName: 'Roboto', fontSize: '22', bold: 'true', italic: 'false'},
 		width: '740',
