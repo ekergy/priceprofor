@@ -649,7 +649,10 @@ def graphicpredictionmodelsarnnGET():
     # SERVIDOR
     # collection = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario.modelosARNN
 
-    ins_modelos = DBModelosES()
+    # "Data column(s) for axis #0 cannot be of type string×"
+    # este error ocurre si no hay datos en BBDD porque no se ha ejecutado el script del modelo predictivo ARNN
+
+    ins_modelos = DBModelosES('NN')
     collection = ins_modelos.getCollection()
 
     ''' el dia relevante a graficar es el dayahead y sus predicciones de precio '''
@@ -736,8 +739,8 @@ def graphicpredictionmodelsarnnGET():
     print 'DAYAHEAD'
     print dayahead.date()
     print ''
-    # print arrayTDT
-    # print ''
+#     print arrayTDT
+#     print ''
 
     del ins_modelos
 
