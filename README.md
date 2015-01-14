@@ -1,17 +1,10 @@
 # priceprofor
 Priceprofor
 
-## This repository contains the code running in openshif:
-Connect to github:
-```
-git remote set-url origin https://github.com/ekergy/priceprofor
-```
-Connect to openshift:
-```
-git remote set-url origin ssh://54ae44054382ec0f69000247@price-profor.rhcloud.com/~/git/price.git/
-```
-
 ## Setting up and Running the code:
+
+### if you are a developer config the repo as set in [GITWORKFLOW.md](GITWORKFLOW.md)
+
 
 ### do a standard install:
 >   Case:
@@ -29,7 +22,7 @@ You must use python-2.7
 #### Step 2 code requirements:
 pip install -r requirements.txt
 
-#### Step 3 code requirements:
+#### Step 3 run the server:
 python local_run.py
 
 
@@ -41,7 +34,7 @@ python local_run.py
     messing directly with your machine OS:
 
 #### Step ZERO:
-Activate your virtual env (check VIRTUALENV.md)
+Activate your virtual env (check [VIRTUALENV.md](VIRTUALENV.md))
 
 #### Step 1 python and other stuff:
 You must use python-2.7
@@ -49,7 +42,7 @@ You must use python-2.7
 #### Step 2 code requirements:
 pip install -r requirements.txt
 
-#### Step 3 code requirements:
+#### Step 3 run the server:
 python local_run.py
 
 ### Using docker:
@@ -57,9 +50,14 @@ python local_run.py
     You get the same developing and working functionalities as in a
     standard install but you only need to install the boot2docker thingie
 
-#### Step 1 setup the boot2docker:
-This step start a virtual Machine in your host OS then you have a linux
+#### Step ZERO setup the docker:
+This step depends on the your host OS.
+boot2docker is the project to run Docker containers in Windows and in MAC/OSX.
 Kernel and you use it as a standar Linux Machine. (You Don't need full virtualbox).
+see the head of the Dockerfile to set your docker image and run it!
+In the future a docker image will be available in the dockerhub and you only need to pull it from there!
+
+#### Step 1 just run the image as suggested in the Dockerfile
 
 
 

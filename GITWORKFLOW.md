@@ -8,9 +8,8 @@ https://github.com/ekergy/priceprofor
 
 ssh://54ae44054382ec0f69000247@price-profor.rhcloud.com/~/git/price.git/
 
-#### master branch should be a openshift working app:
+master branch is the openshift working branch:
 
-ssh://54ae44054382ec0f69000247@price-profor.rhcloud.com/~/git/price.git/
 
 ## setting up your local development copy:
 Start by clone the github repo:
