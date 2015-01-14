@@ -19,9 +19,15 @@ git remote set-url origin ssh://54ae44054382ec0f69000247@price-profor.rhcloud.co
     and you only need to run the code and the database script
     to upload data.
 
+#### Step ZERO:
+python and pip and easy install should be added to your installed and working in your 
+OS/virtualenv/Docker or what ever you use
+
 #### Step 1 python and other stuff:
+pip install -r requirements.txt
 
 #### Step 2 code requirements:
+
 
 
 
@@ -30,6 +36,9 @@ git remote set-url origin ssh://54ae44054382ec0f69000247@price-profor.rhcloud.co
     You only have your machine and you want to install
     the minimum possible to get the server up and running without
     messing directly with your machine OS:
+
+#### Step ZERO:
+Activate your virtual env
 
 #### Step 1 python and other stuff:
 

@@ -5,12 +5,22 @@
 # build images:
 #   docker build -q -t ekergy/priceprofor .
 #
-# run a container:
+# run a new container:
 #   docker run -v `pwd`:/data -p 8080:8080 ekergy/priceprofor
+#
+# Check the container id:
+#   docker ps
+#
+# Stop container:
+#   docker stop $CONTAINER_ID
+#
+# Start container:
+#   docker start $CONTAINER_ID
+
 
 # based on debian image
 FROM google/debian:wheezy
-MAINTAINER ludovic.rivallain@gmail.com
+MAINTAINER hmarrao@ekergy.es
 
 # upgrade packages
 ENV DEBIAN_FRONTEND noninteractive
