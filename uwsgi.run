@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Activate the venv
+. $OPENSHIFT_PYTHON_DIR/virtenv/bin/activate
+
+# install project deps
+cd $OPENSHIFT_REPO_DIR && python setup.py install
+
+# run project:
+echo "Starting application..."
+cd wsgi/  && uwsgi --http :8080 --wsgi-file application --logto $OPENSHIFT_PYTHON_LOG_DIR/application.log
