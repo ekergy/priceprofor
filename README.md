@@ -24,11 +24,13 @@ python and pip and easy install should be added to your installed and working in
 OS/virtualenv/Docker or what ever you use
 
 #### Step 1 python and other stuff:
-Yuo must use python-2.7
+You must use python-2.7
 
 #### Step 2 code requirements:
 pip install -r requirements.txt
 
+#### Step 3 code requirements:
+python local_run.py
 
 
 
@@ -42,8 +44,13 @@ pip install -r requirements.txt
 Activate your virtual env (check VIRTUALENV.md)
 
 #### Step 1 python and other stuff:
+You must use python-2.7
 
 #### Step 2 code requirements:
+pip install -r requirements.txt
+
+#### Step 3 code requirements:
+python local_run.py
 
 ### Using docker:
 >   Case:
