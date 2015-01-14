@@ -1,10 +1,7 @@
-<<<<<<< HEAD
-# ignore python compiled files:
-*.pyc
-=======
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+*.pyc
 
 # C extensions
 *.so
@@ -56,4 +53,3 @@ docs/_build/
 
 # PyBuilder
 target/
->>>>>>> 6ef0bfb3b1f407022f7a4f8bbfde05d650433d79

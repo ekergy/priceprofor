@@ -1,10 +1,14 @@
 # Priceprofor Gitworkflow:
 
-## main repo github repo:
+#### main repo github repo:
 
 https://github.com/ekergy/priceprofor
 
-## openshift repo:
+#### openshift repo:
+
+ssh://54ae44054382ec0f69000247@price-profor.rhcloud.com/~/git/price.git/
+
+#### master branch should be a openshift working app:
 
 ssh://54ae44054382ec0f69000247@price-profor.rhcloud.com/~/git/price.git/
 
@@ -38,12 +42,24 @@ pulling github code:
 ```
 git pull github master
 ```
-the _all_ remote only is set to push from git hub
+the _all_ remote only is set to push from github
 ```
 git pull all master
 ```
 
 ## Main development workflow:
+developments goes against the github repo.
+your if your changes aren'te ready to be updated to the openshift online:
+```
+git pull github master
+```
+and remember that:
+```
+git push github master
+```
+will update your local copy:
+
+## Main mantenaice workflow:
 Configure the all remote with the 2 url as explained above.
 use this to update your local copy:
 ```
@@ -53,5 +69,6 @@ and remember that:
 ```
 git push all master
 ```
-will update both github origin (openshift online)
+will update both github origin (openshift online app)
+
 
