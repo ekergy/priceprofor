@@ -77,12 +77,12 @@ ul, ol, li
 }
 
 
-.btn-primary:hover, 
+.btn-primary:hover,
 .btn-primary:focus{
   background: #c52d2f;
   outline: none;
   box-shadow: none;
-} 
+}
 
 .btn-transparent {
   border: 3px solid #fff;
@@ -370,7 +370,7 @@ input.search-form:hover {
   top: 40%;
   z-index: 9999;
 }
-.navigation a
+.navigation div
 {
   display: block;
   width: 20px;
@@ -379,6 +379,18 @@ input.search-form:hover {
   background: rgba(255,255,255,.7);
   border-radius: 50%;
   box-shadow: 0 0 4px rgba(0,0,0,.7);
+}
+.navigation a
+{
+  display: block;
+}
+.navigation div:active
+{
+  background: rgba(73,121,63,.7);
+}
+.green
+{
+  background: rgba(73,121,63,.7)!important;
 }
 
 
@@ -558,6 +570,11 @@ input.search-form:hover {
 }
 
 #feature {
+  background: #f2f2f2;
+  padding-bottom: 40px;
+}
+
+#featureBis {
   background: #f2f2f2;
   padding-bottom: 40px;
 }
@@ -2554,4 +2571,3 @@ shortcodes page css
   display: inline-block;
   margin-left: 15px;
 }
-

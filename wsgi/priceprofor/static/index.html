@@ -29,13 +29,11 @@
 
     <header id="header">
         <nav class="navigation">
-            <ul>
-                <li><a href="#main-slider"></a></li>
-                <li><a href="#feature"></a></li>
-                <li><a href="#services"></a></li>
-                <li><a href=".sec4"></a></li>
-                <li><a href="#footer"></a></li>
-            </ul>
+            <a href="#main-slider"><div></div></a>
+            <a href="#feature"><div></div></a>
+            <a href="#services"><div></div></a>
+            <a href="#featureBis"><div></div></a>
+            <a href="#footer"><div></div></a>
         </nav>
         <!--<div class="top-bar">
             <div class="container">
@@ -365,9 +363,9 @@
             <div class="center wow fadeInDown subtitulo">
                 <h3>La información es obtenida de..</h3>
             </div>
-            <div class="row">
+            <div class="row row-same-height">
                 <div class="col-sm-6 col-md-6">
-                    <div class="media services-wrap wow fadeInDown">
+                    <div class="media services-wrap wow fadeInDown heightsServices">
                         <div class="pull-left">
                             <img class="img-responsive" src="images/services/services1.png">
                         </div>
@@ -380,7 +378,7 @@
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-6">
-                    <div class="media services-wrap wow fadeInDown">
+                    <div class="media services-wrap wow fadeInDown heightsServices">
                         <div class="pull-left">
                             <img class="img-responsive" src="images/services/services2.png">
                         </div>
@@ -395,7 +393,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-6 col-md-6">
-                    <div class="media services-wrap wow fadeInDown">
+                    <div class="media services-wrap wow fadeInDown heightsServices">
                         <div class="pull-left">
                             <img class="img-responsive" src="images/services/services3.png">
                         </div>
@@ -408,7 +406,7 @@
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-6">
-                    <div class="media services-wrap wow fadeInDown">
+                    <div class="media services-wrap wow fadeInDown heightsServices">
                         <div class="pull-left">
                             <img class="img-responsive" src="images/services/services5.png">
                         </div>
@@ -644,7 +642,7 @@
             </div>/.row
         </div>/.container
     </section>/#content-->
-    <section id="feature" class="sec4" >
+    <section id="featureBis" class="sec4" >
         <div class="container">
            <div class="center wow fadeInDown">
                 <h2>Proyectos en desarrollo</h2>
@@ -653,7 +651,7 @@
 
             <div class="row">
                 <div class="features">
-                    <div class="col-md-6 col-sm-6 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="600ms">
+                    <div class="col-md-6 col-sm-6 wow fadeInDown heightsFeatureBisUp" data-wow-duration="1000ms" data-wow-delay="600ms">
                         <div class="feature-wrap">
                             <i class="fa fa-bullhorn"></i>
                             <h2>ARIMA Modelados [Universidad]</h2>
@@ -661,7 +659,7 @@
                         </div>
                     </div><!--/.col-md-6-->
 
-                    <div class="col-md-6 col-sm-6 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="600ms">
+                    <div class="col-md-6 col-sm-6 wow fadeInDown heightsFeatureBisUp" data-wow-duration="1000ms" data-wow-delay="600ms">
                         <div class="feature-wrap">
                             <i class="fa fa-comments"></i>
                             <h2>ATWS</h2>
@@ -680,7 +678,7 @@
                         <div class="feature-wrap">
                             <i class="fa fa-cloud-download"></i>
                             <h2>ARNN (redes neuronales)</h2>
-                            <h3>Se ha estudiado el Método Académico de ARNN Auto Regressive Neural Network. Se ha aplicado este modelado a los precios del mercado (con una vision de serie Temporal) para obtener un método predictivo. Este modelo está en backtesting.</h3>
+                            <h3 class="heightsFeatureBis">Se ha estudiado el Método Académico de ARNN Auto Regressive Neural Network. Se ha aplicado este modelado a los precios del mercado (con una vision de serie Temporal) para obtener un método predictivo. Este modelo está en backtesting.</h3>
                             <div class="center">
                                 <a class="btn btn-default" href="#" data-filter="*">Contribuye en el desarrollo</a>
                             </div>
@@ -690,7 +688,7 @@
                         <div class="feature-wrap">
                             <i class="fa fa-leaf"></i>
                             <h2>Modelo de los Vecinos</h2>
-                            <h3>Este problema solo esta en formulación pero la idea para este método es construir una métrica que nos permita comparar días similares y construir previsiones de mercado usando combinaciones lineales de dichos días.</h3>
+                            <h3 class="heightsFeatureBis" style="margin-top: 43px;">Este problema solo esta en formulación pero la idea para este método es construir una métrica que nos permita comparar días similares y construir previsiones de mercado usando combinaciones lineales de dichos días.</h3>
                             <div class="center">
                                 <a class="btn btn-default" href="#" data-filter="*">Contribuye en el desarrollo</a>
                             </div>
@@ -701,7 +699,7 @@
                         <div class="feature-wrap">
                             <i class="fa fa-cogs"></i>
                             <h2>Modelo de Lógica difusa</h2>
-                            <h3>Este problema solo esta en formulación pero la idea para este método es construir reglas difusas coherentes con el funcionamiento del mercado para definir funciones de base para el modelado y cálculo de previsiones del Mercado Diario.</h3>
+                            <h3 class="heightsFeatureBis">Este problema solo esta en formulación pero la idea para este método es construir reglas difusas coherentes con el funcionamiento del mercado para definir funciones de base para el modelado y cálculo de previsiones del Mercado Diario.</h3>
                             <div class="center">
                                 <a class="btn btn-default" href="#" data-filter="*">Contribuye en el desarrollo</a>
                             </div>
@@ -716,7 +714,7 @@
                         <div class="feature-wrap">
                             <i class="fa fa-heart"></i>
                             <h2>Algoritmo Genético y optimización</h2>
-                            <h3>Este problema solo está en formulación pero la idea esta relacionada con el modelo de Logica difusa. La evolucion de cada función base de precio para las tecnologías en el Mercado Diario, son distintas para hora. Con esta analise se pretende establecer una métrica que permita entender esta evolución en el Mercado al largo del historico.</h3>
+                            <h3 class="heightsFeatureBis">Este problema solo está en formulación pero la idea esta relacionada con el modelo de Logica difusa. La evolucion de cada función base de precio para las tecnologías en el Mercado Diario, son distintas para hora. Con esta analise se pretende establecer una métrica que permita entender esta evolución en el Mercado al largo del historico.</h3>
                             <div class="center">
                                 <a class="btn btn-default" href="#" data-filter="*">Contribuye en el desarrollo</a>
                             </div>
@@ -726,7 +724,7 @@
                         <div class="feature-wrap">
                             <i class="fa fa-heart"></i>
                             <h2>Sistema de Analytics para el mercado</h2>
-                            <h3>Pretendemos adicionar cálculos de Business Analytics (ej: agregado de volumen en dinero ...) para realizar estudios y informes con lo datos del mercado. La idea aqui es definir un modelo para los datos de priceprofor dentro del formato OLAP</h3>
+                            <h3 class="heightsFeatureBis">Pretendemos adicionar cálculos de Business Analytics (ej: agregado de volumen en dinero ...) para realizar estudios y informes con lo datos del mercado. La idea aqui es definir un modelo para los datos de priceprofor dentro del formato OLAP</h3>
                             <div class="center">
                                 <a class="btn btn-default" href="#" data-filter="*">Contribuye en el desarrollo</a>
                             </div>
@@ -736,7 +734,7 @@
                         <div class="feature-wrap">
                             <i class="fa fa-heart"></i>
                             <h2>Labore et dolore</h2>
-                            <h3>Lorem ipsum dolor sit amet, consectetur adipisicing elit</h3>
+                            <h3 class="heightsFeatureBis">Lorem ipsum dolor sit amet, consectetur adipisicing elit</h3>
                         </div>
                     </div><!--/.col-md-4-->
                 </div><!--/.services-->
@@ -847,7 +845,7 @@
         </div>
     </section> /#bottom-->
 
-    <footer id="footer" class="midnight-blue">
+    <section id="footer" class="midnight-blue">
         <div class="container">
             <div class="row">
                 <div class="col-sm-6">
@@ -863,7 +861,7 @@
                 </div>
             </div>
         </div>
-    </footer><!--/#footer-->
+    </section><!--/#footer-->
 
     <script src="js/jquery.js"></script>
     <script src="js/jquery.easing.1.3.js"></script>
@@ -873,5 +871,6 @@
     <script src="js/main.js"></script>
     <script src="js/wow.min.js"></script>
     <script src="js/scroll.js"></script>
+    <script src="js/heightDiv.js"></script>
 </body>
 </html>
