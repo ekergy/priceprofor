@@ -16,15 +16,8 @@ from flask import Flask, url_for, redirect
 # from flask.ext.assets import Environment
 app = Flask(__name__, static_folder='static', static_url_path='')
 # importing blueprints:
-# from blueprints.home_page import homepage
-# importing Assets (Bundles and Enviroment).
-# from blueprints.home_page import homepage_js
-# Register Blueprints
-# app.register_blueprint(homepage)
-#assets = Environment(app)
-# Register Assets
-#assets.register('homepage_js',homepage_js)
-
+from blueprints.omieinfosys_bp import omieinfosys_bp
+app.register_blueprint(omieinfosys_bp)
 
 def has_no_empty_params(rule):
     """
