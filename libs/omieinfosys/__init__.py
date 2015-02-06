@@ -33,6 +33,37 @@ class NoUpdateNeeded(Exception):
     def __str__(self):
         return repr(self.value)
 
+def status():
+    """Gives status on collections used by this module.
+
+    """
+    try:
+        from omieinfosys import omieMercadoDiarioDBManager
+    except:
+        result = 'failed'
+        raise
+    else:
+        precioswebstatus = omieMercadoDiarioDBManager.PreciosWeb.status
+
+        tecnologiaswebstatus = omieMercadoDiarioDBManager.TecnologiasWeb.status
+
+        studydatamibelstatus = omieMercadoDiarioDBManager.StudyDataMIBEL.status
+
+        result = {'StudyDataMIBEL':studydatamibelstatus,
+              'PreciosWeb':precioswebstatus,
+              'TecnologiasWeb':tecnologiaswebstatus,}
+    finally:
+        return result
+
+def updatedb():
+    """Update current database for the 3 Collection so far managed:
+    """
+    try:
+        populatepreciosweb()
+        populatetecnologiasweb()
+        populatestudydatamibel()
+    except:
+        raise
 
 def omiepreciosurl(fecha):
     """omiepreciosurl

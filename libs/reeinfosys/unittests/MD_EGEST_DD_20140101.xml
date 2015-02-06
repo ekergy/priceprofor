@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><siosbi fechaAplica="Fecha 01-01-2014" tipoMensaje="Diario" titulo="Energía Gestionada en el Mercado Diario en España (MWh).">
+      <Cabecera>
+         <Concepto type="text" value="Concepto"/>
+         <Atributo id="tot" type="text" value="Total"/>
+         <Periodo>
+            <Intervalo>
+               <Pos type="number" value="1"/>
+               <Ctd type="text" value="00-01"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="2"/>
+               <Ctd type="text" value="01-02"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="3"/>
+               <Ctd type="text" value="02-03"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="4"/>
+               <Ctd type="text" value="03-04"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="5"/>
+               <Ctd type="text" value="04-05"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="6"/>
+               <Ctd type="text" value="05-06"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="7"/>
+               <Ctd type="text" value="06-07"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="8"/>
+               <Ctd type="text" value="07-08"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="9"/>
+               <Ctd type="text" value="08-09"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="10"/>
+               <Ctd type="text" value="09-10"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="11"/>
+               <Ctd type="text" value="10-11"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="12"/>
+               <Ctd type="text" value="11-12"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="13"/>
+               <Ctd type="text" value="12-13"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="14"/>
+               <Ctd type="text" value="13-14"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="15"/>
+               <Ctd type="text" value="14-15"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="16"/>
+               <Ctd type="text" value="15-16"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="17"/>
+               <Ctd type="text" value="16-17"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="18"/>
+               <Ctd type="text" value="17-18"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="19"/>
+               <Ctd type="text" value="18-19"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="20"/>
+               <Ctd type="text" value="19-20"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="21"/>
+               <Ctd type="text" value="20-21"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="22"/>
+               <Ctd type="text" value="21-22"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="23"/>
+               <Ctd type="text" value="22-23"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="24"/>
+               <Ctd type="text" value="23-24"/>
+            </Intervalo>
+         </Periodo>
+      </Cabecera>
+      <SeriesTemporales>
+         <Concepto type="text" value="Valores horarios"/>
+         <Atributo id="tot" type="number" value="552.193,4"/>
+         <Periodo>
+            <Intervalo>
+               <Pos type="number" value="1"/>
+               <Ctd type="number" value="21.334,9"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="2"/>
+               <Ctd type="number" value="20.298,0"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="3"/>
+               <Ctd type="number" value="22.597,7"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="4"/>
+               <Ctd type="number" value="20.590,9"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="5"/>
+               <Ctd type="number" value="20.434,2"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="6"/>
+               <Ctd type="number" value="20.426,1"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="7"/>
+               <Ctd type="number" value="20.592,2"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="8"/>
+               <Ctd type="number" value="21.223,2"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="9"/>
+               <Ctd type="number" value="21.602,7"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="10"/>
+               <Ctd type="number" value="22.860,1"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="11"/>
+               <Ctd type="number" value="23.814,8"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="12"/>
+               <Ctd type="number" value="24.517,9"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="13"/>
+               <Ctd type="number" value="25.626,6"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="14"/>
+               <Ctd type="number" value="25.483,1"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="15"/>
+               <Ctd type="number" value="25.636,5"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="16"/>
+               <Ctd type="number" value="25.894,5"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="17"/>
+               <Ctd type="number" value="25.678,3"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="18"/>
+               <Ctd type="number" value="25.903,2"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="19"/>
+               <Ctd type="number" value="26.507,9"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="20"/>
+               <Ctd type="number" value="23.383,0"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="21"/>
+               <Ctd type="number" value="20.007,9"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="22"/>
+               <Ctd type="number" value="20.546,3"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="23"/>
+               <Ctd type="number" value="24.119,3"/>
+            </Intervalo>
+            <Intervalo>
+               <Pos type="number" value="24"/>
+               <Ctd type="number" value="23.114,1"/>
+            </Intervalo>
+         </Periodo>
+      </SeriesTemporales>
+   </siosbi>
