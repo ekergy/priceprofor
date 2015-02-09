@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-"""
+"""hwtes
+holt winters triple exponential smoothing
 """
 
 # import paths
@@ -24,12 +25,27 @@ stats = importr('stats')
 base = importr('base')
 forecast = importr('forecast')
 
-def studioHWTES(period,datos0Hora,datos1Hora,miHora):
-    """
+def studioHWTES(period, miHora, datos0Hora, datos1Hora):
+    """studioHWTES
+    Realiza los calculos de modelado y prediccion HWTES
+
+    Arguments:
+        period: 28
+        miHora: range(24)
+        datos0Hora: [45.28, 51.54, 20.0, 44.38, 20.0, 44.08, 35.68, ... ]
+        datos1Hora: [42.67, 47.32, ...]
+
+    Result:
+        workingSet=listaVector[0]
+        modelSet=listaVector[1]
+        testeSet=listaVector[2]
+        realSet=listaVector[3]
+        lowerSet=listaVector[4]
+        upperSet=listaVector[5]
 
     Notes of developers:
-        
-
+        El elemento Rstudio forecast[7] se corresponde con el elemento Python forecast[6], es decir,
+        que el indice del vector en Python es una unidad menor que su respectivo utilizado en Rstudio
     """
     prices = FloatVector(datos0Hora)
 
@@ -116,8 +132,18 @@ def studioHWTES(period,datos0Hora,datos1Hora,miHora):
     return data, model, prediction, real, lower, upper
 
 def fullfunctionR(docstring_r_function,res=0, dat=0, dat2=0, dat3=0):
-    """funcionR
+    """fullfuncionR
     Auxilary function to contruct a R function using robjects like a decorator
+
+    Arguments:
+        docstring_r_function: argumento que varia en funcion del uso que se le de
+
+    Result:
+        a function interface with R defined function at docstring_r_function.
+        the type is a rpy2.robjects + the needed class to operate with the R implemented function.
+
+    Notes of developers:
+        A esta funcion no se le puede pasar un arg None, porque no reconoce dicho tipo de dato
     """
     robjects.r(docstring_r_function)
     # r_f = robjects.globalenv['f']
@@ -131,6 +157,16 @@ def fullfunctionR(docstring_r_function,res=0, dat=0, dat2=0, dat3=0):
 
 def mongodbHWTES(collection, listSort, listPast, listFuture):
     """
+    Gestiona la carga de datos en mongodb
+
+    Arguments:
+        collection: nombre de la coleccion
+        listSort: todos los datos ordenados
+        listPast: datos de trabajo y modelado anteriores al dayahead
+        listFuture: datos predichos posteriores al dayahead
+
+    Result:
+        Inserta informacion en base de datos
     """
     # print ''
     # print 'MONGO DB'
@@ -158,11 +194,15 @@ def mongodbHWTES(collection, listSort, listPast, listFuture):
 
 def hourHWTES(listDict, database, miHora):
     """hourHWTES
+    Descarga datos de precios, los trata a traves de la funcion studioHWTES y los reordena asignandoles una fecha
 
-    listDict    This
-    database    This is the mongo database Connection.
-    miHora      This is the hour to perform method calculation
+    Arguments:
+        listDict    Esta es una lista auxiliar para tratar los valores de los precios
+        database    This is the mongo database Connection
+        miHora      This is the hour to perform method calculation
 
+    Result:
+        Devuelve una lista de vectores de precios tratados e intervalos de confianza
     """
 
     per = 28
@@ -196,12 +236,16 @@ def hourHWTES(listDict, database, miHora):
     for element in cursor:
         laterData.append(element['PreciosES'])
 
-    listaVector=studioHWTES(per,previousData,laterData,miHora)
+    # Este metodo no procesa nada relacionado con el calendario (No pasamos informacion del periodo del año)
+    # Unicamente usamos los 28*2 resultados anteriores (Para mas informacion, consulte la wiki en bitbucket)
+    listaVector=studioHWTES(per, miHora, previousData, laterData)
 
     workingSet=listaVector[0]
     modelSet=listaVector[1]
     testeSet=listaVector[2]
     realSet=listaVector[3]
+
+    # Es una matriz que se importa como un vector: la mitad corresponde al intervalo 80 y la otra mitad al 95
     lowerSet=listaVector[4]
     upperSet=listaVector[5]
 
@@ -209,7 +253,7 @@ def hourHWTES(listDict, database, miHora):
 
     workingSetPY = workingSet
     modelSetPY = modelSet
-#     realSetPY = realSet
+    # realSetPY = realSet
     testeSetPY = testeSet
 
     listPast = list()
@@ -246,7 +290,7 @@ def hourHWTES(listDict, database, miHora):
     indi = 0
     for indi in range(len(testeSetPY)):
         listDict.append({'fecha': listFuture[indi], 'hora': miHora, 'PreciosES': testeSetPY[indi], 'tipo': 'teste', 'dayahead': DAYAHEAD})
-#             listDict.append({'fecha': listFuture[indi], 'hora': miHora, 'PreciosES': realSetPY[indi], 'tipo': 'real', 'dayahead': DAYAHEAD})
+        # listDict.append({'fecha': listFuture[indi], 'hora': miHora, 'PreciosES': realSetPY[indi], 'tipo': 'real', 'dayahead': DAYAHEAD})
         listDict.append({'fecha': listFuture[indi], 'hora': miHora, 'PreciosES': upper80[indi], 'tipo': 'upper80', 'dayahead': DAYAHEAD})
         listDict.append({'fecha': listFuture[indi], 'hora': miHora, 'PreciosES': upper95[indi], 'tipo': 'upper95', 'dayahead': DAYAHEAD})
         listDict.append({'fecha': listFuture[indi], 'hora': miHora, 'PreciosES': lower80[indi], 'tipo': 'lower80', 'dayahead': DAYAHEAD})
@@ -256,7 +300,7 @@ def hourHWTES(listDict, database, miHora):
     listW = list()
     listM = list()
     listT = list()
-#     listR = list()
+    # listR = list()
     listU8 = list()
     listU9 = list()
     listL8 = list()
@@ -269,8 +313,8 @@ def hourHWTES(listDict, database, miHora):
             listM.append(element)
         if element['tipo'] == 'teste':
             listT.append(element)
-#         if element['tipo'] == 'real':
-#             listR.append(element)
+        # if element['tipo'] == 'real':
+        #     listR.append(element)
         if element['tipo'] == 'upper80':
             listU8.append(element)
         if element['tipo'] == 'upper95':
@@ -283,7 +327,7 @@ def hourHWTES(listDict, database, miHora):
     listWsort = sorted(listW, key=itemgetter('fecha','hora'))
     listMsort = sorted(listM, key=itemgetter('fecha','hora'))
     listTsort = sorted(listT, key=itemgetter('fecha','hora'))
-#     listRsort = sorted(listR, key=itemgetter('fecha','hora'))
+    # listRsort = sorted(listR, key=itemgetter('fecha','hora'))
     listU8sort = sorted(listU8, key=itemgetter('fecha','hora'))
     listU9sort = sorted(listU9, key=itemgetter('fecha','hora'))
     listL8sort = sorted(listL8, key=itemgetter('fecha','hora'))
@@ -292,7 +336,7 @@ def hourHWTES(listDict, database, miHora):
     listWprice = list()
     listMprice = list()
     listTprice = list()
-#     listRprice = list()
+    # listRprice = list()
     listU8price = list()
     listU9price = list()
     listL8price = list()
@@ -303,8 +347,8 @@ def hourHWTES(listDict, database, miHora):
         listMprice.append(element['PreciosES'])
     for element in listTsort:
         listTprice.append(element['PreciosES'])
-#     for element in listRsort:
-#         listRprice.append(element['PreciosES'])
+    # for element in listRsort:
+    #     listRprice.append(element['PreciosES'])
     for element in listU8sort:
         listU8price.append(element['PreciosES'])
     for element in listU9sort:
@@ -317,7 +361,8 @@ def hourHWTES(listDict, database, miHora):
     return listWsort, listMsort, listTsort, listU8sort, listU9sort, listL8sort, listL9sort
 
 def mainHWTES():
-    """
+    """mainHWTES
+    Se encarga de definir la bbdd, llamar a las funciones del codigo y finalmente selecciona parte de los datos
     """
     listDict = list()
 
