@@ -10,8 +10,14 @@ from pymongo import Connection
 from operator import itemgetter
 from rpy2.robjects import FloatVector
 
+# import paths
+from os import path
+direc = path.abspath(__file__)
+machine = direc[direc.find("e")+2:direc.find("w")-1]
+
 # codigo necesario para importar el paquete arnn.R
-f = file("/home/david/workspace/packagesR/arnn.R")
+f = file("/home/"+machine+"/workspace/priceprofor/libs/packagesR/arnn.R")
+# f = file("/home/david/workspace/priceprofor/libs/packagesR/arnn.R")
 code = ''.join(f.readlines())
 result = robjects.r(code)
 
@@ -244,7 +250,7 @@ def fullfunctionR(docstring_r_function,res=0, dat=0, dat2=0, dat3=0):
     # print var
     return var
 
-def mongodbARNN(collection, listSort, listPast, listFuture):
+def mongodbARNN(database, listSort, listPast, listFuture):
     '''mongodbARNN
     Gestiona la carga de datos en mongodb
 
@@ -256,19 +262,25 @@ def mongodbARNN(collection, listSort, listPast, listFuture):
 
     Result:
         Inserta informacion en base de datos
+
+    Notes of developers:
+        Hay veces que al ejecutar da este error, pero si vuelves a ejecutar ya no aparece este mismo error
+        "missing values and NaN's not allowed if 'na.rm' is FALSE"
     '''
-    print 'MONGO DB'
-    print ''
+
+    # print 'MONGO DB'
+    # print ''
     # print DAYAHEAD.date()
     # print ''
 
     for jsontoinsert in listSort:
         fecha = jsontoinsert['fecha']
-        if jsontoinsert['hora'] == 0:
-            print fecha.date()
+        # if jsontoinsert['hora'] == 0:
+        #     print fecha.date()
         hora = jsontoinsert['hora']
         tipo = jsontoinsert['tipo']
         dayahead = jsontoinsert['dayaheadNN']
+        collection = database.modelosARNN
         results = collection.find({ "fecha" : {"$in": [fecha]}, "hora": {"$in": [hora]}, "tipo": {"$in": [tipo]}, "dayaheadNN": {"$in": [dayahead]} })
         if results.count() == 0:
             collection.insert(jsontoinsert)
@@ -295,9 +307,9 @@ def hourARNN(listDict, database, miHora):
         Devuelve una lista de vectores de precios tratados e intervalos de confianza
     """
 
-    print ''
-    print 'miHora'
-    print miHora
+    # print ''
+    # print 'miHora'
+    # print miHora
 
     # lags2 = 2, 3, 4
     lags2 = 3
@@ -477,5 +489,6 @@ def mainARNN():
     listFuture2 = listTsort[0:2*24] + listU8sort[0:2*24] + listU9sort[0:2*24] + listL8sort[0:2*24] + listL9sort[0:2*24]
     listSort = listPast2 + listFuture2
 
-    collection = Connection(host=None).mercadodiario.modelosARNN
-    mongodbARNN(collection, listSort, listPast2, listFuture2)
+    #collection = Connection(host=None).mercadodiario.modelosARNN
+    database = Connection(host=None).mercadodiario
+    mongodbARNN(database, listSort, listPast2, listFuture2)

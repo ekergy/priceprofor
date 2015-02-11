@@ -7,8 +7,6 @@ holt winters triple exponential smoothing
 from os import path
 direc = path.abspath(__file__)
 machine = direc[direc.find("e")+2:direc.find("w")-1]
-import sys
-sys.path.append('/home/'+machine+'ruta')
 
 # import R objects
 from rpy2.robjects import FloatVector
@@ -205,6 +203,7 @@ def hourHWTES(listDict, database, miHora):
         Devuelve una lista de vectores de precios tratados e intervalos de confianza
     """
 
+    # per = 29
     per = 28
     currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
     DAYAHEAD = currentDate + timedelta(1)
