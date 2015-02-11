@@ -365,13 +365,14 @@ def mainHWTES():
     Se encarga de definir la bbdd, llamar a las funciones del codigo y finalmente selecciona parte de los datos
     """
     listDict = list()
-
     database = Connection(host='mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario').mercadodiario
     horasDelDia = range(24)
     for miHora in horasDelDia:
         listWsort, listMsort, listTsort, listU8sort, listU9sort, listL8sort, listL9sort = hourHWTES(listDict, database, miHora)
 
+    # si limito la carga en base de datos a una semana
     listPast2 = listWsort[(28-7)*24:] + listMsort[(28-7)*24:]
+    # si limito la carga en base de datos a dos dias
     listFuture2 = listTsort[0:2*24] + listU8sort[0:2*24] + listU9sort[0:2*24] + listL8sort[0:2*24] + listL9sort[0:2*24]
     listSort = listPast2 + listFuture2
 

@@ -42,7 +42,18 @@ def execute_hwtes(dayahead):
 def execute_arnn(dayahead):
     """perform modelling and construct predictions using arnn Method
     """
-    print("execute_arnn done")
+    # print("execute_arnn done")
+
+    try:
+        from models import arnn
+        # result = hwtes.mainHWTES()
+        arnn.mainARNN()
+    except:
+        raise
+    else:
+        print ''
+#         print("execute_hwtes done")
+#         pprint(result)
 
 def check_status():
     """perform modelling and construct predictions using hwtes Method
@@ -52,14 +63,17 @@ def check_status():
 
 arguments = docopt(__doc__,version="alpha")
 
-if arguments["--arnn"]:
-    print arguments["--arnn"]
-    execute_arnn(arguments["--arnn"])
 if arguments["--hwtes"]:
     if arguments["--hwtes"] == "now":
-        # print "\nel dayahead es hoy\n"
         execute_hwtes(arguments["--hwtes"])
     else:
-        print "\nno encuentra la funcion\n"
+        print "\nno encuentra la funcion hwtes\n"
+
+if arguments["--arnn"]:
+    if arguments["--arnn"] == "now":
+        execute_arnn(arguments["--arnn"])
+    else:
+        print "\nno encuentra la funcion arnn\n"
+
 if arguments["--status"]:
     check_status()
