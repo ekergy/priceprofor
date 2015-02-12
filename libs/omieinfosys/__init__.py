@@ -10,7 +10,8 @@ __revision__ = "dev"
 CONN_DETAILS = {'db':'omieMercadoDiario'}
 
 # db = MongoEngine()
-
+import os
+host = os.environ['MONGODB_URL']
 # imports
 
 from utilities import cambiohoraverano, cambiohorainvierno
@@ -23,7 +24,9 @@ from mongoengine.connection import get_db, connect
 try:
     get_db(CONN_DETAILS['db'],reconnect=True)
 except:
-    connect(CONN_DETAILS['db'])
+    connect(CONN_DETAILS['db'],host=host)
+
+
 
 class NoUpdateNeeded(Exception):
     """
