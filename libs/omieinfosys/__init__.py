@@ -12,7 +12,8 @@ CONN_DETAILS = {'db':'omieMercadoDiario'}
 # db = MongoEngine()
 import os
 #host = os.environ['MONGODB_URL'][:-1]+str(27017)+'/'
-host="127.3.118.130"
+# host="127.3.118.130"
+host="priceprofor-ekergy.rhcloud.com"
 # imports
 
 from utilities import cambiohoraverano, cambiohorainvierno
