@@ -16,8 +16,8 @@ from flask import Flask, url_for, redirect
 # from flask.ext.assets import Environment
 app = Flask(__name__, static_folder='static', static_url_path='')
 # importing blueprints:
-#from omieinfosys.omieBlueprintAPI import omieMercadoDiario
-#app.register_blueprint(omieMercadoDiario)
+from omieinfosys.omieBlueprintAPI import omieMercadoDiario
+app.register_blueprint(omieMercadoDiario)
 
 # import for old controllers:
 from json import dumps
