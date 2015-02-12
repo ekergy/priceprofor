@@ -24,7 +24,7 @@ from mongoengine.connection import get_db, connect
 try:
     get_db(CONN_DETAILS['db'],reconnect=True)
 except:
-    connect(CONN_DETAILS['db'],host=host)
+    connect(CONN_DETAILS['db'],host=host+"27017")
 
 
 
