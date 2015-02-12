@@ -11,9 +11,13 @@ class PreciosMercadoDiarioHandler(object):
     Class to parse the Spanish and Portguese Electric Market Prices.
     http://www.omie.es/aplicaciones/datosftp/datosftp.jsp?path=/marginalpdbc/
     Introduced the concept of Mibel Price as the market price set before market split operation.
-    What is used here is not the concept only an aproximation. Because the split can occur in both markets and not only one.
+    Note:
+        What is used here for the mibel price is not the concept only an aproximation. Because the split can occur in both markets and not only one.
     But it is a good aproximation to assume that the mibel price is the lower price from the Spanish and Portguese Electric Market Prices
     """
+    PARSEABLETOMIBEL = {}
+    PARSEABLETOES = {}
+    PARSEABLETOPT = {}
     def __init__(self,thefile = None):
         try:
             self.toparsePRECIOS = reader(thefile,delimiter=';')
@@ -35,10 +39,68 @@ class PreciosMercadoDiarioHandler(object):
                     self.preciospt.append(preciopt)
                     self.preciosmibel.append(min(precioes,preciopt))
                     
+class EnergiaGestionadaMercadoDiarioHandler(object):
+    """Class to parse Spanish, Portuguese and Mibel Electric Market Volumen managed in
+    the Daily Market.
+    Data is parsed directly from OMIE web and can be found at:
+    http://www.omie.es/aplicaciones/datosftp/datosftp.jsp?path=/pdbc_tot/
+    The data source contains the information for all three markets.
+    """
+    def __init__(self,thefile = None):
+        try:
+            self.toparseENERGIA = reader(thefile,delimiter=';')
+            self.energiaes = {'TOTAL_COMPRAS':list(),'TOTAL_VENTAS':list()}
+            self.energiapt = {'TOTAL_COMPRAS':list(),'TOTAL_VENTAS':list()}
+            self.energiami = {'TOTAL_COMPRAS':list(),'TOTAL_VENTAS':list()}
+        except:
+            raise
+        else:
+            for row in self.toparseENERGIA:
+                # condition to be a row with data:
+                if row.__len__() == 9:
+                    # This is the first row. Let get date from it.
+                    self.fecha = datetime.strptime(row[3],'%d/%m/%Y')
+                if row.__len__()!=0 and row.__len__()>25:
+                    if self.fecha == cambiohoraverano(self.fecha.year):
+                        len_valores = range(2,25)
+                    elif self.fecha == cambiohorainvierno(self.fecha.year):
+                        len_valores = range(2,27)
+                    else:
+                        len_valores = range(2,26)
+                    concepto = row[0]
+                    mercado = row[1]
+                    if concepto == "Total Compras":
+                        if mercado == "ES":
+                            for i in len_valores:
+                                self.energiaes['TOTAL_COMPRAS'].append(stringtofloat(row[i]))
+                        elif mercado == "PT":
+                            for i in len_valores:
+                                self.energiapt['TOTAL_COMPRAS'].append(stringtofloat(row[i]))
+                        else:
+                            for i in len_valores:
+                                self.energiami['TOTAL_COMPRAS'].append(stringtofloat(row[i]))
+                    elif concepto == "Total Ventas":
+                        if mercado == "ES":
+                            for i in len_valores:
+                                self.energiaes['TOTAL_VENTAS'].append(stringtofloat(row[i]))
+                        elif mercado == "PT":
+                            for i in len_valores:
+                                self.energiapt['TOTAL_VENTAS'].append(stringtofloat(row[i]))
+                        else:
+                            for i in len_valores:
+                                self.energiami['TOTAL_VENTAS'].append(stringtofloat(row[i]))
+
+
+
+
+                    
+
+                    
+
 
 class TecnologiasMercadoDiarioHandler(object):
     '''
-    Class to parse the Spanish, Portguese and Mibel Electric Market Tecnologies.
+    Class to parse the Spanish, Portuguese and Mibel Electric Market Tecnologies.
     Data is parsed directly from OMIE web and can be found at:
     http://www.omie.es/aplicaciones/datosftp/datosftp.jsp?path=/pdbc_stota/
     TODO: ProduccionYDemanda deberia tener algo como Produccion por un lado y Demanda por otro.

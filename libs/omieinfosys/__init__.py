@@ -14,8 +14,8 @@ CONN_DETAILS = {'db':'omieMercadoDiario'}
 # imports
 
 from utilities import cambiohoraverano, cambiohorainvierno
-from .omieMercadoDiarioWebParsers import PreciosMercadoDiarioHandler, TecnologiasMercadoDiarioHandler
-from .omieMercadoDiarioDBManager import PreciosWeb, TecnologiasWeb, StudyDataES, StudyDataMIBEL
+from .omieMercadoDiarioWebParsers import PreciosMercadoDiarioHandler, TecnologiasMercadoDiarioHandler, EnergiaGestionadaMercadoDiarioHandler
+from .omieMercadoDiarioDBManager import PreciosWeb, TecnologiasWeb, EnergiaGestionadaWeb, StudyDataES, StudyDataMIBEL
 import datetime
 from urllib2 import urlopen
 from mongoengine.connection import get_db, connect
@@ -62,6 +62,7 @@ def updatedb():
         populatepreciosweb()
         populatetecnologiasweb()
         populatestudydatamibel()
+        populateenergiagestionadaweb()
     except:
         raise
 
@@ -90,6 +91,24 @@ def omiepreciosurl(fecha):
         fechaURL= fecha.strftime("%Y%m%d")
         # return result as a str.
         return URL_OMIE_PRECIOMARGINAL+fechaURL+URL_FIN
+    except:
+        raise
+
+def omieenergiasurl(fecha):
+    """omieenergiasurl
+    Builds the omie url that gives Mibel Daily energy volumes negociated
+    
+    doctest:
+    ++++++++
+
+    """
+    URL_OMIE_DATOSPUB = 'http://www.omie.es/datosPub'
+    URL_OMIE_ENERGIA = URL_OMIE_DATOSPUB + '/' + 'pdbc_tot/pdbc_tot_'
+    URL_FIN = '.1'
+    try:
+        fechaURL= fecha.strftime("%Y%m%d")
+        # return result as a str.
+        return URL_OMIE_ENERGIA+fechaURL+URL_FIN
     except:
         raise
 
@@ -132,6 +151,29 @@ def preciosmercadodiarioparser(fecha):
         else:
             return {"PreciosMibel":Precios.preciospt,"PreciosES":Precios.precioses,"PreciosPT":Precios.preciosmibel}
 
+def energiagestionadamercadodiarioparser(fecha):
+    '''
+    This is the main method so the usage of PreciosMibelHandler is more strainfoward.
+    '''
+    try:
+        # TODO: validafecha(fecha)
+        URL = omieenergiasurl(fecha)
+        # print URL
+        toparseEnergia = urlopen(URL)
+    except:
+        raise
+    else:
+        Energia = EnergiaGestionadaMercadoDiarioHandler(toparseEnergia)
+        # print Precios.precioses
+        # TODO: make this better code and also include .3 in the search path!
+        if Energia.energiaes == []:
+            numero = '2'
+            URL = omiepreciosurl(fecha)[:len(omiepreciosurl(fecha))-1]+str(numero)
+            toparseEnergia = urlopen(URL)
+            Energia = EnergiaGestionadaMercadoDiarioHandler(toparseEnergia)
+            return {"EnergiaMI":Energia.energiami,"EnergiaES":Energia.energiaes,"EnergiaPT":Energia.energiapt}
+        else:
+            return {"EnergiaMI":Energia.energiami,"EnergiaES":Energia.energiaes,"EnergiaPT":Energia.energiapt}
 
 def tecnologiasmercadodiarioparser(fecha):
     '''
@@ -236,6 +278,74 @@ which is the last available data in esios.ree.es "%(initfecha,todaydatetime))
         print "Collection up to date"
     except:
         raise
+
+def populateenergiagestionadaweb(initfecha=None,endfecha=None):
+    """
+    This will populate data into mongo collection as delivered by omie web
+
+    usage:: if is the first time then:
+
+
+            if is only updateing then:
+
+
+    """
+    # by default initfecha = datetime.datetime(2012,1,1)
+    def _check_args(initfecha,endfecha):
+        """
+        Function arguments validator
+        """
+        if initfecha is None:
+            try:
+                initfecha = EnergiaGestionadaWeb.lastdateindb
+            except IndexError:
+                print "No data in the collection! using 2011-1-1 as start date"
+                initfecha = datetime.datetime(2010,12,31)
+            finally:
+                initfecha += datetime.timedelta(days=1)
+        initfecha = initfecha.replace(hour = 0, minute = 0,second = 0,microsecond = 0)
+        todaydatetime = datetime.datetime.now()
+        if endfecha is None:
+            if todaydatetime.hour > 14:
+                endfecha = datetime.datetime.now()+datetime.timedelta(days=1)
+                todaydatetime += datetime.timedelta(days=1)
+            else:
+                endfecha = datetime.datetime.now()
+        endfecha = endfecha.replace(hour = 0, minute = 0,second = 0,microsecond = 0)
+        todaydatetime = todaydatetime.replace(hour = 0, minute = 0,second = 0,microsecond = 0)
+        if initfecha > todaydatetime:
+            raise NoUpdateNeeded("Collection is probably up to date -->%s -->%s"%(initfecha,endfecha))
+        if initfecha > endfecha:
+            raise ValueError("invalid dates given -->%s is bigger then -->%s"%(initfecha,endfecha))
+        if endfecha > todaydatetime:
+            raise ValueError("invalid dates given -->%s is bigger then -->%s \
+which is the last available data in esios.ree.es "%(initfecha,todaydatetime))
+        # Returning needed data as specified.
+        return initfecha,endfecha
+    try:
+        initfecha,endfecha = _check_args(initfecha,endfecha)
+        # # updatedata if needed:
+        iterfecha = initfecha
+        while iterfecha <= endfecha:
+            energiaweb = energiagestionadamercadodiarioparser(iterfecha)
+            energiaindb = EnergiaGestionadaWeb.objects(fecha=iterfecha)
+            if energiaindb.count() ==0:
+                energiadb = EnergiaGestionadaWeb(fecha=iterfecha)
+            elif energiaindb.count() ==1:
+                for p in preciosindb:
+                    energiadb = p
+            energiadb = EnergiaGestionadaWeb(fecha=iterfecha)
+            energiadb.EnergiaMI = energiaweb['EnergiaMI']
+            energiadb.EnergiaES = energiaweb['EnergiaES']
+            energiadb.EnergiaPT = energiaweb['EnergiaPT']
+            energiadb.save()
+            iterfecha = iterfecha + datetime.timedelta(days=1)
+            del energiadb,energiaweb
+    except NoUpdateNeeded:
+        print "Collection up to date"
+    except:
+        raise
+
         
 
 def populatetecnologiasweb(initfecha=None,endfecha=None):
@@ -328,6 +438,8 @@ which is the last available data in esios.ree.es "%(initfecha,todaydatetime))
         print "Collection up to date"
     except:
         raise
+
+
 
 def populatestudydataes():
     """
@@ -555,6 +667,7 @@ which is the last available data in esios.ree.es "%(initfecha,todaydatetime))
                         studydatamibel.P_TOTAL_HIDRAULICA = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_HIDRAULICA_(901+902)'][h]
                         studydatamibel.P_TOTAL_TERMICA = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_TERMICA_(903+904+905+906+907+908)'][h]
                         studydatamibel.P_TOTAL_REGIMEN_ESPECIAL = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_REGIMEN_ESPECIAL_(909+910)'][h]
+                        studydatamibel.P_TOTAL_REGIMEN_ORDINARIO_CON_PRIMA = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_REGIMEN_ORDINARIO_CON_PRIMA'][h]
                         studydatamibel.P_TOTAL_IMPORTACION = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_IMPORTACION_(911+912+914+915)'][h]
                         studydatamibel.P_TOTAL_GENERICAS = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_GENERICAS_(916+917)'][h]
                         studydatamibel.P_TOTAL_PRODUCCION_MIBEL = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_PRODUCCION_MIBEL'][h]
@@ -575,6 +688,7 @@ which is the last available data in esios.ree.es "%(initfecha,todaydatetime))
                         studydatamibel.P_TOTAL_HIDRAULICA = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_HIDRAULICA_(901+902)'][h]
                         studydatamibel.P_TOTAL_TERMICA = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_TERMICA_(903+904+905+906+907+908)'][h]
                         studydatamibel.P_TOTAL_REGIMEN_ESPECIAL = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_REGIMEN_ESPECIAL_(909+910)'][h]
+                        studydatamibel.P_TOTAL_REGIMEN_ORDINARIO_CON_PRIMA = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_REGIMEN_ORDINARIO_CON_PRIMA'][h]
                         studydatamibel.P_TOTAL_IMPORTACION = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_IMPORTACION_(911+912+914+915)'][h]
                         studydatamibel.P_TOTAL_GENERICAS = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_GENERICAS_(916+917)'][h]
                         studydatamibel.P_TOTAL_PRODUCCION_MIBEL = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_PRODUCCION_MIBEL'][h]
@@ -595,6 +709,7 @@ which is the last available data in esios.ree.es "%(initfecha,todaydatetime))
                         studydatamibel.P_TOTAL_HIDRAULICA = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_HIDRAULICA_(901+902)'][h]
                         studydatamibel.P_TOTAL_TERMICA = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_TERMICA_(903+904+905+906+907+908)'][h]
                         studydatamibel.P_TOTAL_REGIMEN_ESPECIAL = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_REGIMEN_ESPECIAL_(909+910)'][h]
+                        studydatamibel.P_TOTAL_REGIMEN_ORDINARIO_CON_PRIMA = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_REGIMEN_ORDINARIO_CON_PRIMA'][h]
                         studydatamibel.P_TOTAL_IMPORTACION = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_IMPORTACION_(911+912+914+915)'][h]
                         studydatamibel.P_TOTAL_GENERICAS = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_GENERICAS_(916+917)'][h]
                         studydatamibel.P_TOTAL_PRODUCCION_MIBEL = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_PRODUCCION_MIBEL'][h]
@@ -615,6 +730,7 @@ which is the last available data in esios.ree.es "%(initfecha,todaydatetime))
                         studydatamibel.P_TOTAL_HIDRAULICA = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_HIDRAULICA_(901+902)'][h]
                         studydatamibel.P_TOTAL_TERMICA = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_TERMICA_(903+904+905+906+907+908)'][h]
                         studydatamibel.P_TOTAL_REGIMEN_ESPECIAL = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_REGIMEN_ESPECIAL_(909+910)'][h]
+                        studydatamibel.P_TOTAL_REGIMEN_ORDINARIO_CON_PRIMA = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_REGIMEN_ORDINARIO_CON_PRIMA'][h]
                         studydatamibel.P_TOTAL_IMPORTACION = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_IMPORTACION_(911+912+914+915)'][h]
                         studydatamibel.P_TOTAL_GENERICAS = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_GENERICAS_(916+917)'][h]
                         studydatamibel.P_TOTAL_PRODUCCION_MIBEL = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_PRODUCCION_MIBEL'][h]
@@ -639,6 +755,7 @@ which is the last available data in esios.ree.es "%(initfecha,todaydatetime))
                         studydatamibel.P_TOTAL_HIDRAULICA = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_HIDRAULICA_(901+902)'][h]
                         studydatamibel.P_TOTAL_TERMICA = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_TERMICA_(903+904+905+906+907+908)'][h]
                         studydatamibel.P_TOTAL_REGIMEN_ESPECIAL = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_REGIMEN_ESPECIAL_(909+910)'][h]
+                        studydatamibel.P_TOTAL_REGIMEN_ORDINARIO_CON_PRIMA = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_REGIMEN_ORDINARIO_CON_PRIMA'][h]
                         studydatamibel.P_TOTAL_IMPORTACION = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_IMPORTACION_(911+912+914+915)'][h]
                         studydatamibel.P_TOTAL_GENERICAS = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_GENERICAS_(916+917)'][h]
                         studydatamibel.P_TOTAL_PRODUCCION_MIBEL = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_PRODUCCION_MIBEL'][h]
@@ -659,6 +776,7 @@ which is the last available data in esios.ree.es "%(initfecha,todaydatetime))
                         studydatamibel.P_TOTAL_HIDRAULICA = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_HIDRAULICA_(901+902)'][h-1]
                         studydatamibel.P_TOTAL_TERMICA = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_TERMICA_(903+904+905+906+907+908)'][h-1]
                         studydatamibel.P_TOTAL_REGIMEN_ESPECIAL = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_REGIMEN_ESPECIAL_(909+910)'][h-1]
+                        studydatamibel.P_TOTAL_REGIMEN_ORDINARIO_CON_PRIMA = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_REGIMEN_ORDINARIO_CON_PRIMA'][h-1]
                         studydatamibel.P_TOTAL_IMPORTACION = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_IMPORTACION_(911+912+914+915)'][h-1]
                         studydatamibel.P_TOTAL_GENERICAS = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_GENERICAS_(916+917)'][h-1]
                         studydatamibel.P_TOTAL_PRODUCCION_MIBEL = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_PRODUCCION_MIBEL'][h-1]
@@ -685,6 +803,7 @@ which is the last available data in esios.ree.es "%(initfecha,todaydatetime))
                     studydatamibel.P_TOTAL_HIDRAULICA = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_HIDRAULICA_(901+902)'][h]
                     studydatamibel.P_TOTAL_TERMICA = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_TERMICA_(903+904+905+906+907+908)'][h]
                     studydatamibel.P_TOTAL_REGIMEN_ESPECIAL = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_REGIMEN_ESPECIAL_(909+910)'][h]
+                    studydatamibel.P_TOTAL_REGIMEN_ORDINARIO_CON_PRIMA = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_REGIMEN_ORDINARIO_CON_PRIMA'][h]
                     studydatamibel.P_TOTAL_IMPORTACION = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_IMPORTACION_(911+912+914+915)'][h]
                     studydatamibel.P_TOTAL_GENERICAS = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_GENERICAS_(916+917)'][h]
                     studydatamibel.P_TOTAL_PRODUCCION_MIBEL = tecnologiasindb.ProduccionyDemandaMIBEL['TOTAL_PRODUCCION_MIBEL'][h]

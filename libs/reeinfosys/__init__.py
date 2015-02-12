@@ -9,7 +9,7 @@ __author__ = ("Hugo M. Marrao Rodrigues")
 __version__ = "0.0.1"
 __revision__ = "dev"
 
-CONN_DETAILS = {'db':'reeMercadoDiario'}
+CONN_DETAILS = {'db':'priceproforsys'}
 
 import datetime
 from .reeMercadoDiarioWebParsers import ContratacionBilateralHandler, ProgramaBaseFuncHandler, PrevEolHandler, PrevDemandaHandler, EnergiaGestionadaHandler, PreciosHandler
@@ -26,18 +26,25 @@ try:
 except:
     connect(CONN_DETAILS['db'])
 
+class NoUpdateNeeded(Exception):
+    """
+    """
+    def __init__(self, value):
+        self.value = ""
+    def __str__(self):
+        return repr(self.value)
+
 def updatedb():
     """Update current database for the 3 Collection so far managed:
     """
-    try:
-        populatepreciosweb()
-        populateprevdemandaweb()
-        populatepreveolweb()
-        populateenergiagestionadaweb()
-        populatetecnologiascblweb()
-        populatetecnologiaspbfweb()
-    except:
-        raise
+    
+    populatepreciosweb()
+    populateprevdemandaweb()
+    populatepreveolweb()
+    populateenergiagestionadaweb()
+    populatetecnologiascblweb()
+    populatetecnologiaspbfweb()
+    
 
 def esiosreeurl(fecha=None, xmlid=None):
     URL_ESIOS_REE = "http://www.esios.ree.es/Solicitar/"
@@ -235,7 +242,7 @@ def populateprevdemandaweb(initfecha=None,endfecha=None):
         endfecha = endfecha.replace(hour = 0, minute = 0,second = 0,microsecond = 0)
         todaydatetime = todaydatetime.replace(hour = 0, minute = 0,second = 0,microsecond = 0)
         if initfecha > todaydatetime:
-            raise ValueError("Collection is probably up to date -->%s -->%s"%(initfecha,endfecha))
+            raise NoUpdateNeeded("Collection is probably up to date -->%s -->%s"%(initfecha,endfecha))
         if initfecha > endfecha:
             raise ValueError("invalid dates given -->%s is bigger then -->%s"%(initfecha,endfecha))
         if endfecha > todaydatetime:
@@ -260,6 +267,8 @@ which is the last available data in esios.ree.es "%(initfecha,todaydatetime))
             prevdemandadb.save()
             iterfecha = iterfecha + datetime.timedelta(days=1)
             del prevdemandadb, prevdemandaweb, prevdemandaindb
+    except NoUpdateNeeded:
+        pass
     except:
         raise
 
@@ -293,7 +302,7 @@ def populatepreveolweb(initfecha=None,endfecha=None):
         endfecha = endfecha.replace(hour = 0, minute = 0,second = 0,microsecond = 0)
         todaydatetime = todaydatetime.replace(hour = 0, minute = 0,second = 0,microsecond = 0)
         if initfecha > todaydatetime:
-            raise ValueError("Collection is probably up to date -->%s -->%s"%(initfecha,endfecha))
+            raise NoUpdateNeeded("Collection is probably up to date -->%s -->%s"%(initfecha,endfecha))
         if initfecha > endfecha:
             raise ValueError("invalid dates given -->%s is bigger then -->%s"%(initfecha,endfecha))
         if endfecha > todaydatetime:
@@ -317,6 +326,8 @@ which is the last available data in esios.ree.es "%(initfecha,todaydatetime))
             preveoldb.save()
             iterfecha = iterfecha + datetime.timedelta(days=1)
             del preveoldb, preveolweb, preveolindb
+    except NoUpdateNeeded:
+        pass
     except:
         raise
 
@@ -354,7 +365,7 @@ def populateenergiagestionadaweb(initfecha=None,endfecha=None):
         endfecha = endfecha.replace(hour = 0, minute = 0,second = 0,microsecond = 0)
         todaydatetime = todaydatetime.replace(hour = 0, minute = 0,second = 0,microsecond = 0)
         if initfecha > todaydatetime:
-            raise ValueError("Collection is probably up to date -->%s -->%s"%(initfecha,endfecha))
+            raise NoUpdateNeeded("Collection is probably up to date -->%s -->%s"%(initfecha,endfecha))
         if initfecha > endfecha:
             raise ValueError("invalid dates given -->%s is bigger then -->%s"%(initfecha,endfecha))
         if endfecha > todaydatetime:
@@ -379,10 +390,12 @@ which is the last available data in esios.ree.es "%(initfecha,todaydatetime))
             energiagestionadadb.save()
             iterfecha = iterfecha + datetime.timedelta(days=1)
             del energiagestionadadb, energiagestionadaweb, energiagestionadaindb
+    except NoUpdateNeeded:
+        pass
     except:
         raise
 
-def populatetecnologiaspbfweb(initfecha=datetime.datetime(2012,1,1),endfecha=datetime.datetime.now()+datetime.timedelta(days=1)):
+def populatetecnologiaspbfweb(initfecha=datetime.datetime(2012,1,1),endfecha=None):
     """
     This will populate data into mongo collection as delivered by omie web
 
@@ -416,7 +429,7 @@ def populatetecnologiaspbfweb(initfecha=datetime.datetime(2012,1,1),endfecha=dat
         endfecha = endfecha.replace(hour = 0, minute = 0,second = 0,microsecond = 0)
         todaydatetime = todaydatetime.replace(hour = 0, minute = 0,second = 0,microsecond = 0)
         if initfecha > todaydatetime:
-            raise ValueError("Collection is probably up to date -->%s -->%s"%(initfecha,endfecha))
+            raise NoUpdateNeeded("Collection is probably up to date -->%s -->%s"%(initfecha,endfecha))
         if initfecha > endfecha:
             raise ValueError("invalid dates given -->%s is bigger then -->%s"%(initfecha,endfecha))
         if endfecha > todaydatetime:
@@ -445,10 +458,12 @@ which is the last available data in esios.ree.es "%(initfecha,todaydatetime))
             tecnologiaspbfdb.save()
             iterfecha = iterfecha + datetime.timedelta(days=1)
             del tecnologiaspbfdb, tecnologiaspbfweb, tecnologiaspbfindb
+    except NoUpdateNeeded:
+        pass
     except:
         raise
 
-def populatetecnologiascblweb(initfecha=datetime.datetime(2012,1,1),endfecha=datetime.datetime.now()+datetime.timedelta(days=1)):
+def populatetecnologiascblweb(initfecha=datetime.datetime(2012,1,1),endfecha=None):
     """
     This will populate data into mongo collection as delivered by omie web
 
@@ -458,7 +473,6 @@ def populatetecnologiascblweb(initfecha=datetime.datetime(2012,1,1),endfecha=dat
         if is only updateing then:
 
     """
-    # by default initfecha = datetime.datetime(2012,1,1)
     def _check_args(initfecha,endfecha):
         """
         Function arguments validator
@@ -482,7 +496,7 @@ def populatetecnologiascblweb(initfecha=datetime.datetime(2012,1,1),endfecha=dat
         endfecha = endfecha.replace(hour = 0, minute = 0,second = 0,microsecond = 0)
         todaydatetime = todaydatetime.replace(hour = 0, minute = 0,second = 0,microsecond = 0)
         if initfecha > todaydatetime:
-            raise ValueError("Collection is probably up to date -->%s -->%s"%(initfecha,endfecha))
+            raise NoUpdateNeeded("Collection is probably up to date -->%s -->%s"%(initfecha,endfecha))
         if initfecha > endfecha:
             raise ValueError("invalid dates given -->%s is bigger then -->%s"%(initfecha,endfecha))
         if endfecha > todaydatetime:
@@ -511,6 +525,8 @@ which is the last available data in esios.ree.es "%(initfecha,todaydatetime))
             tecnologiascbldb.save()
             iterfecha = iterfecha + datetime.timedelta(days=1)
             del tecnologiascbldb, tecnologiascblweb, tecnologiascblindb
+    except NoUpdateNeeded:
+        pass
     except:
         raise
 
@@ -546,7 +562,7 @@ def populatepreciosweb(initfecha=None,endfecha=None):
         endfecha = endfecha.replace(hour = 0, minute = 0,second = 0,microsecond = 0)
         todaydatetime = todaydatetime.replace(hour = 0, minute = 0,second = 0,microsecond = 0)
         if initfecha > todaydatetime:
-            raise ValueError("Collection is probably up to date -->%s -->%s"%(initfecha,endfecha))
+            raise NoUpdateNeeded("Collection is probably up to date -->%s -->%s"%(initfecha,endfecha))
         if initfecha > endfecha:
             raise ValueError("invalid dates given -->%s is bigger then -->%s"%(initfecha,endfecha))
         if endfecha > todaydatetime:
@@ -569,6 +585,8 @@ which is the last available data in esios.ree.es "%(initfecha,todaydatetime))
             preciosdb.save()
             iterfecha = iterfecha + datetime.timedelta(days=1)
             del preciosdb, preciosweb, preciosindb
+    except NoUpdateNeeded:
+        pass
     except:
         raise
 
@@ -627,6 +645,7 @@ def populatestudydataes(initfecha=None,endfecha=None):
                 studydata.PrevDemanda = prevdemandaindb[h]
                 studydata.PrevEol = preveolindb[h]
                 studydata.NUCLEAR = tecnologiaspbfindb['NUCLEAR']['valores'][h] - tecnologiascblindb['NUCLEAR']['valores'][h]
+                
                 studydata.save()
     except:
         raise

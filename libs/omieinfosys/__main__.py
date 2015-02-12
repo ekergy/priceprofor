@@ -9,6 +9,8 @@ Usage:
   omieinfosys (-h | --help)
   omieinfosys status
   omieinfosys updatedb
+  omieinfosys reportday --day "2015-01-01"
+  omieinfosys reportdaytech --day "2015-01-01"
   omieinfosys aggregations <type>
 
 Arguments:
@@ -17,6 +19,8 @@ Arguments:
             updatedb    Update data from the the omir ewb site into database.
                         Needs internet connection.
             updatedb
+            reportday   Gives a summary of the given day. if no day is given the last day available
+                        is given.
             volumenes   Give the current Volumns of current data in database
                         in MWh and EURs.
 
@@ -42,10 +46,12 @@ Options:
   --agg VALUE           Gives Aggregations on Study Data Collection:
                             Possible VALUEs are:
                             volumenes     volumenes de EUR y MWh por año
+  --day                 Input for report day operation
 
 """
 from docopt import docopt
 from pprint import pprint
+import sys
 
 if __name__ == '__main__':
     args = docopt(__doc__, version='Calculator with docopt')
@@ -53,6 +59,7 @@ if __name__ == '__main__':
         from . import status
         from . import updatedb
         from omieMercadoDiarioAggregations import volumenesanhoStudyDataMIBEL
+        from omieMercadoDiarioReports import ReportDay, ReportDayTecnologies
     except:
         print "Note: usage must be preceded by 'python -m' Example:\n\
               python -m omieinfosys status"
@@ -60,10 +67,26 @@ if __name__ == '__main__':
         operation = args["<operation>"]
         optype = args["<type>"]
         if operation:
+            if operation == "reportday":
+                if not args["--day"]:
+                    pprint(dict(ReportDay().items()),indent=0)
+                    sys.exit()
+                else:
+                    #parse datetime and complete report
+                    pprint(ReportDay())
+                    sys.exit()
+            if operation == "reportdaytech":
+                if not args["--day"]:
+                    pprint(dict(ReportDayTecnologies().items()),indent=0)
+                    sys.exit()
+                else:
+                    #parse datetime and complete report
+                    pprint(ReportDay())
+                    sys.exit()
             if optype is None:
                 if operation == "status":
                     pprint(status())
-                    exit
+                    sys.exit()
                 elif operation == "updatedb":
                     try:
                         updatedb()
@@ -71,7 +94,7 @@ if __name__ == '__main__':
                         raise
                     else:
                         print "Done"
-                    exit
+                    sys.exit()
             else:
                 print("-"*80)
                 print("ERROR:: Invalid <operation> <type> combination. Check help below:")
