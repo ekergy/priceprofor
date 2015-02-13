@@ -38,7 +38,7 @@ finally:
 
 CONN_URI=None
 
-from flask import Flask, url_for, redirect
+#from flask import Flask, url_for, redirect
 
 @route("/")
 # @app.route("/index")
@@ -52,7 +52,7 @@ def roothomeindex():
     Default Project presentation page.
     """
     # print url_for('static', filename="index.html")
-    return redirect(url_for('static', filename="index.html"))
+    return redirect(url_for('static', filename="priceprofor/static/index.html"))
 
-myapplication = default_app(static_folder='priceprofor/static', static_url_path='')
+myapplication = default_app()
 
