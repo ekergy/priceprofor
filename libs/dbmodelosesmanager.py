@@ -37,8 +37,10 @@ class DBModelosES(object):
             self.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
             self.connectiondetails['coll_name'] = 'modelosHWTES'
         elif tipo == 'NN':
-            self.connectiondetails['host'] = None
+            self.connectiondetails['host'] = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
             self.connectiondetails['coll_name'] = 'modelosARNN'
+            # self.connectiondetails['host'] = None
+            # self.connectiondetails['coll_name'] = 'modelosARNN'
         self.setCollection()
 
     def getCollection(self):
