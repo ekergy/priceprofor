@@ -10,11 +10,11 @@ from dbpreciosesmanager import preciosDiarios, tecnologiasDiarias
 from datetime import datetime, timedelta
 from copy import copy
 
-@route('/')
-def home():
-    '''
-    '''
-    return template('home.html')
+# @route('/')
+# def home():
+#     '''
+#     '''
+#     return "Página en actualización. Dentro de momentos estára disponible!"
 
 @route('/uikitTemplate.html')
 def home2():

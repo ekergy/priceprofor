@@ -17,7 +17,7 @@ from controllers import sme_mde_viz
 from controllers import priceprofor_RESTful_API
 from controllers import priceprofor_precioshorarios
 
-from bottle import TEMPLATE_PATH
+from bottle import TEMPLATE_PATH, static_file
 # TEMPLATE_PATH.append(os.path.join(os.environ['OPENSHIFT_HOMEDIR'],'runtime/repo/wsgi/views/'))
 
 # Get APP root in system
@@ -38,4 +38,27 @@ finally:
 
 CONN_URI=None
 
+#from flask import Flask, url_for, redirect
+
+@route("/")
+# @app.route("/index")
+# @app.route("/index/")
+# @app.route("/index.html")
+# @app.route("/home")
+# @app.route("/home/")
+# @app.route("/home.html")
+def roothomeindex():
+    """
+    Default Project presentation page.
+    """
+    # print url_for('static', filename="index.html")
+    return static_file('index.html', root=ospath.join(root_app,'wsgi','static', 'homefolder'))
+
+@route('/homefolder/<path:path>')
+def callback(path):
+    return static_file(path, root=ospath.join(root_app,'wsgi','static', 'homefolder'))
+
+
+
 myapplication = default_app()
+
