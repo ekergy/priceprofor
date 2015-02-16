@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Highcharts Example</title>
+
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <style type="text/css">
+${demo.css}
+        </style>
+        <script type="text/javascript">
+$(function () {
+    $('#container').highcharts({
+        chart: {
+            zoomType: 'xy'
+        },
+        title: {
+            text: 'Resultados del Mercado Diario de Electricidad España:'
+        },
+        subtitle: {
+            text: 'Fuente: OMIE'
+        },
+        xAxis: [{
+            categories: ['1', '2', '3', '4', '5', '6',
+                '7', '8', '9', '10', '11', '12',
+                '13', '14', '15', '16', '17', '18',
+                '19', '20', '21', '22', '23', '24']
+        }],
+        yAxis: [{ // Primary yAxis
+            labels: {
+                format: '{value} MWh',
+                style: {
+                    color: Highcharts.getOptions().colors[1]
+                }
+            },
+            title: {
+                text: 'Volumen del Mercado',
+                style: {
+                    color: Highcharts.getOptions().colors[1]
+                }
+            }
+        }, { // Secondary yAxis
+            title: {
+                text: 'Precio del MWh',
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
+            },
+            labels: {
+                format: '{value} €/MWh',
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
+            },
+            opposite: true
+        }],
+        tooltip: {
+            shared: true
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'left',
+            x: 120,
+            verticalAlign: 'top',
+            y: 100,
+            floating: true,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+        },
+        series: [{
+            name: 'Volumen',
+            type: 'column',
+            yAxis: 1,
+            data: {{energia|safe}},
+            tooltip: {
+                valueSuffix: ' €/MWh'
+            }
+
+        }, {
+            name: 'Precio',
+            type: 'spline',
+            data: {{precio|safe}},
+            tooltip: {
+                valueSuffix: ' MWh'
+            }
+        }]
+    });
+});
+        </script>
+    </head>
+    <body>
+<script src="/js/lib/highcharts.js"></script>
+<script src="/js/lib/exporting.js"></script>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<div id="sumario" style="min-width: 310px; height: 400px; margin: 0 auto">
+    {{sumario|safe}}
+</div>
+
+
+    </body>
+</html>

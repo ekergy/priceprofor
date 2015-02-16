@@ -65,23 +65,7 @@ def roothomeindex():
     # print url_for('static', filename="index.html")
     return redirect(url_for('static', filename="index.html"))
 
-@app.route("/PreciosHorariosUltimoDia")
-def PreciosHorariosUltimoDia():
-    """This controller comes from old priceprofor:
-    The information is 
-    PrecioMedio
-    PreciosPromedio
-    PreciosHorario
-    PrecioMaximo
-    PrecioMinimo
-    """
-    result = {'PrecioMedio':list(),
-              'PreciosPromedio':list(),
-              'PreciosHorario':list(),
-              'PrecioMaximo':list(),
-              'PrecioMinimo':list()}
 
-    return dumps(result)
     
 
 

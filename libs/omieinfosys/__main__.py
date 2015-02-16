@@ -12,6 +12,7 @@ Usage:
   omieinfosys reportday --day "2015-01-01"
   omieinfosys reportdaytech --day "2015-01-01"
   omieinfosys aggregations <type>
+  omieinfosys datafiles
 
 Arguments:
   operation:            Operation that you like to do. It can be:
@@ -23,6 +24,7 @@ Arguments:
                         is given.
             volumenes   Give the current Volumns of current data in database
                         in MWh and EURs.
+            datafiles   this operation generates data 
 
   type:                 The operation type. Only valid for aggregations.
                         Types can be:
