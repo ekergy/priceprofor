@@ -2,10 +2,17 @@
 """Running the application on a local machine:
 
 just type:
-    $ python wsgi/priceprofor.py
+    $ python local_run.py
 
 Remmenber to have the mongodb up and running:
 Also (it could be a on the same server or in a different one:)
+
+Test the server:
+
+curl http://localhost:5000/omieinfosys/status
+curl -X POST -H "Content-Type: application/json" -d '{"day":"2014-1-1","market":"ES"}' http://localhost:5000/omieinfosys/ReportDay
+curl -X POST -H "Content-Type: application/json" -d '{"day":"2014-01-01","market":"ES"}' http://localhost:5000/omieinfosys/ReportDay
+
 
 """
 # set up sys path for local run development
