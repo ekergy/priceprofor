@@ -60,7 +60,54 @@ class PreciosWeb(Document):
                 'numofrecord':numofrecord,}
     
     
+class EnergiaGestionadaWeb(Document):
+    """
+    Manages EnergiaGestionadaWeb as delivered by EnergiaGestionadaParser Collection/Table
 
+    > Note to developers and mongo users:
+        Check last document available:
+        Check last document available:
+
+    """
+    fecha = DateTimeField(unique=True)
+    EnergiaES = DictField()
+    EnergiaPT = DictField()
+    EnergiaMI = DictField()
+
+    @queryset_manager
+    def lastdateindb(doc_cls, queryset):
+        """
+        """
+        result = queryset.order_by('-fecha')[0].fecha
+        return result
+
+    @queryset_manager
+    def numofrecords(doc_cls, queryset):
+        """
+        """
+        result = queryset.count()
+        return result
+
+    @queryset_manager
+    def status(doc_cls, queryset):
+        """
+        Gives Collection status:
+            * Start Date record startrecdate
+            * End Date record
+            * Num of record
+        """
+
+        numofrecord = queryset.count()
+        if numofrecord == 0:
+            startrecdate = None
+            endrecdate = None
+        else:
+            startrecdate = queryset.order_by('fecha')[0].fecha
+            endrecdate = queryset.order_by('-fecha')[0].fecha
+
+        return {'startrecdate':startrecdate,
+                'endrecdate':endrecdate,
+                'numofrecord':numofrecord,}
     # def __init__(self):
     #     """
     #     """
@@ -232,6 +279,7 @@ class StudyDataMIBEL(Document):
     P_TOTAL_HIDRAULICA = FloatField()
     P_TOTAL_TERMICA = FloatField()
     P_TOTAL_REGIMEN_ESPECIAL = FloatField()
+    P_TOTAL_REGIMEN_ORDINARIO_CON_PRIMA = FloatField()
     P_TOTAL_IMPORTACION = FloatField()
     P_TOTAL_GENERICAS = FloatField()
     P_TOTAL_PRODUCCION_MIBEL = FloatField()

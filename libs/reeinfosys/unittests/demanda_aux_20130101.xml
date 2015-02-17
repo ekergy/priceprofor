@@ -1,0 +1,114 @@
+<Demanda>
+  <IdentificacionMensaje v="demanda_20130101"/>
+  <VersionMensaje v="1"/>
+  <TipoMensaje v="Z01"/>
+  <TipoProceso v="A01"/>
+  <TipoClasificacion v="A02"/>
+  <IdentificacionRemitente v="10XES-REE------E" codificacion="A01"/>
+  <FuncionRemitente v="A04"/>
+  <IdentificacionDestinatario v="CODIGOSUJETO" codificacion="A01"/>
+  <FuncionDestinatario v="A08"/>
+  <FechaHoraMensaje v="2012-12-25T05:54:48Z"/>
+  <Horizonte v="2012-12-31T23:00Z/2013-01-01T23:00Z"/>
+  <SeriesTemporales>
+    <Periodo>
+      <IntervaloTiempo v="2012-12-31T23:00Z/2013-01-01T23:00Z"/>
+      <Intervalo>
+        <Pos v="1"/>
+        <Ctd v="23784"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="2"/>
+        <Ctd v="22366"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="3"/>
+        <Ctd v="20824"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="4"/>
+        <Ctd v="19345"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="5"/>
+        <Ctd v="18326"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="6"/>
+        <Ctd v="18231"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="7"/>
+        <Ctd v="18372"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="8"/>
+        <Ctd v="18739"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="9"/>
+        <Ctd v="18319"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="10"/>
+        <Ctd v="18414"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="11"/>
+        <Ctd v="19267"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="12"/>
+        <Ctd v="20745"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="13"/>
+        <Ctd v="21735"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="14"/>
+        <Ctd v="22613"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="15"/>
+        <Ctd v="22920"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="16"/>
+        <Ctd v="21971"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="17"/>
+        <Ctd v="21409"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="18"/>
+        <Ctd v="22081"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="19"/>
+        <Ctd v="25235"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="20"/>
+        <Ctd v="26616"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="21"/>
+        <Ctd v="28110"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="22"/>
+        <Ctd v="28543"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="23"/>
+        <Ctd v="27490"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="24"/>
+        <Ctd v="25091"/>
+      </Intervalo>
+    </Periodo>
+  </SeriesTemporales>
+</Demanda>

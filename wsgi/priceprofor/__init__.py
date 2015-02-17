@@ -16,8 +16,11 @@ from flask import Flask, url_for, redirect
 # from flask.ext.assets import Environment
 app = Flask(__name__, static_folder='static', static_url_path='')
 # importing blueprints:
-from blueprints.omieinfosys_bp import omieinfosys_bp
-app.register_blueprint(omieinfosys_bp)
+from omieinfosys.omieBlueprintAPI import omieMercadoDiario
+app.register_blueprint(omieMercadoDiario)
+
+# import for old controllers:
+from json import dumps
 
 def has_no_empty_params(rule):
     """
@@ -61,6 +64,9 @@ def roothomeindex():
     """
     # print url_for('static', filename="index.html")
     return redirect(url_for('static', filename="index.html"))
+
+
+    
 
 
 

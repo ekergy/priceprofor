@@ -3,7 +3,7 @@
 # Activate the venv
 . $OPENSHIFT_PYTHON_DIR/virtenv/bin/activate
 
-# install project deps
+# install project deps and project it self!
 cd $OPENSHIFT_REPO_DIR && python setup.py install
 
 # run project:

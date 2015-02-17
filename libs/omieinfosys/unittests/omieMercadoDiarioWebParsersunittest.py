@@ -10,9 +10,9 @@ try:
 except:
     pass
 finally:
-    from omieMercadoDiarioWebParsers import PreciosMercadoDiarioHandler, TecnologiasMercadoDiarioHandler
-    from omieinfosys import omiepreciosurl, omietecnologiasurl
-    from omieinfosys import preciosmercadodiarioparser, tecnologiasmercadodiarioparser
+    from omieMercadoDiarioWebParsers import PreciosMercadoDiarioHandler, TecnologiasMercadoDiarioHandler, EnergiaGestionadaMercadoDiarioHandler
+    from omieinfosys import omiepreciosurl, omietecnologiasurl, omieenergiasurl
+    from omieinfosys import preciosmercadodiarioparser, tecnologiasmercadodiarioparser, energiagestionadamercadodiarioparser
     from urllib2 import urlopen
 
 # Constantes:
@@ -38,10 +38,10 @@ def validafecha(fecha):
     
     '''
     try:
-        if not isinstance(fecha, datetime):
+        if not isinstance(fecha, datetime.datetime):
             raise Exception('El formato fecha no es del tipo correcto.')
         fecha.replace(hour = 11)
-        if datetime.now() < fecha:
+        if datetime.datetime.now() < fecha:
             raise Exception('La fecha selecionada es posterior a hoy. No hay datos disponibles en la web.')
         fecha.replace(hour = 0)
     except:
@@ -85,6 +85,17 @@ class testOMIEWebParsersLocal(unittest.TestCase):
                 webFile.close()
                 localFile.close()
             self.assertTrue(os.path.isfile(url[41:]))
+            # check if all files exists:
+            url = omieenergiasurl(self.fechatest)
+            if not os.path.isfile(url[37:]):
+                # if not it will try to get data from the web
+                webFile = urlopen(url)
+                #self.assertIsInstance(webFile,instance)
+                localFile = open(url[37:], 'w')
+                localFile.write(webFile.read())
+                webFile.close()
+                localFile.close()
+            self.assertTrue(os.path.isfile(url[37:]))
             # check if all files exists:
             url = omietecnologiasurl(self.fechatest)
             if not os.path.isfile(url[39:]):
@@ -417,3 +428,25 @@ class testOMIEWebParsersLocal(unittest.TestCase):
         infile = urlopen(url)
         Tecnologias = TecnologiasMercadoDiarioHandler(infile)
         result = {"ProduccionyDemandaMIBEL":Tecnologias.ProduccionyDemandaMIBEL,"ProduccionyDemandaES":Tecnologias.ProduccionyDemandaES,"ProduccionyDemandaPT":Tecnologias.ProduccionyDemandaPT}
+
+    # @unittest.skip("demonstrating skipping")
+    def test06_EnergiaGestionadaMercadoDiarioHandler(self):
+        """
+        Testing the PrevEolParser class
+        """
+        url = omieenergiasurl(self.fechatest)
+        # print URL
+        infile = open(url[37:], 'r')
+        Energia = EnergiaGestionadaMercadoDiarioHandler(infile)
+        result = {"EnergiaMibel":Energia.energiami,"EnergiaES":Energia.energiaes,"EnergiaPT":Energia.energiapt}
+        # print result
+        self.assertEqual(result,{'EnergiaMibel': {'TOTAL_VENTAS': ['22.301,3', '20.583,9', '21.459,7', '20.420,5', '20.161,6', '20.166,8', '20.027,5', '20.172,5', '21.132,0', '21.696,7', '22.292,2', '23.252,9', '24.018,2', '24.364,9', '24.227,0', '23.807,9', '23.472,4', '23.272,0', '22.200,7', '23.086,3', '24.242,4', '25.225,8', '25.139,3', '23.504,0'], 'TOTAL_COMPRAS': ['22.301,3', '20.583,9', '21.459,7', '20.420,5', '20.161,6', '20.166,8', '20.027,5', '20.172,5', '21.132,0', '21.696,7', '22.292,2', '23.252,9', '24.018,2', '24.364,9', '24.227,0', '23.807,9', '23.472,4', '23.272,0', '22.200,7', '23.086,3', '24.242,4', '25.225,8', '25.139,3', '23.504,0']}, 'EnergiaPT': {'TOTAL_VENTAS': ['5.643,1', '4.586,7', '3.943,0', '3.498,1', '3.533,3', '3.600,2', '3.515,9', '3.509,3', '3.539,4', '3.522,5', '3.514,0', '3.757,9', '3.998,1', '4.064,3', '3.857,2', '3.481,9', '3.590,8', '4.107,5', '5.120,5', '5.400,6', '5.813,4', '6.160,5', '6.087,2', '5.469,6'], 'TOTAL_COMPRAS': ['5.012,7', '4.775,2', '4.526,1', '4.272,4', '4.074,2', '3.900,6', '4.043,8', '4.148,8', '4.081,9', '3.965,1', '4.203,0', '4.568,2', '4.522,0', '4.742,0', '4.528,1', '4.325,8', '4.254,8', '4.352,4', '4.891,6', '5.389,0', '5.485,7', '5.445,4', '5.333,1', '5.138,5']}, 'EnergiaES': {'TOTAL_VENTAS': ['16.658,2', '15.997,2', '17.516,7', '16.922,4', '16.628,3', '16.566,6', '16.511,6', '16.663,2', '17.592,6', '18.174,2', '18.778,2', '19.495,0', '20.020,1', '20.300,6', '20.369,8', '20.326,0', '19.881,6', '19.164,5', '17.080,2', '17.685,7', '18.429,0', '19.065,3', '19.052,1', '18.034,4'], 'TOTAL_COMPRAS': ['17.288,6', '15.808,7', '16.933,6', '16.148,1', '16.087,4', '16.266,2', '15.983,7', '16.023,7', '17.050,1', '17.731,6', '18.089,2', '18.684,7', '19.496,2', '19.622,9', '19.698,9', '19.482,1', '19.217,6', '18.919,6', '17.309,1', '17.697,3', '18.756,7', '19.780,4', '19.806,2', '18.365,5']}})
+
+    # @unittest.skip("demonstrating skipping")
+    def test07_energiamercadodiarioparser(self):
+        """
+        Testing the preveolparser function
+        """
+        result = energiagestionadamercadodiarioparser(self.fechatest)
+        # print result
+        self.assertEqual(result,{'EnergiaMibel': {'TOTAL_VENTAS': ['22.301,3', '20.583,9', '21.459,7', '20.420,5', '20.161,6', '20.166,8', '20.027,5', '20.172,5', '21.132,0', '21.696,7', '22.292,2', '23.252,9', '24.018,2', '24.364,9', '24.227,0', '23.807,9', '23.472,4', '23.272,0', '22.200,7', '23.086,3', '24.242,4', '25.225,8', '25.139,3', '23.504,0'], 'TOTAL_COMPRAS': ['22.301,3', '20.583,9', '21.459,7', '20.420,5', '20.161,6', '20.166,8', '20.027,5', '20.172,5', '21.132,0', '21.696,7', '22.292,2', '23.252,9', '24.018,2', '24.364,9', '24.227,0', '23.807,9', '23.472,4', '23.272,0', '22.200,7', '23.086,3', '24.242,4', '25.225,8', '25.139,3', '23.504,0']}, 'EnergiaPT': {'TOTAL_VENTAS': ['5.643,1', '4.586,7', '3.943,0', '3.498,1', '3.533,3', '3.600,2', '3.515,9', '3.509,3', '3.539,4', '3.522,5', '3.514,0', '3.757,9', '3.998,1', '4.064,3', '3.857,2', '3.481,9', '3.590,8', '4.107,5', '5.120,5', '5.400,6', '5.813,4', '6.160,5', '6.087,2', '5.469,6'], 'TOTAL_COMPRAS': ['5.012,7', '4.775,2', '4.526,1', '4.272,4', '4.074,2', '3.900,6', '4.043,8', '4.148,8', '4.081,9', '3.965,1', '4.203,0', '4.568,2', '4.522,0', '4.742,0', '4.528,1', '4.325,8', '4.254,8', '4.352,4', '4.891,6', '5.389,0', '5.485,7', '5.445,4', '5.333,1', '5.138,5']}, 'EnergiaES': {'TOTAL_VENTAS': ['16.658,2', '15.997,2', '17.516,7', '16.922,4', '16.628,3', '16.566,6', '16.511,6', '16.663,2', '17.592,6', '18.174,2', '18.778,2', '19.495,0', '20.020,1', '20.300,6', '20.369,8', '20.326,0', '19.881,6', '19.164,5', '17.080,2', '17.685,7', '18.429,0', '19.065,3', '19.052,1', '18.034,4'], 'TOTAL_COMPRAS': ['17.288,6', '15.808,7', '16.933,6', '16.148,1', '16.087,4', '16.266,2', '15.983,7', '16.023,7', '17.050,1', '17.731,6', '18.089,2', '18.684,7', '19.496,2', '19.622,9', '19.698,9', '19.482,1', '19.217,6', '18.919,6', '17.309,1', '17.697,3', '18.756,7', '19.780,4', '19.806,2', '18.365,5']}})

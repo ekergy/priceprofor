@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PrevEol DtdRelease="0" DtdVersion="0">
+  <IdentificacionMensaje v="preveol"/>
+  <VersionMensaje v="1"/>
+  <TipoMensaje v="Prevision"/>
+  <IdentificacionRemitente v="REE"/>
+  <IdentificacionDestinatario v="REE"/>
+  <FechaHoraMensaje v="2014-11-29T23:39:32Z"/>
+  <Horizonte v="2014-11-30T23:00Z/2014-12-01T23:00Z"/>
+  <SeriesTemporales>
+    <IdentificacionSeriesTemporales v="STP0"/>
+    <UnidadMedida v="MWH"/>
+    <Periodo>
+      <IntervaloTiempo v="2014-11-30T23:00Z/2014-12-01T23:00Z"/>
+      <Resolucion v="PT60M"/>
+      <Intervalo>
+        <Pos v="1"/>
+        <Ctd v="12118"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="2"/>
+        <Ctd v="11452"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="3"/>
+        <Ctd v="10731"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="4"/>
+        <Ctd v="10273"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="5"/>
+        <Ctd v="9807"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="6"/>
+        <Ctd v="9502"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="7"/>
+        <Ctd v="9637"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="8"/>
+        <Ctd v="10004"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="9"/>
+        <Ctd v="9776"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="10"/>
+        <Ctd v="9911"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="11"/>
+        <Ctd v="9841"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="12"/>
+        <Ctd v="10107"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="13"/>
+        <Ctd v="11013"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="14"/>
+        <Ctd v="11372"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="15"/>
+        <Ctd v="11675"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="16"/>
+        <Ctd v="12653"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="17"/>
+        <Ctd v="12908"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="18"/>
+        <Ctd v="13009"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="19"/>
+        <Ctd v="12937"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="20"/>
+        <Ctd v="12769"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="21"/>
+        <Ctd v="12843"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="22"/>
+        <Ctd v="12390"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="23"/>
+        <Ctd v="12380"/>
+      </Intervalo>
+      <Intervalo>
+        <Pos v="24"/>
+        <Ctd v="12247"/>
+      </Intervalo>
+    </Periodo>
+  </SeriesTemporales>
+</PrevEol>
