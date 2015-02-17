@@ -24,7 +24,7 @@ Arguments:
                         is given.
             volumenes   Give the current Volumns of current data in database
                         in MWh and EURs.
-            datafiles   this operation generates data 
+            datafiles   this operation generates data files for each market and each year. 
 
   type:                 The operation type. Only valid for aggregations.
                         Types can be:
@@ -62,6 +62,7 @@ if __name__ == '__main__':
         from . import updatedb
         from omieMercadoDiarioAggregations import volumenesanhoStudyDataMIBEL
         from omieMercadoDiarioReports import ReportDay, ReportDayTecnologies
+        from omieDataFilesGenerators import generateAllOMIEwebdatafiles
     except:
         print "Note: usage must be preceded by 'python -m' Example:\n\
               python -m omieinfosys status"
@@ -69,6 +70,8 @@ if __name__ == '__main__':
         operation = args["<operation>"]
         optype = args["<type>"]
         if operation:
+            if operation == "datafiles":    
+                generateAllOMIEwebdatafiles()
             if operation == "reportday":
                 if not args["--day"]:
                     pprint(dict(ReportDay().items()),indent=0)

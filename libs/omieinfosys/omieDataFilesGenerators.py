@@ -53,6 +53,16 @@ def generateOMIEwebdata(fechaini=None,fechafin=None,market='MI',headerstoprocess
             raise Exception("fechaini not valid")
         if market not in ['ES','MI','PT']:
             raise Exception("marketnotvalid not valid")
+            # build the filename as omie_MI_YYYYMMDD_YYYYMMDD.csv
+        filename = 'omie'+'_'+str(market)\
+                     +'_'+fechaini.strftime('%Y-%m-%d')\
+                     +'_'+fechafin.strftime('%Y-%m-%d')\
+                     +'.csv'
+        filepath = os.path.join(path,filename)
+        if os.path.exists(filepath) and not rewritetemp:
+            print "file already generated"
+            print "set rewritetemp to True to generate a new one"
+            raise Exception("File already exists")
         if market == 'ES':
             fieldnames = ['Fecha','Hora','Precio',
                 # 'PRODUCCION_ESPAÑA',
@@ -98,7 +108,7 @@ def generateOMIEwebdata(fechaini=None,fechafin=None,market='MI',headerstoprocess
                 'TOTAL_EXPORTACIONES_(25+26+27+28+29)',
                 'TOTAL_GENERICAS_(30+31)',
                 'TOTAL_DEMANDA',
-                'OTROS_TOTALES_ESPAÑA',
+                # 'OTROS_TOTALES_ESPAÑA',
                 'TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO',
                 'TOTAL_VENTAS_INTERNACIONALES_COMERCIALIZACION_A_MERCADO',
                 'TOTAL_REGIMEN_ORDINARIO_CON_PRIMA',
@@ -211,19 +221,11 @@ def generateOMIEwebdata(fechaini=None,fechafin=None,market='MI',headerstoprocess
         raise
         sys.exit()
 
-    # build the filename as omie_MI_YYYYMMDD_YYYYMMDD.csv
-    filename = 'omie'+'_'+str(market)\
-                     +'_'+fechaini.strftime('%Y-%m-%d')\
-                     +'_'+fechafin.strftime('%Y-%m-%d')\
-                     +'.csv'
+
     # Check if the file exists. if yes return file path.
     # if rewrite==True remove existing file and generate the file again.
     # Get OPENSHIFT_DATA_DIR if it doesn't exists the it is a local run and
     # you can find data at the location ../../data
-
-    
-    filepath = os.path.join(path,filename)
-    print "Fileexists¿?",filepath,os.path.exists(filepath)
 
     numofdays = min(PreciosWeb.objects(fecha__gte=fechaini,fecha__lte=fechafin).count(),
                     TecnologiasWeb.objects(fecha__gte=fechaini,fecha__lte=fechafin).count(),
@@ -248,6 +250,7 @@ def generateOMIEwebdata(fechaini=None,fechafin=None,market='MI',headerstoprocess
             elif market=='PT':
                 writer = csv.DictWriter(f, fieldnames=fieldnames,delimiter=';')
                 writer.writeheader()
+                # writer.writerow(dict((s.encode('utf8'),s.encode('utf8') if s == 'IMPORTACION_DE_ESPAÑA' or type(s) is unicode else s) for s in fieldnames) ) 
                 precios = precios['PreciosPT']
                 energia = energia['EnergiaPT']['TOTAL_VENTAS']
                 tecnologias = tecnologias['ProduccionyDemandaPT']
@@ -269,7 +272,7 @@ def generateOMIEwebdata(fechaini=None,fechafin=None,market='MI',headerstoprocess
                     elif key == 'Ventas':
                         row['Ventas'] = energia[h]
                     else:
-                        row[key]=tecnologias[key][h]
+                        row[key]=tecnologias[key.decode('utf8')][h]
                 writer.writerow(row)
 
             # writer.writerow({'first_name': 'Lovely', 'last_name': 'Spam'})
@@ -280,3 +283,40 @@ def generateOMIEwebdata(fechaini=None,fechafin=None,market='MI',headerstoprocess
 
     return "done"
 
+
+def generateAllOMIEwebdatafiles():
+    """Generates all data file given at ckan repository.
+
+    
+
+    """
+    # year 2011 Market MI
+    generateOMIEwebdata(fechaini=datetime.datetime(2011,1,1),fechafin=datetime.datetime(2011,12,31),market='MI')
+    # year 2011 Market ES
+    generateOMIEwebdata(fechaini=datetime.datetime(2011,1,1),fechafin=datetime.datetime(2011,12,31),market='ES')
+    # year 2011 Market PT
+    generateOMIEwebdata(fechaini=datetime.datetime(2011,1,1),fechafin=datetime.datetime(2011,12,31),market='PT')
+    # year 2012 Market MI
+    generateOMIEwebdata(fechaini=datetime.datetime(2012,1,1),fechafin=datetime.datetime(2012,12,31),market='MI')
+    # year 2012 Market ES
+    generateOMIEwebdata(fechaini=datetime.datetime(2012,1,1),fechafin=datetime.datetime(2012,12,31),market='ES')
+    # year 2012 Market PT
+    generateOMIEwebdata(fechaini=datetime.datetime(2012,1,1),fechafin=datetime.datetime(2012,12,31),market='PT')
+    # year 2013 Market MI
+    generateOMIEwebdata(fechaini=datetime.datetime(2013,1,1),fechafin=datetime.datetime(2013,12,31),market='MI')
+    # year 2013 Market ES
+    generateOMIEwebdata(fechaini=datetime.datetime(2013,1,1),fechafin=datetime.datetime(2013,12,31),market='ES')
+    # year 2013 Market PT
+    generateOMIEwebdata(fechaini=datetime.datetime(2013,1,1),fechafin=datetime.datetime(2013,12,31),market='PT')
+    # year 2014 Market MI
+    generateOMIEwebdata(fechaini=datetime.datetime(2014,1,1),fechafin=datetime.datetime(2014,12,31),market='MI')
+    # year 2014 Market ES
+    generateOMIEwebdata(fechaini=datetime.datetime(2014,1,1),fechafin=datetime.datetime(2014,12,31),market='ES')
+    # year 2014 Market PT
+    generateOMIEwebdata(fechaini=datetime.datetime(2014,1,1),fechafin=datetime.datetime(2014,12,31),market='PT')
+    # year 2015 Market MI
+    generateOMIEwebdata(fechaini=datetime.datetime(2015,1,1),fechafin=datetime.datetime(2015,12,31),market='MI')
+    # year 2015 Market ES
+    generateOMIEwebdata(fechaini=datetime.datetime(2015,1,1),fechafin=datetime.datetime(2015,12,31),market='ES')
+    # year 2015 Market PT
+    generateOMIEwebdata(fechaini=datetime.datetime(2015,1,1),fechafin=datetime.datetime(2015,12,31),market='PT')
