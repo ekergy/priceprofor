@@ -70,4 +70,12 @@ git push all master
 ```
 will update both github origin (openshift online app)
 
+## pulling code discarding local_changes and keep commits!
+untracked files aren't affected
+git fetch --all
+git reset github/master
 
+## pulling code discarding local_changes and commits!
+untracked files aren't affected
+git fetch --all
+git reset --hard github/master
