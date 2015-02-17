@@ -98,7 +98,7 @@ def generateOMIEwebdata(fechaini=None,fechafin=None,market='MI',headerstoprocess
                 'TOTAL_EXPORTACIONES_(25+26+27+28+29)',
                 'TOTAL_GENERICAS_(30+31)',
                 'TOTAL_DEMANDA',
-                'OTROS_TOTALES_ESPAÑA',
+                # 'OTROS_TOTALES_ESPAÑA',
                 'TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO',
                 'TOTAL_VENTAS_INTERNACIONALES_COMERCIALIZACION_A_MERCADO',
                 'TOTAL_REGIMEN_ORDINARIO_CON_PRIMA',
@@ -247,7 +247,8 @@ def generateOMIEwebdata(fechaini=None,fechafin=None,market='MI',headerstoprocess
                 tecnologias = tecnologias['ProduccionyDemandaES']
             elif market=='PT':
                 writer = csv.DictWriter(f, fieldnames=fieldnames,delimiter=';')
-                writer.writeheader()
+                # writer.writeheader()
+                writer.writerow(dict((s.encode('utf8'),s.encode('utf8') if s == 'IMPORTACION_DE_ESPAÑA' or type(s) is unicode else s) for s in fieldnames) ) 
                 precios = precios['PreciosPT']
                 energia = energia['EnergiaPT']['TOTAL_VENTAS']
                 tecnologias = tecnologias['ProduccionyDemandaPT']
