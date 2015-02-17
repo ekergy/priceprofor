@@ -9,11 +9,20 @@ for d3.js without taking away the power that d3.js gives you.
 Project location : https://github.com/areski/python-nvd3
 """
 
+<<<<<<< HEAD
 from .NVD3Chart import NVD3Chart, TemplateMixin
 
 
 class scatterChart(TemplateMixin, NVD3Chart):
 
+=======
+from .NVD3Chart import NVD3Chart
+from jinja2 import DebugUndefined, Environment, FileSystemLoader, Template
+import os
+
+
+class scatterChart(NVD3Chart):
+>>>>>>> b3c763ecf687c7317f4a0af05d07db99af008e81
     """
     A scatter plot or scattergraph is a type of mathematical diagram using Cartesian
     coordinates to display values for two variables for a set of data.
@@ -21,13 +30,22 @@ class scatterChart(TemplateMixin, NVD3Chart):
     determining the position on the horizontal axis and the value of the other variable
     determining the position on the vertical axis.
 
+<<<<<<< HEAD
+=======
+    .. image:: ../_static/screenshot/scatterChart.png
+
+>>>>>>> b3c763ecf687c7317f4a0af05d07db99af008e81
     Python example::
 
         from nvd3 import scatterChart
         chart = scatterChart(name='scatterChart', height=400, width=400)
         xdata = [3, 4, 0, -3, 5, 7]
         ydata = [-1, 2, 3, 3, 15, 2]
+<<<<<<< HEAD
         ydata2 = [1, -2, 4, 7, -5, 3]
+=======
+        ydata = [1, -2, 4, 7, -5, 3]
+>>>>>>> b3c763ecf687c7317f4a0af05d07db99af008e81
 
         kwargs1 = {'shape': 'circle', 'size': '1'}
         kwargs2 = {'shape': 'cross', 'size': '10'}
@@ -36,6 +54,7 @@ class scatterChart(TemplateMixin, NVD3Chart):
         chart.add_serie(name="series 1", y=ydata, x=xdata, extra=extra_serie, **kwargs1)
 
         extra_serie = {"tooltip": {"y_start": "", "y_end": " min"}}
+<<<<<<< HEAD
         chart.add_serie(name="series 2", y=ydata2, x=xdata, extra=extra_serie, **kwargs2)
         chart.buildhtml()
 
@@ -121,3 +140,100 @@ class scatterChart(TemplateMixin, NVD3Chart):
         self.set_graph_height(height)
         if width:
             self.set_graph_width(width)
+=======
+        chart.add_serie(name="series 2", y=ydata, x=xdata, extra=extra_serie, **kwargs2)
+        chart.buildhtml()
+
+    Javascript generated::
+
+        data = [{ key: "series 1",
+                  values: [
+                    {
+                      "x": 2,
+                      "y": 10,
+                      "shape": "circle"
+                    },
+                    {
+                      "x": -2,
+                      "y" : 0,
+                      "shape": "circle"
+                    },
+                    {
+                      "x": 5,
+                      "y" : -3,
+                      "shape": "circle"
+                    },
+                  ]
+                },
+                { key: "series 2",
+                  values: [
+                    {
+                      "x": 4,
+                      "y": 10,
+                      "shape": "cross"
+                    },
+                    {
+                      "x": 4,
+                      "y" : 0,
+                      "shape": "cross"
+                    },
+                    {
+                      "x": 3,
+                      "y" : -3,
+                      "shape": "cross"
+                    },
+                  ]
+                }]
+
+        nv.addGraph(function() {
+            var chart = nv.models.scatterChart()
+                .showLabels(true);
+
+            chart.showDistX(true);
+            chart.showDistY(true);
+
+            chart.tooltipContent(function(key, y, e, graph) {
+                var x = String(graph.point.x);
+                var y = String(graph.point.y);
+                if(key == 'serie 1'){
+                    var y =  String(graph.point.y)  + ' calls';
+                }
+                if(key == 'serie 2'){
+                    var y =  String(graph.point.y)  + ' min';
+                }
+                tooltip_str = '<center><b>'+key+'</b></center>' + y + ' at ' + x;
+                return tooltip_str;
+            });
+
+            d3.select("#div_id")
+                .datum(data)
+                .transition()
+                .duration(1200)
+                .call(chart);
+
+            return chart;
+        });
+    """
+
+    CHART_FILENAME = "./scatter.html"
+
+    template_environment = Environment(lstrip_blocks = True, trim_blocks = True)
+    template_environment.loader = FileSystemLoader(os.path.join(os.path.dirname(__file__), 'templates'))
+    template_chart_nvd3 = template_environment.get_template(CHART_FILENAME)
+
+    def __init__(self, **kwargs):
+        NVD3Chart.__init__(self, **kwargs)
+        height = kwargs.get('height', 450)
+        width = kwargs.get('width', None)
+        self.create_x_axis('xAxis', format=kwargs.get('x_axis_format', '.02f'), label=kwargs.get('x_axis_label', None))
+        self.create_y_axis('yAxis', format=kwargs.get('y_axis_format', '.02f'), label=kwargs.get('y_axis_label', None))
+        # must have a specified height, otherwise it superimposes both chars
+        if height:
+            self.set_graph_height(height)
+        if width:
+            self.set_graph_width(width)
+
+    def buildjschart(self):
+        NVD3Chart.buildjschart(self)
+        self.jschart = self.template_chart_nvd3.render(chart = self)
+>>>>>>> b3c763ecf687c7317f4a0af05d07db99af008e81

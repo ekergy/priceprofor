@@ -9,20 +9,36 @@ for d3.js without taking away the power that d3.js gives you.
 Project location : https://github.com/areski/python-nvd3
 """
 
+<<<<<<< HEAD
 from .NVD3Chart import NVD3Chart, TemplateMixin
 
 
 class cumulativeLineChart(TemplateMixin, NVD3Chart):
+=======
+from .NVD3Chart import NVD3Chart
+
+
+class cumulativeLineChart(NVD3Chart):
+>>>>>>> b3c763ecf687c7317f4a0af05d07db99af008e81
     """
     A cumulative line chart is used when you have one important grouping representing
     an ordered set of data and one value to show, summed over time.
 
+<<<<<<< HEAD
+=======
+    .. image:: ../_static/screenshot/cumulativeLineChart.png
+
+>>>>>>> b3c763ecf687c7317f4a0af05d07db99af008e81
     Python example::
 
         from nvd3 import cumulativeLineChart
         chart = cumulativeLineChart(name='cumulativeLineChart', x_is_date=True)
         xdata = [1365026400000000, 1365026500000000, 1365026600000000]
+<<<<<<< HEAD
         ydata = [6, 5, 1]
+=======
+        ydata = [-6, 5, -1]
+>>>>>>> b3c763ecf687c7317f4a0af05d07db99af008e81
         y2data = [36, 55, 11]
 
         extra_serie = {"tooltip": {"y_start": "There are ", "y_end": " calls"}}
@@ -32,6 +48,7 @@ class cumulativeLineChart(TemplateMixin, NVD3Chart):
         chart.add_serie(name="Serie 2", y=y2data, x=xdata, extra=extra_serie)
         chart.buildhtml()
 
+<<<<<<< HEAD
     Javascript generated:
 
     .. raw:: html
@@ -83,6 +100,70 @@ class cumulativeLineChart(TemplateMixin, NVD3Chart):
     def __init__(self, **kwargs):
         super(cumulativeLineChart, self).__init__(**kwargs)
         self.model = 'cumulativeLineChart'
+=======
+    Javascript generated::
+
+        data_lineWithFocusChart = [
+            {
+               "key" : "Serie 1",
+               "values" : [
+                    { "x" : "1365026400000000",
+                      "y" : -6
+                    },
+                    { "x" : "1365026500000000",
+                      "y" : -5
+                    },
+                    { "x" : "1365026600000000",
+                      "y" : -1
+                    },
+                  ],
+            },
+            {
+               "key" : "Serie 2",
+               "values" : [
+                    { "x" : "1365026400000000",
+                      "y" : 34
+                    },
+                    { "x" : "1365026500000000",
+                      "y" : 56
+                    },
+                    { "x" : "1365026600000000",
+                      "y" : 32
+                    },
+                  ],
+            }
+        ]
+
+        nv.addGraph(function() {
+            var chart = nv.models.cumulativeLineChart();
+
+            chart.xAxis
+                .tickFormat(function(d) { return d3.time.format('%d %b %Y')(new Date(d)) });
+            chart.y1Axis
+                .tickFormat(d3.format('.1%'));
+            chart.tooltipContent(function(key, y, e, graph) {
+                var x = d3.time.format('%d %b %Y')(new Date(parseInt(graph.point.x)));
+                var y = String(graph.point.y);
+                if(key == 'Serie 1'){
+                    var y = 'There are ' + String(e)  + ' calls';
+                }
+                if(key == 'Serie 2'){
+                    var y =  String(e)  + ' mins';
+                }
+                tooltip_str = '<center><b>'+key+'</b></center>' + y + ' on ' + x;
+                return tooltip_str;
+            });
+            d3.select('#cumulativeLineChart svg')
+                .datum(data_linePlusBarChart)
+                .transition().duration(500)
+                .attr('height', 350)
+                .call(chart);
+            return chart;
+        });
+    """
+    def __init__(self, **kwargs):
+        NVD3Chart.__init__(self, **kwargs)
+>>>>>>> b3c763ecf687c7317f4a0af05d07db99af008e81
 
         height = kwargs.get('height', 450)
         width = kwargs.get('width', None)
@@ -94,11 +175,21 @@ class cumulativeLineChart(TemplateMixin, NVD3Chart):
                                date=True)
             self.set_custom_tooltip_flag(True)
         else:
+<<<<<<< HEAD
             self.create_x_axis('xAxis', format=kwargs.get(
                 'x_axis_format', '.2f'))
 
         self.create_y_axis('yAxis', format=kwargs.get('y_axis_format', '.1%'))
 
         self.set_graph_height(height)
+=======
+            self.create_x_axis('xAxis', format=kwargs.get('x_axis_format', '.2f'))
+
+        self.create_y_axis('yAxis', format=kwargs.get('y_axis_format', '.1%'))
+
+        # must have a specified height, otherwise it superimposes both chars
+        if height:
+            self.set_graph_height(height)
+>>>>>>> b3c763ecf687c7317f4a0af05d07db99af008e81
         if width:
             self.set_graph_width(width)

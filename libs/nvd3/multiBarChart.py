@@ -9,16 +9,28 @@ for d3.js without taking away the power that d3.js gives you.
 Project location : https://github.com/areski/python-nvd3
 """
 
+<<<<<<< HEAD
 from .NVD3Chart import NVD3Chart, TemplateMixin
 
 
 class multiBarChart(TemplateMixin, NVD3Chart):
+=======
+from .NVD3Chart import NVD3Chart
+
+
+class multiBarChart(NVD3Chart):
+>>>>>>> b3c763ecf687c7317f4a0af05d07db99af008e81
     """
     A multiple bar graph contains comparisons of two or more categories or bars.
     One axis represents a quantity and the other axis identifies a specific feature
     about the categories. Reading a multiple bar graph includes looking at extremes
     (tallest/longest vs. shortest) in each grouping.
 
+<<<<<<< HEAD
+=======
+    .. image:: ../_static/doc_images/multiBarChart.png
+
+>>>>>>> b3c763ecf687c7317f4a0af05d07db99af008e81
     Python example::
 
         from nvd3 import multiBarChart
@@ -31,6 +43,7 @@ class multiBarChart(TemplateMixin, NVD3Chart):
         chart.add_serie(name="Serie 2", y=ydata2, x=xdata)
         chart.buildhtml()
 
+<<<<<<< HEAD
     Javascript generated:
 
     .. raw:: html
@@ -77,6 +90,40 @@ class multiBarChart(TemplateMixin, NVD3Chart):
     def __init__(self, **kwargs):
         super(multiBarChart, self).__init__(**kwargs)
 
+=======
+    Javascript generated::
+
+        nv.addGraph(function() {
+            var chart = nv.models.multiBarChart();
+            chart.yAxis
+                .tickFormat(d3.format(',.2f'));
+            chart.showLegend(true);
+            d3.select('#multiBarChart svg')
+                .datum(data_multiBarChart)
+                .transition().duration(500)
+                .attr('width', 500)
+                .attr('height', 400)
+                .call(chart);
+
+        return chart;
+        });
+        data_multiBarChart=[
+            {"yAxis": "1",
+             "values": [{"x": "one", "y": 6},
+                        {"x": "two", "y": 12},
+                        {"x": "three", "y": 9},
+                        {"x": "four", "y": 16}],
+             "key": "Serie 1"},
+            {"yAxis": "1",
+             "values": [{"x": "one", "y": 8},
+                        {"x": "two", "y": 14},
+                        {"x": "three", "y": 7},
+                        {"x": "four", "y": 11}],
+             "key": "Serie 2"}];
+    """
+    def __init__(self, **kwargs):
+        NVD3Chart.__init__(self, **kwargs)
+>>>>>>> b3c763ecf687c7317f4a0af05d07db99af008e81
         height = kwargs.get('height', 450)
         width = kwargs.get('width', None)
 
@@ -89,7 +136,13 @@ class multiBarChart(TemplateMixin, NVD3Chart):
         else:
             self.create_x_axis('xAxis', format=kwargs.get('x_axis_format', '.2f'))
         self.create_y_axis('yAxis', format=kwargs.get('y_axis_format', '.2f'))
+<<<<<<< HEAD
 
         self.set_graph_height(height)
+=======
+        # must have a specified height, otherwise it superimposes both chars
+        if height:
+            self.set_graph_height(height)
+>>>>>>> b3c763ecf687c7317f4a0af05d07db99af008e81
         if width:
             self.set_graph_width(width)

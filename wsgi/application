@@ -1,4 +1,5 @@
 #!/usr/bin/python
+<<<<<<< HEAD
 import os
 import sys
 
@@ -19,3 +20,42 @@ except IOError:
     pass
 
 from priceprofor import app as application
+=======
+
+import os
+
+virtenv = os.environ['APPDIR'] + '/virtenv/'
+os.environ['PYTHON_EGG_CACHE'] = os.path.join(virtenv, 'lib/python2.6/site-packages')
+virtualenv = os.path.join(virtenv, 'bin/activate_this.py')
+try:
+    execfile(virtualenv, dict(__file__=virtualenv))
+except IOError:
+    pass
+
+# from sme_hogar import application
+# application.CONN_URI = 'mongodb://sme:sme@ds035997.mongolab.com:35997/smehogar'
+# application.CONN_URI = None
+
+# from database import DatabaseUsers
+from priceprofor import myapplication
+from dbpreciosesmanager import DBPreciosES
+from dbmodelosesmanager import DBModelosES
+from omelinfosys.dbstudydatamanager import DBStudyData
+from omelinfosys.dbrawdatamanager import DBRawData
+from utilities import connectiondetails as connectiondetailsutilities
+from estadisticasgenericas import connectiondetails as connectiondetailsestadisticasgenericas
+
+# hostLocalHost = None
+hostOpenShift = 'mongodb://hmarrao:hmarrao@ds031117.mongolab.com:31117/mercadodiario'
+
+''' SERVIDOR '''
+# DatabaseUsers.connectiondetails['host'] = 'mongodb://sme:sme@ds035997.mongolab.com:35997/smehogar'
+DBPreciosES.connectiondetails['host'] = hostOpenShift
+DBModelosES.connectiondetails['host'] = hostOpenShift
+DBStudyData.connectiondetails['host'] = hostOpenShift
+DBRawData.connectiondetails['host'] = hostOpenShift
+connectiondetailsutilities['host'] = hostOpenShift
+connectiondetailsestadisticasgenericas['host'] = hostOpenShift
+
+application = myapplication
+>>>>>>> b3c763ecf687c7317f4a0af05d07db99af008e81
