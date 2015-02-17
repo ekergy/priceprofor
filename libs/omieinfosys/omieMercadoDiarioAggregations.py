@@ -46,6 +46,8 @@ def volumenesanhoStudyDataMIBEL():
     }},
         ])
 
+    return result
+
 def volumenesmesesStudyDataMIBEL(anho):
     """Dado un año Devuelve los volumenes en MWh y en EURs por meses:
 
