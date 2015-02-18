@@ -236,27 +236,22 @@ def generateOMIEwebdata(fechaini=None,fechafin=None,market='MI',headerstoprocess
         # query lastday = 
         days = [fechaini + datetime.timedelta(days=i) for i in range(numofdays)]
         # if you want to handle exceptional day do it here!
+        writer = csv.DictWriter(f, fieldnames=fieldnames,delimiter=';')
+        writer.writeheader()
         for day in days:
             precios = PreciosWeb.objects.get(fecha=day)
             tecnologias = TecnologiasWeb.objects.get(fecha=day)
             energia = EnergiaGestionadaWeb.objects.get(fecha=day)
             # select market:
             if market=='ES':
-                writer = csv.DictWriter(f, fieldnames=fieldnames,delimiter=';')
-                writer.writeheader()
                 precios = precios['PreciosES']
                 energia = energia['EnergiaES']['TOTAL_VENTAS']
                 tecnologias = tecnologias['ProduccionyDemandaES']
             elif market=='PT':
-                writer = csv.DictWriter(f, fieldnames=fieldnames,delimiter=';')
-                writer.writeheader()
-                # writer.writerow(dict((s.encode('utf8'),s.encode('utf8') if s == 'IMPORTACION_DE_ESPAÑA' or type(s) is unicode else s) for s in fieldnames) ) 
                 precios = precios['PreciosPT']
                 energia = energia['EnergiaPT']['TOTAL_VENTAS']
                 tecnologias = tecnologias['ProduccionyDemandaPT']
             else:
-                writer = csv.DictWriter(f, fieldnames=fieldnames,delimiter=';')
-                writer.writeheader()
                 precios = precios['PreciosMI']
                 energia = energia['EnergiaMI']['TOTAL_VENTAS']
                 tecnologias = tecnologias['ProduccionyDemandaMIBEL']
