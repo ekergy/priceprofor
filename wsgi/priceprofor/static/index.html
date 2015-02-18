@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -7,7 +7,7 @@
     <meta name="author" content="">
     <title>Priceprofor | Ekergy</title>
 
-	<!-- core CSS -->
+    <!-- core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/font-awesome.min.css" rel="stylesheet">
     <link href="css/animate.min.css" rel="stylesheet">
@@ -32,7 +32,7 @@
             <a href="#main-slider"><div></div></a>
             <a href="#feature"><div></div></a>
             <a href="#services"><div></div></a>
-            <a href="#featureBis"><div></div></a>
+            <a href="#development"><div></div></a>
             <a href="#footer"><div></div></a>
         </nav>
         <!--<div class="top-bar">
@@ -99,53 +99,66 @@
 
     <section id="main-slider" class="no-margin sec1">
         <div class="carousel slide">
-            <!--<ol class="carousel-indicators">
+            
+            <ol class="carousel-indicators">
                 <li data-target="#main-slider" data-slide-to="0" class="active"></li>
                 <li data-target="#main-slider" data-slide-to="1"></li>
-                <li data-target="#main-slider" data-slide-to="2"></li>
-            </ol>-->
+             <!--   <li data-target="#main-slider" data-slide-to="2"></li> -->
+            </ol>
+            
             <div class="carousel-inner">
 
-                <div class="item active" style="background-image: url(images/header2.jpg)">
+                <div class="item active" style="background-image: url(images/header1.jpg)">
                     <div class="container">
-                        <div class="row slide-margin">
-                            <div class="col-sm-6">
-                                <div class="carousel-content">
-                                    <h1 class="animation animated-item-1">Priceprofor Zero Alpha</h1>
-                                    <h2 class="animation animated-item-2">Proyecto para la observación, análisis y explotación de datos del Mercado Eléctrico de España.</h2>
+                         <div class="row slide-margin">                 
+                        
+                          <!--  <div class="col-sm-6 animation animated-item-4">  -->
+                          <div >  
+                                <div class="carousel-content" >
+                                    <h1 class="animation animated-item-1" >PriceProfor Engine</h1>
+                                    <h2 class="animation animated-item-3" >Iniciativa open para el modelado, el análisis y la explotación de datos de precios del Mercado mayorista eléctrico Español.</h2>                                 
+                                    <a class="btn-slide animation animated-item-2" align="center" href="#development">Contribuye</a> 
                                 </div>
                             </div>
 
-                            <!--<div class="col-sm-6 hidden-xs animation animated-item-4">
+                           
+                           <!--
+                           <div class="col-sm-6 hidden-xs animation animated-item-4">
                                 <div class="slider-img">
                                     <img src="images/slider/img1.png" class="img-responsive">
                                 </div>
-                            </div>-->
+                            </div>  
+                            -->
 
                         </div>
                     </div>
-                </div><!--/.item
+                </div>
+                
 
-                <div class="item" style="background-image: url(images/slider/bg2.jpg)">
+                <div class="item" style="background-image: url(images/slider/bg1.jpg)">
                     <div class="container">
                         <div class="row slide-margin">
-                            <div class="col-sm-6">
+                            <!-- 
+                            <div class="col-sm-6"> 
+                            -->
                                 <div class="carousel-content">
-                                    <h1 class="animation animated-item-1">Lorem ipsum dolor sit amet consectetur adipisicing elit</h1>
-                                    <h2 class="animation animated-item-2">Accusantium doloremque laudantium totam rem aperiam, eaque ipsa...</h2>
-                                    <a class="btn-slide animation animated-item-3" href="#">Read More</a>
+                                    <h1 class="animation animated-item-1">PriceProfor OpenData </h1>
+                                     <h2 class="animation animated-item-2" >Energy Prices Open Data & Models.</h2>                                  
+                                   <a class="btn-slide animation animated-item-3" align="left" href="#services">Descarga los datos</a> 
                                 </div>
-                            </div>
-
+                            <!-- </div> --> 
+<!--
                             <div class="col-sm-6 hidden-xs animation animated-item-4">
                                 <div class="slider-img">
                                     <img src="images/slider/img2.png" class="img-responsive">
                                 </div>
                             </div>
+-->
 
                         </div>
                     </div>
-                </div><!--/.item
+                </div>
+                <!--/.item
 
                 <div class="item" style="background-image: url(images/slider/bg3.jpg)">
                     <div class="container">
@@ -178,7 +191,7 @@
     <section id="feature" class="sec2" >
         <div class="container">
            <div class="center wow fadeInDown">
-                <h2>Herramientas desarrolladas</h2>
+                <h2>Características: OpenData </h2>
                 <!-- <p class="lead">Teniendo en cuenta las diferentes fuentes de información relativas a Mercado Electrico de Electricidad y la generación Electrica<br> et dolore magna aliqua. Ut enim ad minim veniam</p> -->
             </div>
 
@@ -186,9 +199,9 @@
                 <div class="features">
                     <div class="col-md-4 col-sm-6 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="600ms">
                         <div class="feature-wrap">
-                            <i class="fa fa-bullhorn"></i>
+                            <a href="http://github.com/ekergy/priceprofor/" target="_blank"><i class="fa fa-bullhorn"></i></a>
                             <h2>Actualización automática de la información del Mercado Diario de Electricidad</h2>
-                            <h3>Proceso de Automatización para la actualización de la base de datos para estudios y otras operaciones con los datos liberados por el Operador de Mercado OMIE</h3>
+                            <h3>Automatización del proceso de actualización de la base de datos de precios para estudios y otras operaciones con los datos liberados por el Operador de Mercado OMIE</h3>
                         </div>
                     </div><!--/.col-md-4-->
 
@@ -196,15 +209,15 @@
                         <div class="feature-wrap">
                             <i class="fa fa-comments"></i>
                             <h2>Actualización automática de otras fuentes de información de interés para el sector</h2>
-                            <h3>Lorem ipsum dolor sit amet, consectetur adipisicing elit</h3>
+                            <h3>Datos medioambientáles, datos económicos, demanda, etc.  </h3>
                         </div>
                     </div><!--/.col-md-4-->
 
                     <div class="col-md-4 col-sm-6 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="600ms">
                         <div class="feature-wrap">
-                            <a href="https://data.lab.fi-ware.org/dataset/omie-daily-market-hourly-results"><i class="fa fa-cloud-download"></i></a>
-                            <h2>Gestión y descarga de los datos</h2>
-                            <h3>Descárgate los datos del Mercado Diario de Electridad disponibilizados por el Operador de Mercado OMIE</h3>
+                            <a href="http://github.com/ekergy/priceprofor/wiki/omieinfosysdata" target="_blank"><i class="fa fa-cloud-download"></i></a>
+                            <h2>Descarga de datos</h2>
+                            <h3>Descárgate los datos del Mercado Diario de Electridad disponibilizados por el Operador de Mercado OMIE aggregados por años para realizar estudios.</h3>
                         </div>
                     </div><!--/.col-md-4-->
                 </div>
@@ -213,23 +226,23 @@
                 <div class="features">
                     <div class="col-md-4 col-sm-6 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="600ms">
                         <div class="feature-wrap">
-                            <i class="fa fa-leaf"></i>
+                            <a href="http://github.com/ekergy/priceprofor/"  target="_blank"><i class="fa fa-leaf"></i></a>
                             <h2>Explotación visual de los datos</h2>
-                            <h3>Lorem ipsum dolor sit amet, consectetur adipisicing elit</h3>
+                            <h3>Librerías para la consulta y análisis de los datos y modelos</h3>
                         </div>
                     </div><!--/.col-md-4-->
 
                     <div class="col-md-4 col-sm-6 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="600ms">
                         <div class="feature-wrap">
-                            <i class="fa fa-cogs"></i>
+                            <a href="http://github.com/ekergy/priceprofor/" target="_blank"><i class="fa fa-cogs"></i></a>
                             <h2>Automatización de informes y de Predicciones y Previsiones del Precio de la Electricidad</h2>
-                            <h3>Lorem ipsum dolor sit amet, consectetur adipisicing elit</h3>
+                            <h3>Procesos de generación de informes de información a demanda.</h3>
                         </div>
                     </div><!--/.col-md-4-->
 
                     <div class="col-md-4 col-sm-6 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="600ms">
                         <div class="feature-wrap">
-                            <i class="fa fa-heart"></i>
+                            <a href="http://github.com/ekergy/priceprofor/wiki/" target="_blank"><i class="fa fa-heart"></i></a>
                             <h2>Componente Didactica</h2>
                             <h3>Aprende con el proyecto de como esta organizado el mercado, como disponibilizar los datos en formato opendata o desarrollo de aplicaciones y mucho más.</h3>
                         </div>
@@ -354,14 +367,14 @@
     </section>/#recent-works-->
 
     <section id="services" class="service-item sec3">
-	   <div class="container">
+       <div class="container">
             <div class="center wow fadeInDown">
-                <h2>Priceproforinfosys</h2>
-                <p class="lead">Plataforma que unifica y centraliza la información para realizar previsionesy predicciones para el Mercado de Electricidad. En ella se recoje toda la información de los siguientes sistemas.</p>
-                <a class="btn btn-default" href="#" data-filter="*">Accesso a la plataforma</a>
+                <h2>Priceprofor Infosys</h2>
+                <p class="lead">Plataforma que unifica y centraliza la información para realizar previsiones y predicciones para el Mercado de Electricidad. En ella se recoje toda la información de los siguientes sistemas:.</p>
+                <a class="btn btn-default" href="http://github.com/ekergy/priceprofor"  target="_blank" data-filter="*">Accesso a la plataforma</a>
             </div>
             <div class="center wow fadeInDown subtitulo">
-                <h3>La información es obtenida de..</h3>
+                <h3>La información es obtenida de:</h3>
             </div>
             <div class="row row-same-height">
                 <div class="col-sm-6 col-md-6">
@@ -370,10 +383,10 @@
                             <img class="img-responsive" src="images/services/services1.png">
                         </div>
                         <div class="media-body">
-                            <h3 class="media-heading">Omelinfosys</h3>
-                            <p>Información disponibilizada por el Operador de Mercado. Procesamos la información en energía producida por tecnologías y precio del mercado diario, que además fija los valores del precio para los futuros negociados en otros mercados financieros. Tiene un carácter financiero aunque contiene, en su proceso de casacion de precios, restrinciones "a priori" del Operador de Sistema.</p>
-                            <a class="btn btn-success" href="#" data-filter="*">Descarga datos</a>
-                            <a class="btn btn-info" href="#" data-filter="*">Ver más</a>
+                            <h3 class="media-heading">omie infosys</h3>
+                            <p>Información obtenida del Operador de Mercado. Procesamos la información en energía producida por tecnologías y precio del mercado diario, que además fija los valores del precio para los futuros negociados en otros mercados financieros. Tiene un carácter financiero aunque contiene, en su proceso de casacion de precios, restrinciones "a priori" del Operador de Sistema.</p>
+                            <a class="btn btn-success" href="http://github.com/ekergy/priceprofor/wiki/omieinfosysdata"  target="_blank" data-filter="*">Descarga datos</a>
+                            <a class="btn btn-info" href="http://github.com/ekergy/priceprofor/wiki#componentes-del-sistema-de-informaci%C3%B3n-priceprofor"  target="_blank" data-filter="*">Ver más</a>
                         </div>
                     </div>
                 </div>
@@ -383,10 +396,10 @@
                             <img class="img-responsive" src="images/services/services2.png">
                         </div>
                         <div class="media-body">
-                            <h3 class="media-heading">Reeinfosys</h3>
-                            <p>Información disponibilizada por el Operador de Sistema. Tiene un caracter fisico-Ingenieril. La información se disponibiliza de forma agregada, ya que para el operador de sistema es necesario saber todas las unidades que están produciendo energía independientemente del mercado donde esa unidad la ha negociado. Esta página, además, disponibiliza alguna información que podemos considerar de input para el mercado: * Las previsiones de Demanda Horaria * y de la generación eólica.</p>
-                            <a class="btn btn-success" href="#" data-filter="*">Descarga datos</a>
-                            <a class="btn btn-info" href="#" data-filter="*">Ver más</a>
+                            <h3 class="media-heading">ree infosys</h3>
+                            <p>Información obtenida del Operador de Sistema. Tiene un caracter técnico. La información se obtiene de forma agregada, ya que para el operador de sistema es necesario saber todas las unidades que están produciendo energía independientemente del mercado donde esa unidad la ha negociado. Esta página, además, disponibiliza alguna información que podemos considerar de input para el mercado: Las previsiones de Demanda Horaria y de la generación eólica.</p>
+                            <a class="btn btn-success" href="http://github.com/ekergy/priceprofor/wiki/omieinfosysdata" data-filter="*"  target="_blank">Descarga datos</a>
+                            <a class="btn btn-info" href="http://github.com/ekergy/priceprofor/wiki#componentes-del-sistema-de-informaci%C3%B3n-priceprofor" data-filter="*" target="_blank">Ver más</a>
                         </div>
                     </div>
                 </div>
@@ -398,10 +411,10 @@
                             <img class="img-responsive" src="images/services/services3.png">
                         </div>
                         <div class="media-body">
-                            <h3 class="media-heading">Unidadesinfosys</h3>
-                            <p>La Información disponibilizada para las unidades de producción no esta centralizada. Aquí pretendemos gestionar dos tipos de información distinta: Unidades de producción y las ofertas que realizan. Hay que rellenar la información con varias fuentes.</p>
-                            <a class="btn btn-success" href="#" data-filter="*">Descarga datos</a>
-                            <a class="btn btn-info" href="#" data-filter="*">Ver más</a>
+                            <h3 class="media-heading">unidades infosys</h3>
+                            <p>La Información obtenida de las unidades de producción que no esta centralizada. Aquí pretendemos gestionar dos tipos de información distinta: Unidades de producción y las ofertas que realizan. Hay que rellenar la información con varias fuentes.</p>
+                            <a class="btn btn-success" href="http://github.com/ekergy/priceprofor/wiki/Proyectos" data-filter="*" target="_blank">Colabora en el proyecto</a>
+                            <a class="btn btn-info" href="http://github.com/ekergy/priceprofor/wiki#componentes-del-sistema-de-informaci%C3%B3n-priceprofor" data-filter="*" target="_blank">Ver más</a>
                         </div>
                     </div>
                 </div>
@@ -413,8 +426,8 @@
                         <div class="media-body">
                             <h3 class="media-heading">Datos Geográficos y laboralidad del Calendario</h3>
                             <p>Información de Temperatura, reservas Hidráulicas, diferenciación entre día laborable y festivo. Esta parte la consideramos importante pero queremos consolidar los datos de Mercados antes de poder avanzar para esta tarea.</p>
-                            <a class="btn btn-success" href="#" data-filter="*">Descarga datos</a>
-                            <a class="btn btn-info" href="#" data-filter="*">Ver más</a>
+                            <a class="btn btn-success" href="http://github.com/ekergy/priceprofor/wiki/Proyectos" data-filter="*" target="_blank">Colabora en el proyecto</a>
+                            <a class="btn btn-info" href="http://github.com/ekergy/priceprofor/wiki#componentes-del-sistema-de-informaci%C3%B3n-priceprofor" data-filter="*" target="_blank">Ver más</a>
                         </div>
                     </div>
                 </div>
@@ -642,11 +655,11 @@
             </div>/.row
         </div>/.container
     </section>/#content-->
-    <section id="featureBis" class="sec4" >
+    <section id="development" class="sec4" >
         <div class="container">
            <div class="center wow fadeInDown">
                 <h2>Proyectos en desarrollo</h2>
-                <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut <br> et dolore magna aliqua. Ut enim ad minim veniam</p>
+                <p class="lead">Modelos matemáticos y sistemas software del sistema actualmente bajo desarrollo, <br> para contar con las herramientas necesarias para la previsión de precios. </p>
             </div>
 
             <div class="row">
@@ -661,16 +674,17 @@
 
                     <div class="col-md-6 col-sm-6 wow fadeInDown heightsFeatureBisUp" data-wow-duration="1000ms" data-wow-delay="600ms">
                         <div class="feature-wrap">
-                            <i class="fa fa-comments"></i>
-                            <h2>ATWS</h2>
+                            <i class="fa fa-eye"></i>
+                             <a class="btn btn-default" href="https://github.com/ekergy/priceprofor/wiki/Proyectos" target="_blank">Contribuye en el desarrollo</a>
+                            <h2>HTWS</h2>
                             <h3>Se ha estudiado el Método Académico de HWTES Holt-Winters Triple Exponential Smoothing. Se ha aplicado este modelado a los precios del mercado (con una vision de serie Temporal) para obtener un método predictivo. Este modelo está en backtesting.</h3>
                         </div>
                     </div><!--/.col-md-6-->
                 </div>
             </div>
             <div class="center wow fadeInDown">
-                <h2>Próximos proyectos</h2>
-                <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut <br> et dolore magna aliqua. Ut enim ad minim veniam</p>
+                <h2>Próximos desarrollos</h2>
+                <p class="lead">Se desarrollará en función de las necesidades en los proyectos, distintos técnicas de modelado  <br> que nos ayuden a encontrar los modelos más adaptados al problema</p>
             </div>
             <div class="row">
                 <div class="features">
@@ -680,17 +694,17 @@
                             <h2>ARNN (redes neuronales)</h2>
                             <h3 class="heightsFeatureBis">Se ha estudiado el Método Académico de ARNN Auto Regressive Neural Network. Se ha aplicado este modelado a los precios del mercado (con una vision de serie Temporal) para obtener un método predictivo. Este modelo está en backtesting.</h3>
                             <div class="center">
-                                <a class="btn btn-default" href="#" data-filter="*">Contribuye en el desarrollo</a>
+                                <a class="btn btn-default" href="https://github.com/ekergy/priceprofor/wiki/Proyectos" target="_blank">Contribuye en el desarrollo</a>
                             </div>
                         </div>
                     </div><!--/.col-md-4-->
                     <div class="col-md-4 col-sm-6 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="600ms">
                         <div class="feature-wrap">
-                            <i class="fa fa-leaf"></i>
+                            <i class="fa fa-comments"></i>
                             <h2>Modelo de los Vecinos</h2>
                             <h3 class="heightsFeatureBis" style="margin-top: 43px;">Este problema solo esta en formulación pero la idea para este método es construir una métrica que nos permita comparar días similares y construir previsiones de mercado usando combinaciones lineales de dichos días.</h3>
                             <div class="center">
-                                <a class="btn btn-default" href="#" data-filter="*">Contribuye en el desarrollo</a>
+                                <a class="btn btn-default" href="https://github.com/ekergy/priceprofor/wiki/Proyectos" target="_blank">Contribuye en el desarrollo</a>
                             </div>
                         </div>
                     </div><!--/.col-md-4-->
@@ -698,47 +712,61 @@
                     <div class="col-md-4 col-sm-6 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="600ms">
                         <div class="feature-wrap">
                             <i class="fa fa-cogs"></i>
-                            <h2>Modelo de Lógica difusa</h2>
-                            <h3 class="heightsFeatureBis">Este problema solo esta en formulación pero la idea para este método es construir reglas difusas coherentes con el funcionamiento del mercado para definir funciones de base para el modelado y cálculo de previsiones del Mercado Diario.</h3>
+                            <h2>Modelos de Lógica difusa y Algorítmos Genéticos </h2>
+                            <h3 class="heightsFeatureBis">Aún en fase de diseño, la idea para este método es la de construir reglas de <a href="http://es.wikipedia.org/wiki/L%C3%B3gica_difusa" > lógica difusa </a>
+                             coherentes con el funcionamiento del mercado para identificar algoritmos de modelado y cálculo para las previsiones del Mercado Diario.</h3>
                             <div class="center">
-                                <a class="btn btn-default" href="#" data-filter="*">Contribuye en el desarrollo</a>
+                                <a class="btn btn-default" href="https://github.com/ekergy/priceprofor/wiki/Proyectos" target="_blank">Contribuye en el desarrollo</a>
                             </div>
                         </div>
                     </div><!--/.col-md-4-->
                 </div>
             </div>
+             <div class="container">
+            <div class="center wow fadeInDown">
+                <h2>Aplicaciones</h2>
+                <p class="lead">Distintas aplicaciones del sistema de modelado de precios eléctricos: <br> optimización de compra electrica, optimización productiva en función de señales de precios, simulación de ofertas de venta al pool, ...</p>
+            </div>
             <div class="row">
                 <div class="features">
-
                     <div class="col-md-4 col-sm-6 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="600ms">
                         <div class="feature-wrap">
                             <i class="fa fa-heart"></i>
-                            <h2>Algoritmo Genético y optimización</h2>
-                            <h3 class="heightsFeatureBis">Este problema solo está en formulación pero la idea esta relacionada con el modelo de Logica difusa. La evolucion de cada función base de precio para las tecnologías en el Mercado Diario, son distintas para hora. Con esta analise se pretende establecer una métrica que permita entender esta evolución en el Mercado al largo del historico.</h3>
+                            <h2>Optmización Productiva</h2>
+                            <h3 class="heightsFeatureBis">La idea es optmizar la producción en una empresa o industria, en función de las señales de precios del mercado. Esto nos permite organizar los procesos productivos en función de la previsión de precios que influye en el coste de nuestra producción</h3>
                             <div class="center">
-                                <a class="btn btn-default" href="#" data-filter="*">Contribuye en el desarrollo</a>
+                                <a class="btn btn-default" href="https://github.com/ekergy/priceprofor/wiki/Proyectos" target="_blank">Contribuye en el desarrollo</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+            
+                <div class="features">
+                    <div class="col-md-4 col-sm-6 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="600ms">
+                        <div class="feature-wrap">
+                            <i class="fa fa-phone"></i>
+                            <h2>Actuación en el mercado</h2>
+                            <h3 class="heightsFeatureBis">La aplicación principal del sistema de modelos de precios, es la compra en el propio mercado, tanto para la compra directa el mercado, compra conjunta por un conjunto de empresas o incluso para ofertas de venta en el mercado.</h3>
+                            <div class="center">
+                                <a class="btn btn-default" href="https://github.com/ekergy/priceprofor/wiki/Proyectos" target="_blank">Contribuye en el desarrollo</a>
                             </div>
                         </div>
                     </div><!--/.col-md-4-->
                     <div class="col-md-4 col-sm-6 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="600ms">
                         <div class="feature-wrap">
-                            <i class="fa fa-heart"></i>
-                            <h2>Sistema de Analytics para el mercado</h2>
+                            <i class="fa  fa-cogs"></i>
+                            <h2>Analytics: Análisis de los datos del mercado mayorista de electricidad</h2>
                             <h3 class="heightsFeatureBis">Pretendemos adicionar cálculos de Business Analytics (ej: agregado de volumen en dinero ...) para realizar estudios y informes con lo datos del mercado. La idea aqui es definir un modelo para los datos de priceprofor dentro del formato OLAP</h3>
                             <div class="center">
-                                <a class="btn btn-default" href="#" data-filter="*">Contribuye en el desarrollo</a>
+                                <a class="btn btn-default" href="https://github.com/ekergy/priceprofor/wiki/Proyectos" target="_blank">Contribuye en el desarrollo</a>
                             </div>
                         </div>
                     </div><!--/.col-md-4-->
-                    <div class="col-md-4 col-sm-6 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="600ms">
-                        <div class="feature-wrap">
-                            <i class="fa fa-heart"></i>
-                            <h2>Labore et dolore</h2>
-                            <h3 class="heightsFeatureBis">Lorem ipsum dolor sit amet, consectetur adipisicing elit</h3>
-                        </div>
-                    </div><!--/.col-md-4-->
+                   
                 </div><!--/.services-->
             </div><!--/.row-->
+            </div><!--/.container-->
+       
         </div><!--/.container-->
     </section><!--/#feature-->
 
