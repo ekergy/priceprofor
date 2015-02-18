@@ -77,7 +77,7 @@ if __name__ == '__main__':
                     pprint(dict(ReportDay().items()),indent=0)
                     sys.exit()
                 else:
-                    #parse datetime and complete report
+                    #TODO: parse datetime and complete report
                     pprint(ReportDay())
                     sys.exit()
             if operation == "reportdaytech":
@@ -85,7 +85,7 @@ if __name__ == '__main__':
                     pprint(dict(ReportDayTecnologies().items()),indent=0)
                     sys.exit()
                 else:
-                    #parse datetime and complete report
+                    #TODO: parse datetime and complete report
                     pprint(ReportDay())
                     sys.exit()
             if optype is None:
