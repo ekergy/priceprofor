@@ -372,7 +372,6 @@
         // $scope.verver.fechaini = "2014-01-01";
         $scope.generatefile = function(datafile) {
         // setting proper headers to the API:
-        alert(datafile.Fecha);
         datafile = JSON.stringify(datafile)
         .replace('FUEL_GAS_REGIMEN_ORDINARIO_CON_PRIMA','FUEL_+_GAS_REGIMEN_ORDINARIO_(CON_PRIMA)')
         .replace('FUEL_GAS_REGIMEN_ORDINARIO_SIN_PRIMA','FUEL_+_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA)')
@@ -426,7 +425,6 @@
 
         // datafile['FUEL_+_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA)'] = datafile['FUEL_GAS_REGIMEN_ORDINARIO_SIN_PRIMA'];
         // delete datafile['FUEL_GAS_REGIMEN_ORDINARIO_SIN_PRIMA'];
-        alert(JSON.stringify(datafile));
         datafile = JSON.parse(datafile)
         $http.post('/omieinfosys/DataFileGenerator', datafile ,
         {
@@ -434,8 +432,6 @@
         }
             ).
         success(function(data, status, headers, config) {
-            alert("success");
-            alert(JSON.stringify(data));
             var file = new Blob([ data ], {
                 type : 'application/csv'
             });
