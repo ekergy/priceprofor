@@ -57,10 +57,13 @@ def status():
         tecnologiaswebstatus = omieMercadoDiarioDBManager.TecnologiasWeb.status
 
         studydatamibelstatus = omieMercadoDiarioDBManager.StudyDataMIBEL.status
+        
+        energiagestionadawebstatus = omieMercadoDiarioDBManager.EnergiaGestionadaWeb.status
 
         result = {'StudyDataMIBEL':studydatamibelstatus,
-              'PreciosWeb':precioswebstatus,
-              'TecnologiasWeb':tecnologiaswebstatus,}
+                  'PreciosWeb':precioswebstatus,
+                  'TecnologiasWeb':tecnologiaswebstatus,
+                  'EnergiaGestionadaWeb':energiagestionadawebstatus,}
     finally:
         return result
 
@@ -70,8 +73,8 @@ def updatedb():
     try:
         populatepreciosweb()
         populatetecnologiasweb()
-        populatestudydatamibel()
         populateenergiagestionadaweb()
+        populatestudydatamibel()
     except:
         raise
 

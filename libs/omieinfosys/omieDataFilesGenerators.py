@@ -13,6 +13,7 @@ import os
 import sys
 import csv
 import datetime
+from collections import OrderedDict
 try:
     path = os.environ['OPENSHIFT_HOMEDIR']
     # openshift file path!
@@ -25,7 +26,7 @@ except:
     #
     
 
-def generateOMIEwebdata(fechaini=None,fechafin=None,market='MI',headerstoprocess=dict(),rewritetemp=False):
+def generateOMIEwebdata(fechaini=None,fechafin=None,market='MI',headerstoprocess=None,rewritetemp=False,filename=None):
     """Generate OMIE 2011
     market
     result
@@ -34,6 +35,202 @@ def generateOMIEwebdata(fechaini=None,fechafin=None,market='MI',headerstoprocess
     The collections processed here are: PreciosWeb, EnergiaGestionadaWeb and
     TecnologiasWeb.
     """
+    def generatefieldnames(market,headerstoprocess=None):
+        """processheaders
+            return a list of the of the filenames:
+        """
+        OrderedDict([('pear', 1), ('orange', 2), ('banana', 3), ('apple', 4)])
+        marketsfieldnames = {
+        'MI': OrderedDict([
+            ('Fecha',True),
+            ('Anho',False),
+            ('Mes',False),
+            ('Dia',False),
+            ('Semana',False),
+            ('DiaSemana',False),
+            ('Hora',True),
+            ('Precio',True),
+            ('TOTAL_VENTAS',True),
+            #('PRODUCCION_MIBEL',True),
+            ('HIDRAULICA_CONVENCIONAL',True),
+            ('HIDRAULICA_BOMBEO_PURO',True),
+            ('NUCLEAR',True),
+            ('CARBON_NACIONAL',True),
+            ('CARBON_IMPORTACION',True),
+            ('CICLO_COMBINADO',True),
+            ('FUEL_+_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA)',True),
+            ('FUEL_+_GAS_REGIMEN_ORDINARIO_(CON_PRIMA)',True),
+            ('REGIMEN_ESPECIAL_A_MERCADO',True),
+            ('REGIMEN_ESPECIAL_A_DISTRIBUCION',True),
+            ('IMPORTACION_CONTRATO_LARGO_PLAZO',True),
+            ('IMPORTACION_FRANCIA',True),
+            ('NO_UTILIZADO',True),
+            ('IMPORTACION_MARRUECOS',True),
+            ('IMPORTACION_ANDORRA',True),
+            ('UNIDADES_GENERICAS',True),
+            ('UNIDADES_SUBASTAS_DISTRIBUCION_AJUSTE_A_PREVISION_DEMANDA',True),
+            #('DEMANDA_MIBEL',True),
+            ('COMERCIALIZACION_MIBEL',True),
+            ('COMERCIALIZACION_ULTIMO_RECURSO',True),
+            ('CONSUMIDOR_DIRECTO',True),
+            ('CONSUMO_DE_BOMBEO',True),
+            ('EXPORTACION_CONTRATO_A_LARGO_PLAZO',True),
+            ('EXPORTACION_A_FRANCIA',True),
+            ('NO_UTILIZADO',True),
+            ('EXPORTACION_A_MARRUECOS',True),
+            ('EXPORTACION_A_ANDORRA',True),
+            ('UNIDADES_GENERICAS',True),
+            ('UNIDADES_GENERICAS_DE_DISTRIBUCION',True),
+            #('RESUMEN_DE_PRODUCCION_MIBEL',True),
+            ('TOTAL_HIDRAULICA_(901+902)',True),
+            ('TOTAL_TERMICA_(903+904+905+906+907+908)',True),
+            ('TOTAL_REGIMEN_ESPECIAL_(909+910)',True),
+            ('TOTAL_IMPORTACION_(911+912+914+915)',True),
+            ('TOTAL_GENERICAS_(916+917)',True),
+            ('TOTAL_PRODUCCION_MIBEL',True),
+            #('RESUMEN_DE_DEMANDA_MIBEL',True),
+            ('TOTAL_DEMANDA_NACIONAL_CLIENTES_(921+922+923)',True),
+            ('TOTAL_CONSUMO_BOMBEO_(924)',True),
+            ('TOTAL_EXPORTACIONES_(925+926+928+929)',True),
+            ('TOTAL_GENERICAS_(930+931)',True),
+            ('TOTAL_DEMANDA_MIBEL',True),
+            #('OTROS_TOTALES_MIBEL',True),
+            ('TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO',True),
+            ('TOTAL_VENTAS_INTERNACIONALES_COMERCIALIZACION_A_MERCADO',True),
+            ('TOTAL_REGIMEN_ORDINARIO_CON_PRIMA',True),
+            ('TOTAL_POTENCIA_INDISPONIBLE',True),
+            ]),
+        'ES': OrderedDict([
+            ('Fecha',True),
+            ('Anho',False),
+            ('Mes',False),
+            ('Dia',False),
+            ('Semana',False),
+            ('DiaSemana',False),
+            ('Hora',True),
+            ('Precio',True),
+            ('TOTAL_VENTAS',True),
+            # ('PRODUCCION_ESPAÑA',True),
+            ('HIDRAULICA_CONVENCIONAL',True),
+            ('HIDRAULICA_BOMBEO_PURO',True),
+            ('NUCLEAR',True),
+            ('CARBON_NACIONAL',True),
+            ('CARBON_IMPORTACION',True),
+            ('CICLO_COMBINADO',True),
+            ('FUEL_+_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA)',True),
+            ('FUEL_+_GAS_REGIMEN_ORDINARIO_(CON_PRIMA)',True),
+            ('REGIMEN_ESPECIAL_A_MERCADO',True),
+            ('REGIMEN_ESPECIAL_A_DISTRIBUCION',True),
+            ('IMPORTACION_CONTRATO_LARGO_PLAZO',True),
+            ('IMPORTACION_FRANCIA',True),
+            ('IMPORTACION_PORTUGAL',True),
+            ('IMPORTACION_MARRUECOS',True),
+            ('IMPORTACION_ANDORRA',True),
+            ('UNIDADES_GENERICAS',True),
+            ('UNIDADES_AJUSTE_DE_DISTRIBUIDORAS_A_PREVISION_DEMANDA',True),
+            # ('DEMANDA_ESPAÑA',True),
+            ('COMERCIALIZACION_NACIONAL',True),
+            ('COMERCIALIZACION_ULTIMO_RECURSO',True),
+            ('CONSUMIDOR_DIRECTO',True),
+            ('CONSUMO_DE_BOMBEO',True),
+            ('EXPORTACION_CONTRATO_A_LARGO_PLAZO',True),
+            ('EXPORTACION_A_FRANCIA',True),
+            ('EXPORTACION_A_PORTUGAL',True),
+            ('EXPORTACION_A_MARRUECOS',True),
+            ('EXPORTACION_A_ANDORRA',True),
+            ('UNIDADES_GENERICAS',True),
+            ('UNIDADES_GENERICAS_SUBASTAS_DISTRIBUCION',True),
+            # ('RESUMEN_DE_PRODUCCION_ESPAÑA',True),
+            ('TOTAL_HIDRAULICA_(1+2)',True),
+            ('TOTAL_TERMICA_(3+4+5+6+7+8)',True),
+            ('TOTAL_REGIMEN_ESPECIAL_(9+10)',True),
+            ('TOTAL_IMPORTACION_(11+12+13+14+15)',True),
+            ('TOTAL_GENERICAS_(16+17)',True),
+            ('TOTAL_PRODUCCION',True),
+            # ('RESUMEN_DE_DEMANDA_ESPAÑA',True),
+            ('TOTAL_DEMANDA_NACIONAL_CLIENTES_(21+22+23)',True),
+            ('TOTAL_CONSUMO_BOMBEO_(24)',True),
+            ('TOTAL_EXPORTACIONES_(25+26+27+28+29)',True),
+            ('TOTAL_GENERICAS_(30+31)',True),
+            ('TOTAL_DEMANDA',True),
+            # ('OTROS_TOTALES_ESPAÑA',True),
+            ('TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO',True),
+            ('TOTAL_VENTAS_INTERNACIONALES_COMERCIALIZACION_A_MERCADO',True),
+            ('TOTAL_REGIMEN_ORDINARIO_CON_PRIMA',True),
+            ('TOTAL_POTENCIA_INDISPONIBLE',True),
+            ]),
+        'PT': OrderedDict([
+            ('Fecha',True),
+            ('Anho',False),
+            ('Mes',False),
+            ('Dia',False),
+            ('Semana',False),
+            ('DiaSemana',False),
+            ('Hora',True),
+            ('Precio',True),
+            ('TOTAL_VENTAS',True),
+            # ('PRODUCCION_PORTUGAL',True),
+            ('HIDRAULICA_CONVENCIONAL',True),
+            ('HIDRAULICA_BOMBEO_PURO',True),
+            ('NUCLEAR',True),
+            ('CARBON_NACIONAL',True),
+            ('CARBON_IMPORTACION',True),
+            ('CICLO_COMBINADO',True),
+            ('FUEL_+_GAS',True),
+            ('NO_UTILIZADO',True),
+            ('REGIMEN_ESPECIAL_A_MERCADO',True),
+            ('NO_UTILIZADO',True),
+            ('NO_UTILIZADO',True),
+            ('NO_UTILIZADO',True),
+            ('IMPORTACION_DE_ESPAÑA',True),
+            ('NO_UTILIZADO',True),
+            ('NO_UTILIZADO',True),
+            ('UNIDADES_GENERICAS',True),
+            # ('DEMANDA_PORTUGAL',True),
+            ('COMERCIALIZACION_NACIONAL',True),
+            ('COMERCIALIZACION_DE_ULTIMO_RECURSO',True),
+            ('CONSUMIDOR_DIRECTO',True),
+            ('CONSUMO_DE_BOMBEO',True),
+            ('NO_UTILIZADO',True),
+            ('NO_UTILIZADO',True),
+            ('EXPORTACION_A_ESPAÑA',True),
+            ('NO_UTILIZADO',True),
+            ('NO_UTILIZADO',True),
+            ('UNIDADES_GENERICAS',True),
+            # ('RESUMEN_DE_PRODUCCION_PORTUGAL',True),
+            ('TOTAL_HIDRAULICA_(201+202)',True),
+            ('TOTAL_TERMICA_(203+204+205+206+207)',True),
+            ('NO_UTILIZADO',True),
+            ('TOTAL_IMPORTACION_(213)',True),
+            ('TOTAL_GENERICAS_(216)',True),
+            ('TOTAL_PRODUCCION',True),
+            # ('RESUMEN_DE_DEMANDA_PORTUGAL',True),
+            ('TOTAL_DEMANDA_PORTUGAL_CLIENTES_(221+222+223)',True),
+            ('TOTAL_CONSUMO_BOMBEO_(224)',True),
+            ('TOTAL_EXPORTACIONES_(227)',True),
+            ('TOTAL_GENERICAS_(230)',True),
+            ('TOTAL_DEMANDA',True),
+            # ('OTROS_TOTALES_PORTUGAL',True),
+            ('TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO',True),
+            ('NO_UTILIZADO',True),
+            ('NO_UTILIZADO',True),
+            ('TOTAL_POTENCIA_INDISPONIBLE',True),
+            ])
+        }
+        if headerstoprocess is not None:
+            marketsfieldnames[market].update(headerstoprocess)
+        result = list()
+        for k,v in marketsfieldnames[market].iteritems():
+            if v:
+                # NOT CLEAR THAT IS NEEDED decoding here or not.
+                # result.append(k.decode('utf8'))
+                result.append(k)
+        return result
+
+
+        
+
+
     # Validate input data:
     try:
         from omieMercadoDiarioDBManager import PreciosWeb
@@ -53,167 +250,21 @@ def generateOMIEwebdata(fechaini=None,fechafin=None,market='MI',headerstoprocess
             raise Exception("fechaini not valid")
         if market not in ['ES','MI','PT']:
             raise Exception("marketnotvalid not valid")
-            # build the filename as omie_MI_YYYYMMDD_YYYYMMDD.csv
-        filename = 'omie'+'_'+str(market)\
-                     +'_'+fechaini.strftime('%Y-%m-%d')\
-                     +'_'+fechafin.strftime('%Y-%m-%d')\
-                     +'.csv'
+        # build the filename as omie_MI_YYYYMMDD_YYYYMMDD_NN.csv
+        # with NN as number og fields processed!
+        fieldnames = generatefieldnames(market,headerstoprocess=headerstoprocess)
+        if filename is None:
+            filename = 'omie'+'_'+str(market)\
+                             +'_'+fechaini.strftime('%Y-%m-%d')\
+                             +'_'+fechafin.strftime('%Y-%m-%d')\
+                             +'_'+str(len(fieldnames))\
+                             +'.csv'
         filepath = os.path.join(path,filename)
         if os.path.exists(filepath) and not rewritetemp:
             print "file already generated"
             print "set rewritetemp to True to generate a new one"
             raise Exception("File already exists")
-        if market == 'ES':
-            fieldnames = ['Fecha','Hora','Precio',
-                # 'PRODUCCION_ESPAÑA',
-                'HIDRAULICA_CONVENCIONAL',
-                'HIDRAULICA_BOMBEO_PURO',
-                'NUCLEAR',
-                'CARBON_NACIONAL',
-                'CARBON_IMPORTACION',
-                'CICLO_COMBINADO',
-                'FUEL_+_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA)',
-                'FUEL_+_GAS_REGIMEN_ORDINARIO_(CON_PRIMA)',
-                'REGIMEN_ESPECIAL_A_MERCADO',
-                'REGIMEN_ESPECIAL_A_DISTRIBUCION',
-                'IMPORTACION_CONTRATO_LARGO_PLAZO',
-                'IMPORTACION_FRANCIA',
-                'IMPORTACION_PORTUGAL',
-                'IMPORTACION_MARRUECOS',
-                'IMPORTACION_ANDORRA',
-                'UNIDADES_GENERICAS',
-                'UNIDADES_AJUSTE_DE_DISTRIBUIDORAS_A_PREVISION_DEMANDA',
-                #'DEMANDA_ESPAÑA',
-                'COMERCIALIZACION_NACIONAL',
-                'COMERCIALIZACION_ULTIMO_RECURSO',
-                'CONSUMIDOR_DIRECTO',
-                'CONSUMO_DE_BOMBEO',
-                'EXPORTACION_CONTRATO_A_LARGO_PLAZO',
-                'EXPORTACION_A_FRANCIA',
-                'EXPORTACION_A_PORTUGAL',
-                'EXPORTACION_A_MARRUECOS',
-                'EXPORTACION_A_ANDORRA',
-                'UNIDADES_GENERICAS',
-                'UNIDADES_GENERICAS_SUBASTAS_DISTRIBUCION',
-                # 'RESUMEN_DE_PRODUCCION_ESPAÑA',
-                'TOTAL_HIDRAULICA_(1+2)',
-                'TOTAL_TERMICA_(3+4+5+6+7+8)',
-                'TOTAL_REGIMEN_ESPECIAL_(9+10)',
-                'TOTAL_IMPORTACION_(11+12+13+14+15)',
-                'TOTAL_GENERICAS_(16+17)',
-                'TOTAL_PRODUCCION',
-                # 'RESUMEN_DE_DEMANDA_ESPAÑA',
-                'TOTAL_DEMANDA_NACIONAL_CLIENTES_(21+22+23)',
-                'TOTAL_CONSUMO_BOMBEO_(24)',
-                'TOTAL_EXPORTACIONES_(25+26+27+28+29)',
-                'TOTAL_GENERICAS_(30+31)',
-                'TOTAL_DEMANDA',
-                # 'OTROS_TOTALES_ESPAÑA',
-                'TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO',
-                'TOTAL_VENTAS_INTERNACIONALES_COMERCIALIZACION_A_MERCADO',
-                'TOTAL_REGIMEN_ORDINARIO_CON_PRIMA',
-                'TOTAL_POTENCIA_INDISPONIBLE',
-                ]
-        elif market == 'PT':
-            fieldnames = ['Fecha','Hora','Precio',
-                # 'PRODUCCION_PORTUGAL',
-                'HIDRAULICA_CONVENCIONAL',
-                'HIDRAULICA_BOMBEO_PURO',
-                'NUCLEAR',
-                'CARBON_NACIONAL',
-                'CARBON_IMPORTACION',
-                'CICLO_COMBINADO',
-                'FUEL_+_GAS',
-                'NO_UTILIZADO',
-                'REGIMEN_ESPECIAL_A_MERCADO',
-                'NO_UTILIZADO',
-                'NO_UTILIZADO',
-                'NO_UTILIZADO',
-                'IMPORTACION_DE_ESPAÑA',
-                'NO_UTILIZADO',
-                'NO_UTILIZADO',
-                'UNIDADES_GENERICAS',
-                #'DEMANDA_PORTUGAL',
-                'COMERCIALIZACION_NACIONAL',
-                'COMERCIALIZACION_DE_ULTIMO_RECURSO',
-                'CONSUMIDOR_DIRECTO',
-                'CONSUMO_DE_BOMBEO',
-                'NO_UTILIZADO',
-                'NO_UTILIZADO',
-                'EXPORTACION_A_ESPAÑA',
-                'NO_UTILIZADO',
-                'NO_UTILIZADO',
-                'UNIDADES_GENERICAS',
-                # 'RESUMEN_DE_PRODUCCION_PORTUGAL',
-                'TOTAL_HIDRAULICA_(201+202)',
-                'TOTAL_TERMICA_(203+204+205+206+207)',
-                'NO_UTILIZADO',
-                'TOTAL_IMPORTACION_(213)',
-                'TOTAL_GENERICAS_(216)',
-                'TOTAL_PRODUCCION',
-                # 'RESUMEN_DE_DEMANDA_PORTUGAL',
-                'TOTAL_DEMANDA_PORTUGAL_CLIENTES_(221+222+223)',
-                'TOTAL_CONSUMO_BOMBEO_(224)',
-                'TOTAL_EXPORTACIONES_(227)',
-                'TOTAL_GENERICAS_(230)',
-                'TOTAL_DEMANDA',
-                #'OTROS_TOTALES_PORTUGAL',
-                'TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO',
-                'NO_UTILIZADO',
-                'NO_UTILIZADO',
-                'TOTAL_POTENCIA_INDISPONIBLE',
-                ]
-        elif market == 'MI':
-            fieldnames = ['Fecha','Hora','Precio',
-                #'PRODUCCION_MIBEL',
-                'HIDRAULICA_CONVENCIONAL',
-                'HIDRAULICA_BOMBEO_PURO',
-                'NUCLEAR',
-                'CARBON_NACIONAL',
-                'CARBON_IMPORTACION',
-                'CICLO_COMBINADO',
-                'FUEL_+_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA)',
-                'FUEL_+_GAS_REGIMEN_ORDINARIO_(CON_PRIMA)',
-                'REGIMEN_ESPECIAL_A_MERCADO',
-                'REGIMEN_ESPECIAL_A_DISTRIBUCION',
-                'IMPORTACION_CONTRATO_LARGO_PLAZO',
-                'IMPORTACION_FRANCIA',
-                'NO_UTILIZADO',
-                'IMPORTACION_MARRUECOS',
-                'IMPORTACION_ANDORRA',
-                'UNIDADES_GENERICAS',
-                'UNIDADES_SUBASTAS_DISTRIBUCION_AJUSTE_A_PREVISION_DEMANDA',
-                #'DEMANDA_MIBEL',
-                'COMERCIALIZACION_MIBEL',
-                'COMERCIALIZACION_ULTIMO_RECURSO',
-                'CONSUMIDOR_DIRECTO',
-                'CONSUMO_DE_BOMBEO',
-                'EXPORTACION_CONTRATO_A_LARGO_PLAZO',
-                'EXPORTACION_A_FRANCIA',
-                'NO_UTILIZADO',
-                'EXPORTACION_A_MARRUECOS',
-                'EXPORTACION_A_ANDORRA',
-                'UNIDADES_GENERICAS',
-                'UNIDADES_GENERICAS_DE_DISTRIBUCION',
-                #'RESUMEN_DE_PRODUCCION_MIBEL',
-                'TOTAL_HIDRAULICA_(901+902)',
-                'TOTAL_TERMICA_(903+904+905+906+907+908)',
-                'TOTAL_REGIMEN_ESPECIAL_(909+910)',
-                'TOTAL_IMPORTACION_(911+912+914+915)',
-                'TOTAL_GENERICAS_(916+917)',
-                'TOTAL_PRODUCCION_MIBEL',
-                #'RESUMEN_DE_DEMANDA_MIBEL',
-                'TOTAL_DEMANDA_NACIONAL_CLIENTES_(921+922+923)',
-                'TOTAL_CONSUMO_BOMBEO_(924)',
-                'TOTAL_EXPORTACIONES_(925+926+928+929)',
-                'TOTAL_GENERICAS_(930+931)',
-                'TOTAL_DEMANDA_MIBEL',
-                #'OTROS_TOTALES_MIBEL',
-                'TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO',
-                'TOTAL_VENTAS_INTERNACIONALES_COMERCIALIZACION_A_MERCADO',
-                'TOTAL_REGIMEN_ORDINARIO_CON_PRIMA',
-                'TOTAL_POTENCIA_INDISPONIBLE',
-                ]
+        
 
         # now must validate headerstoprocess:
 
@@ -236,27 +287,25 @@ def generateOMIEwebdata(fechaini=None,fechafin=None,market='MI',headerstoprocess
         # query lastday = 
         days = [fechaini + datetime.timedelta(days=i) for i in range(numofdays)]
         # if you want to handle exceptional day do it here!
+        print 'fieldnames'
+        print fieldnames
+        print 'fieldnames'
+        writer = csv.DictWriter(f, fieldnames=fieldnames,delimiter=';')
+        writer.writeheader()
         for day in days:
             precios = PreciosWeb.objects.get(fecha=day)
             tecnologias = TecnologiasWeb.objects.get(fecha=day)
             energia = EnergiaGestionadaWeb.objects.get(fecha=day)
             # select market:
             if market=='ES':
-                writer = csv.DictWriter(f, fieldnames=fieldnames,delimiter=';')
-                writer.writeheader()
                 precios = precios['PreciosES']
                 energia = energia['EnergiaES']['TOTAL_VENTAS']
                 tecnologias = tecnologias['ProduccionyDemandaES']
             elif market=='PT':
-                writer = csv.DictWriter(f, fieldnames=fieldnames,delimiter=';')
-                writer.writeheader()
-                # writer.writerow(dict((s.encode('utf8'),s.encode('utf8') if s == 'IMPORTACION_DE_ESPAÑA' or type(s) is unicode else s) for s in fieldnames) ) 
                 precios = precios['PreciosPT']
                 energia = energia['EnergiaPT']['TOTAL_VENTAS']
                 tecnologias = tecnologias['ProduccionyDemandaPT']
             else:
-                writer = csv.DictWriter(f, fieldnames=fieldnames,delimiter=';')
-                writer.writeheader()
                 precios = precios['PreciosMI']
                 energia = energia['EnergiaMI']['TOTAL_VENTAS']
                 tecnologias = tecnologias['ProduccionyDemandaMIBEL']
@@ -265,12 +314,22 @@ def generateOMIEwebdata(fechaini=None,fechafin=None,market='MI',headerstoprocess
                 for key in fieldnames:
                     if key == 'Fecha':
                         row['Fecha'] = day.strftime('%Y-%m-%d')
+                    elif key == 'Anho':
+                        row['Anho'] = day.year
+                    elif key == 'Mes':
+                        row['Mes'] = day.month
+                    elif key == 'Dia':
+                        row['Dia'] = day.day
+                    elif key == 'Semana':
+                        row['Semana'] = day.isocalendar()[1]
+                    elif key == 'DiaSemana':
+                        row['DiaSemana'] = day.weekday[1]
                     elif key == 'Hora':
                         row['Hora'] = h
                     elif key == 'Precio':
                         row['Precio'] = precios[h]
-                    elif key == 'Ventas':
-                        row['Ventas'] = energia[h]
+                    elif key == 'TOTAL_VENTAS':
+                        row['TOTAL_VENTAS'] = energia[h]
                     else:
                         row[key]=tecnologias[key.decode('utf8')][h]
                 writer.writerow(row)
@@ -281,11 +340,13 @@ def generateOMIEwebdata(fechaini=None,fechafin=None,market='MI',headerstoprocess
             # f.write('file contents')
             # f.write('other contents')
 
-    return "done"
+    return os.path.abspath(filepath)
 
 
 def generateAllOMIEwebdatafiles():
     """Generates all data file given at ckan repository.
+
+    This is a Helper and easy to use function.
 
     
 

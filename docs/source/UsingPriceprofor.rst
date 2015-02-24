@@ -1,5 +1,5 @@
 ===================
- Using priceprofor
+ Using Priceprofor
 ===================
 
 As a Visual Explorer:

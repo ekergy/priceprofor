@@ -34,8 +34,9 @@ h2{
 }
 
 h3{
-  font-size: 16px;
-  color: #787878;
+  font-size: 18px;
+  color: #787878; 
+ /* color: #000066; */ 
   font-weight: 400;
   line-height: 24px;
 }
@@ -693,7 +694,7 @@ input.search-form:hover {
 }
 
 #services {
-  background: #000 url(../images/services/bg_services.png);
+  background: #000 url(../images/services/bg_services_2.png);
   background-size: cover;
 }
 

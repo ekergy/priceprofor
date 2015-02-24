@@ -26,7 +26,22 @@ $(function () {
                 '13', '14', '15', '16', '17', '18',
                 '19', '20', '21', '22', '23', '24']
         }],
-        yAxis: [{ // Primary yAxis
+        yAxis: [{ // Secondary yAxis
+            title: {
+                text: 'Precio del MWh',
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
+            },
+            labels: {
+                format: '{value} €/MWh',
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
+            },
+            opposite: true
+
+        }, { // Primary yAxis
             labels: {
                 format: '{value} MWh',
                 style: {
@@ -41,18 +56,19 @@ $(function () {
             }
         }, { // Secondary yAxis
             title: {
-                text: 'Precio del MWh',
+                text: 'Volumen en €',
                 style: {
                     color: Highcharts.getOptions().colors[0]
                 }
             },
             labels: {
-                format: '{value} €/MWh',
+                format: '{value} €',
                 style: {
                     color: Highcharts.getOptions().colors[0]
                 }
             },
-            opposite: true
+            opposite: false
+         
         }],
         tooltip: {
             shared: true
@@ -60,14 +76,14 @@ $(function () {
         legend: {
             layout: 'vertical',
             align: 'left',
-            x: 120,
+            x: 200,
             verticalAlign: 'top',
             y: 100,
             floating: true,
             backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
         },
         series: [{
-            name: 'Volumen',
+            name: 'Volumen en MWh',
             type: 'column',
             yAxis: 1,
             data: {{energia|safe}},
@@ -75,12 +91,23 @@ $(function () {
                 valueSuffix: ' €/MWh'
             }
 
-        }, {
+        },
+        {
+            name: 'Volumen en €',
+            type: 'column',
+            yAxis: 2,
+            data: {{sumario['VolumenesEUR']|safe}},
+            tooltip: {
+                valueSuffix: ' €'
+            }
+
+        }
+        , {
             name: 'Precio',
             type: 'spline',
             data: {{precio|safe}},
             tooltip: {
-                valueSuffix: ' MWh'
+                valueSuffix: ' €/MWh'
             }
         }]
     });
@@ -88,14 +115,13 @@ $(function () {
         </script>
     </head>
     <body>
-<script src="/js/lib/highcharts.js"></script>
-<script src="/js/lib/exporting.js"></script>
+<script src="/vendor/highcharts/js/highcharts.js"></script>
+<script src="/vendor/highcharts/js/modules/exporting.js"></script>
 
 <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-<div id="sumario" style="min-width: 310px; height: 400px; margin: 0 auto">
+<div id="sumario" style="">
     {{sumario|safe}}
 </div>
-
 
     </body>
 </html>
