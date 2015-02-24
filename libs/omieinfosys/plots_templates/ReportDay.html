@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Price Profor Engine: ReportDay</title>
+        <link id="data-uikit-theme" rel="stylesheet" href="/vendor/uikit/css/uikit.css">
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script src="/vendor/uikit/js/uikit.min.js"></script>
+        <script src="/vendor/uikit/js/components/grid.js"></script>
+        <style type="text/css">
+${demo.css}
+        </style>
+        
+        <script type="text/javascript">
+$(function () {
+    $('#preciosvolumenes').highcharts({
+        chart: {
+            zoomType: 'xy',
+            backgroundColor:'rgba(255, 255, 255, 0.1)'
+        },
+        title: {
+            text: 'Resultados del Mercado Diario de Electricidad España:'
+        },
+        subtitle: {
+            text: 'Fuente: OMIE'
+        },
+        xAxis: [{
+            categories: ['1', '2', '3', '4', '5', '6',
+                '7', '8', '9', '10', '11', '12',
+                '13', '14', '15', '16', '17', '18',
+                '19', '20', '21', '22', '23', '24']
+        }],
+        yAxis: [{ // Primary yAxis
+            labels: {
+                format: '{value} MWh',
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
+            },
+            title: {
+                text: 'Volumen del Mercado',
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
+            }
+        }, { // Secondary yAxis
+            title: {
+                text: 'Precio del MWh',
+                style: {
+                    color: Highcharts.getOptions().colors[1]
+                }
+            },
+            labels: {
+                format: '{value} €/MWh',
+                style: {
+                    color: Highcharts.getOptions().colors[1]
+                }
+            },
+            opposite: true
+
+        }],
+        tooltip: {
+            shared: true
+        },
+        legend: {
+            layout: 'vertical',
+            // align: 'left',
+            // x: 200,
+            // verticalAlign: 'top',
+            // y: 100,
+            // floating: true,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+        },
+        series: [{
+            name: 'Volumen en MWh',
+            type: 'column',
+            data: {{energia|safe}},
+            tooltip: {
+                valueSuffix: ' MWh'
+            }
+
+        }, {
+            name: 'Precio',
+            type: 'spline',
+            yAxis: 1,
+            data: {{precio|safe}},
+            tooltip: {
+                valueSuffix: ' €/MWh'
+            }
+        }]
+    });
+});
+        </script>
+    </head>
+    <body>
+        <div class="uk-container uk-container-center">
+            <!-- <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div> -->
+            <!-- <div id="container" style=""></div> -->
+            <div class="uk-grid">
+                <div class="uk-width-1-1">
+                    <div class="uk-panel uk-panel-box">
+                        <div id="preciosvolumenes" ></div>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-grid-width-small-1-2 uk-grid-width-medium-1-4" data-uk-grid="">
+                <div class="uk-panel uk-panel-box" style="text-align: center;">
+                <h3 class="uk-panel-title"><strong>{{preciomedio}}</strong> €/MWh</h3>
+                Precio Medio del MWh
+                </div>
+                <div class="uk-panel uk-panel-box" style="text-align: center;">
+                <h3 class="uk-panel-title"><strong>{{mediaaritmetica}}</strong> €/MWh</h3>
+                Media Aritmetica
+                </div>
+                <div class="uk-panel uk-panel-box" style="text-align: center;">
+                <h3 class="uk-panel-title"><strong>{{totalvolumenmwh}}</strong> MWh</h3>
+                Total de MWh negociados
+                </div>
+                <div class="uk-panel uk-panel-box" style="text-align: center;">
+                <h3 class="uk-panel-title"><strong>{{totalvolumeneurs}}</strong> €</h3>
+                Valor en euros del mercado
+                </div>  
+            </div>
+        </div>
+
+<script src="/vendor/highcharts/js/highcharts.js"></script>
+<script src="/vendor/highcharts/js/modules/exporting.js"></script>
+    </body>
+</html>
