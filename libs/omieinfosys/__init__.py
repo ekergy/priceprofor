@@ -73,8 +73,8 @@ def updatedb():
     try:
         populatepreciosweb()
         populatetecnologiasweb()
-        populatestudydatamibel()
         populateenergiagestionadaweb()
+        populatestudydatamibel()
     except:
         raise
 

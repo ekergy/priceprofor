@@ -14,12 +14,10 @@ Contents:
 
    GettingStarted
    UsingPriceprofor
+   ProjectComponents
 
-.. automodule:: omieinfosys
-   :members:
 
-.. automodule:: omieinfosys.omieMercadoDiarioDBManager
-   :members:
+
 
 
 
