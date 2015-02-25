@@ -19,6 +19,9 @@ class PreciosWeb(Document):
         Check last document available:
 
     """
+
+    meta = {'collection': 'omiePreciosWeb'}
+
     fecha = DateTimeField(unique=True)
     PreciosES = ListField()
     PreciosPT = ListField()
@@ -69,6 +72,9 @@ class EnergiaGestionadaWeb(Document):
         Check last document available:
 
     """
+
+    meta = {'collection': 'omieEnergiaGestionadaWeb'}
+
     fecha = DateTimeField(unique=True)
     EnergiaES = DictField()
     EnergiaPT = DictField()
@@ -118,6 +124,9 @@ class TecnologiasWeb(Document):
     """
     Manages "Energia Acumulados por tipo de generacion" as delivered by EnergiaMercadoDiarioParser Collection/Table
     """
+
+    meta = {'collection': 'omieTecnologiasWeb'}
+
     fecha = DateTimeField(unique=True)
     ProduccionyDemandaMIBEL = DictField()
     ProduccionyDemandaES = DictField()
@@ -268,9 +277,18 @@ class StudyDataES(Document):
 
 
 class StudyDataMIBEL(Document):
-    """Manages omieStudyDataForMIBEL Collection/Table:
+    """Manages omieStudyDataMIBEL Collection/Table:
+
+    Note:
+    For now the values managed are just the totals by production and the totals
+    for each demanders. Price is added. 
+    The main aggregations should be done from this collection.
+
 
     """
+
+    meta = {'collection': 'omieStudyDataMIBEL'}
+
     fecha = DateTimeField(unique=True) # Must at least include Hour!
     # 
     precio = FloatField()

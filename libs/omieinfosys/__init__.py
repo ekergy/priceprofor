@@ -7,7 +7,7 @@ __revision__ = "dev"
 
 # from mongoengine import MongoEngine
 
-CONN_DETAILS = {'db':'omieMercadoDiario'}
+CONN_DETAILS = {'db':'priceprofor'}
 
 # db = MongoEngine()
 import os

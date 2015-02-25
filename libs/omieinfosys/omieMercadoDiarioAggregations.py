@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+ # -*- coding: utf-8 -*-
 import omieMercadoDiarioDBManager
 
 # Aggregations/Projections and other informacion on for PreciosWeb:
