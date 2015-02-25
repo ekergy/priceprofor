@@ -10,15 +10,19 @@ Se pretende construir conocimiento partiendo de la información disponibilizada 
 
 ## Servicios disponibilizados
 
-1. ### Visualización de información de mercados;
+##### 1. Visualización de información de mercados;
 
-2. ### Descarga de los datos disponibilizados por los operadores;
+##### 2. Descarga de los datos disponibilizados por los operadores;
 
-3. ### APIs para consulta de información;
+##### 3. APIs para consulta de información;
 
-4. ### CLIs para consulta de información;
+##### 4. CLIs para consulta de información;
 
 ## Documentación
+
+La documentación del código está disponible en [priceprofor.readthedocs.org](http://priceprofor.readthedocs.org)
+
+En nuestra [wiki](https://github.com/ekergy/priceprofor/wiki) puedes encontrar información de las fuentes de datos incluidas en el proyecto.
 
 ## Proyectos
 
