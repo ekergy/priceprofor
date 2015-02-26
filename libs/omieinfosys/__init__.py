@@ -12,9 +12,13 @@ CONN_DETAILS = {'db':'priceprofor'}
 # db = MongoEngine()
 import os
 try:
-    host = os.environ['OPENSHIFT_MONGODB_IP']
+    # mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/
+    # host = os.environ['OPENSHIFT_MONGODB_IP']
+    host = os.environ['$OPENSHIFT_MONGODB_DB_HOST']
+    port = os.environ['$OPENSHIFT_MONGODB_DB_PORT']
 except:
     host = 'localhost'
+    port = 27017
 #host = os.environ['MONGODB_URL'][:-1]+str(27017)+'/'
 # host="127.3.118.130"
 #host="priceprofor-ekergy.rhcloud.com"
@@ -30,7 +34,7 @@ from mongoengine.connection import get_db, connect
 try:
     get_db(CONN_DETAILS['db'],reconnect=True)
 except:
-    connect(CONN_DETAILS['db'],host=host)
+    connect(CONN_DETAILS['db'],host=host,port=port)
 
 
 
