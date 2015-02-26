@@ -16,6 +16,8 @@ try:
     # host = os.environ['OPENSHIFT_MONGODB_IP']
     host = os.environ['$OPENSHIFT_MONGODB_DB_HOST']
     port = os.environ['$OPENSHIFT_MONGODB_DB_PORT']
+    host = 'mongodb://'+host+':'+port+'/'
+
 except:
     host = 'localhost'
     port = 27017
@@ -34,7 +36,8 @@ from mongoengine.connection import get_db, connect
 try:
     get_db(CONN_DETAILS['db'],reconnect=True)
 except:
-    connect(CONN_DETAILS['db'],host=host,port=port)
+    print host
+    connect(CONN_DETAILS['db'],host=host)
 
 
 
