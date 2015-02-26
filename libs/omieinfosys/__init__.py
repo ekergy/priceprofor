@@ -14,10 +14,10 @@ import os
 try:
     # mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/
     # host = os.environ['OPENSHIFT_MONGODB_IP']
-    host = os.environ['$OPENSHIFT_MONGODB_DB_HOST']
-    port = os.environ['$OPENSHIFT_MONGODB_DB_PORT']
-    host = 'mongodb://'+host+':'+port+'/'
-
+    host = os.environ['OPENSHIFT_MONGODB_DB_HOST']
+    port = os.environ['OPENSHIFT_MONGODB_DB_PORT']
+    # host = 'mongodb://'+host+':'+port+'/'
+    host = os.environ['OPENSHIFT_MONGODB_DB_URL']
 except:
     host = 'localhost'
     port = 27017
