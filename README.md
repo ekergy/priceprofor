@@ -22,7 +22,7 @@ Se pretende construir conocimiento partiendo de la información disponibilizada 
 
 La documentación del código está disponible en [priceprofor.readthedocs.org](http://priceprofor.readthedocs.org)
 
-En nuestra [wiki](https://github.com/ekergy/priceprofor/wiki) puedes encontrar información de las fuentes de datos incluidas en el proyecto.
+En nuestra [wiki](https://github.com/ekergy/priceprofor/wiki <a href=""></a>) puedes encontrar información de las fuentes de datos incluidas en el proyecto.
 
 ## Proyectos
 

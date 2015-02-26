@@ -2,12 +2,16 @@
 import omieMercadoDiarioDBManager
 
 # Aggregations/Projections and other informacion on for PreciosWeb:
+# 
 
 # Aggregations/Projections and other informacion on for TecnologiasWeb:
 
 # Aggregations/Projections and other informacion on for TecnologiasWeb:
 
 # Aggregations/Projections and other informacion on for StudyDataMIBEL:
+
+# Aggregations/Projections and other informacion on for StudyDataMIBEL:
+
 
 def volumenesanhoStudyDataMIBEL():
     """Devuelve los volumenes en MWh y en EURs por año:
