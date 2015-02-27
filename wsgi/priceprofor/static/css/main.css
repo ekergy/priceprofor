@@ -694,9 +694,10 @@ input.search-form:hover {
 }
 
 #services {
-  background: #000 url(../images/services/bg_services_2.png);
-  background-size: cover;
+  background: #000 url(../images/bg3.jpg);
+   background-size: cover; 
 }
+
 
 #services .lead,
 #services h2{
