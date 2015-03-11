@@ -28,7 +28,7 @@ jQuery(function($) {'use strict',
 			itemSelector : '.portfolio-item',
 			layoutMode : 'fitRows'
 		});
-		
+
 		$portfolio_selectors.on('click', function(){
 			$portfolio_selectors.removeClass('active');
 			$(this).addClass('active');
@@ -54,7 +54,7 @@ jQuery(function($) {'use strict',
 		});
 	});
 
-	
+
 	//goto top
 	$('.gototop').click(function(event) {
 		event.preventDefault();
