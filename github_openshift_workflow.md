@@ -27,7 +27,7 @@ Remember to check the remote github workflow.
 
 * Now create the remote for openshift (needs to configure your id_rsa.pub to the openshift account):
   ```
-  git remote add openshift ssh://53a812b8e0b8cd8a67000159@priceprofor-ekergydavid.rhcloud.com/~/git/priceprofor.git/
+  git remote add openshift ssh://542bc3bb4382ec4e520010a0@priceprofor-ekergy.rhcloud.com/~/git/priceprofor.git/
   ```
 
 To kept github and openshift repos sync we will use the remote push-only strategy:
@@ -44,18 +44,18 @@ To kept github and openshift repos sync we will use the remote push-only strateg
 
 * Configure the other push only url for all:
   ```
-  git remote set-url --add --push all ssh://53a812b8e0b8cd8a67000159@priceprofor-ekergydavid.rhcloud.com/~/git/priceprofor.git/
+  git remote set-url --add --push all ssh://542bc3bb4382ec4e520010a0@priceprofor-ekergy.rhcloud.com/~/git/priceprofor.git/
   ```
 
 And you are set to go. To check our config run ``` git remote -v ``` and you should get:
 ```
 all     https://github.com/ekergy/priceprofor (fetch)
 all     https://github.com/ekergy/priceprofor (push)
-all     ssh://53a812b8e0b8cd8a67000159@priceprofor-ekergydavid.rhcloud.com/~/git/priceprofor.git/ (push)
+all     ssh://542bc3bb4382ec4e520010a0@priceprofor-ekergy.rhcloud.com/~/git/priceprofor.git/ (push)
 github  https://github.com/ekergy/priceprofor (fetch)
 github  https://github.com/ekergy/priceprofor (push)
-openshift       ssh://53a812b8e0b8cd8a67000159@priceprofor-ekergydavid.rhcloud.com/~/git/priceprofor.git/ (fetch)
-openshift       ssh://53a812b8e0b8cd8a67000159@priceprofor-ekergydavid.rhcloud.com/~/git/priceprofor.git/ (push)
+openshift       ssh://542bc3bb4382ec4e520010a0@priceprofor-ekergy.rhcloud.com/~/git/priceprofor.git/ (fetch)
+openshift       ssh://542bc3bb4382ec4e520010a0@priceprofor-ekergy.rhcloud.com/~/git/priceprofor.git/ (push)
 ```
 
 Remember to check the remote all/openshift workflow.
