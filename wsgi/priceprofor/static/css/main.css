@@ -129,6 +129,10 @@ body > section {
   text-align: center;
   padding-bottom: 55px;
 }
+.center-min {
+  text-align: center;
+  padding-bottom: 15px;
+}
 
 .scaleIn {
   -webkit-animation-name: scaleIn;
@@ -2572,4 +2576,9 @@ shortcodes page css
 #footer ul > li {
   display: inline-block;
   margin-left: 15px;
+}
+
+.content-auto
+{
+  height: 265px;
 }
