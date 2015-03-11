@@ -36,14 +36,17 @@ To kept github and openshift repos sync we will use the remote push-only strateg
   ```
   git remote add all https://github.com/ekergy/priceprofor
   ```
+
 * Configure a push url for all:
   ```
   git remote set-url --add --push all https://github.com/ekergy/priceprofor
   ```
+
 * Configure the other push only url for all:
   ```
   git remote set-url --add --push all ssh://53a812b8e0b8cd8a67000159@priceprofor-ekergydavid.rhcloud.com/~/git/priceprofor.git/
   ```
+
 And you are set to go. To check our config run ``` git remote -v ``` and you should get:
 ```
 all     https://github.com/ekergy/priceprofor (fetch)
@@ -54,6 +57,7 @@ github  https://github.com/ekergy/priceprofor (push)
 openshift       ssh://53a812b8e0b8cd8a67000159@priceprofor-ekergydavid.rhcloud.com/~/git/priceprofor.git/ (fetch)
 openshift       ssh://53a812b8e0b8cd8a67000159@priceprofor-ekergydavid.rhcloud.com/~/git/priceprofor.git/ (push)
 ```
+
 Remember to check the remote all/openshift workflow.
 
 # The git remote github workflow
