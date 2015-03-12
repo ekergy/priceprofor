@@ -46,7 +46,7 @@ h4{
 }
 
 a {
-  color: #c52d2f;
+  color: #45795B;
   -webkit-transition: color 300ms, background-color 300ms;
   -moz-transition: color 300ms, background-color 300ms;
   -o-transition:  color 300ms, background-color 300ms;
@@ -610,7 +610,7 @@ input.search-form:hover {
   line-height: 110px;
   text-align:center;
   background: #ffffff;
-  color: #c52d2f;
+  color: #45795B;
   border: 3px solid #ffffff;
   box-shadow: inset 0 0 0 5px #f2f2f2;
   -webkit-box-shadow: inset 0 0 0 5px #f2f2f2;
@@ -623,11 +623,11 @@ input.search-form:hover {
 }
 
 .feature-wrap i:hover {
-  background: #c52d2f;
+  background: #45795B;
   color: #fff;
-  box-shadow: inset 0 0 0 5px #c52d2f;
-  -webkit-box-shadow: inset 0 0 0 5px #c52d2f;
-  border: 3px solid #c52d2f;
+  box-shadow: inset 0 0 0 5px #45795B;
+  -webkit-box-shadow: inset 0 0 0 5px #45795B;
+  border: 3px solid #45795B;
 }
 
 #recent-works .col-xs-12.col-sm-4.col-md-3{
@@ -2586,12 +2586,12 @@ shortcodes page css
 .btn-green {
     color: #333;
     background-color: #fff;
-    border-color: #4F6907;
+    border-color: #45795B;
 }
 .btn-green:hover, .btn-green:focus, .btn-green:active, .btn-green.active, .open .dropdown-toggle.btn-green {
-    color: #333;
-    background-color: #fff;
-    border-color: #4F6907;
+    color: #fff;
+    background-color: #45795B;
+    border-color: #45795B;
 }
 .btn-green:active, .btn-green.active, .open .dropdown-toggle.btn-green {
     background-image: none
