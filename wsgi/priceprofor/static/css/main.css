@@ -2582,3 +2582,25 @@ shortcodes page css
 {
   height: 265px;
 }
+
+.btn-green {
+    color: #333;
+    background-color: #fff;
+    border-color: #4F6907;
+}
+.btn-green:hover, .btn-green:focus, .btn-green:active, .btn-green.active, .open .dropdown-toggle.btn-green {
+    color: #333;
+    background-color: #fff;
+    border-color: #4F6907;
+}
+.btn-green:active, .btn-green.active, .open .dropdown-toggle.btn-green {
+    background-image: none
+}
+.btn-green.disabled, .btn-green[disabled], fieldset[disabled] .btn-green, .btn-green.disabled:hover, .btn-green[disabled]:hover, fieldset[disabled] .btn-green:hover, .btn-green.disabled:focus, .btn-green[disabled]:focus, fieldset[disabled] .btn-green:focus, .btn-green.disabled:active, .btn-green[disabled]:active, fieldset[disabled] .btn-green:active, .btn-green.disabled.active, .btn-green[disabled].active, fieldset[disabled] .btn-green.active {
+    background-color: #fff;
+    border-color: #ccc
+}
+.btn-green .badge {
+    color: #fff;
+    background-color: #fff
+}
