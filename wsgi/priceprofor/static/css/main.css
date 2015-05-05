@@ -46,7 +46,7 @@ h4{
 }
 
 a {
-  color: #c52d2f;
+  color: #45795B;
   -webkit-transition: color 300ms, background-color 300ms;
   -moz-transition: color 300ms, background-color 300ms;
   -o-transition:  color 300ms, background-color 300ms;
@@ -128,6 +128,10 @@ body > section {
 .center {
   text-align: center;
   padding-bottom: 55px;
+}
+.center-min {
+  text-align: center;
+  padding-bottom: 15px;
 }
 
 .scaleIn {
@@ -606,7 +610,7 @@ input.search-form:hover {
   line-height: 110px;
   text-align:center;
   background: #ffffff;
-  color: #c52d2f;
+  color: #45795B;
   border: 3px solid #ffffff;
   box-shadow: inset 0 0 0 5px #f2f2f2;
   -webkit-box-shadow: inset 0 0 0 5px #f2f2f2;
@@ -619,11 +623,11 @@ input.search-form:hover {
 }
 
 .feature-wrap i:hover {
-  background: #c52d2f;
+  background: #45795B;
   color: #fff;
-  box-shadow: inset 0 0 0 5px #c52d2f;
-  -webkit-box-shadow: inset 0 0 0 5px #c52d2f;
-  border: 3px solid #c52d2f;
+  box-shadow: inset 0 0 0 5px #45795B;
+  -webkit-box-shadow: inset 0 0 0 5px #45795B;
+  border: 3px solid #45795B;
 }
 
 #recent-works .col-xs-12.col-sm-4.col-md-3{
@@ -2572,4 +2576,31 @@ shortcodes page css
 #footer ul > li {
   display: inline-block;
   margin-left: 15px;
+}
+
+.content-auto
+{
+  height: 265px;
+}
+
+.btn-green {
+    color: #333;
+    background-color: #fff;
+    border-color: #45795B;
+}
+.btn-green:hover, .btn-green:focus, .btn-green:active, .btn-green.active, .open .dropdown-toggle.btn-green {
+    color: #fff;
+    background-color: #45795B;
+    border-color: #45795B;
+}
+.btn-green:active, .btn-green.active, .open .dropdown-toggle.btn-green {
+    background-image: none
+}
+.btn-green.disabled, .btn-green[disabled], fieldset[disabled] .btn-green, .btn-green.disabled:hover, .btn-green[disabled]:hover, fieldset[disabled] .btn-green:hover, .btn-green.disabled:focus, .btn-green[disabled]:focus, fieldset[disabled] .btn-green:focus, .btn-green.disabled:active, .btn-green[disabled]:active, fieldset[disabled] .btn-green:active, .btn-green.disabled.active, .btn-green[disabled].active, fieldset[disabled] .btn-green.active {
+    background-color: #fff;
+    border-color: #ccc
+}
+.btn-green .badge {
+    color: #fff;
+    background-color: #fff
 }

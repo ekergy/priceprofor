@@ -21,7 +21,7 @@ function gestorScroll ()
                     $('a').find('div').css({background: 'rgba(211,215,237,.5)'});
                     $('a').eq(1).find('div').css({background: 'rgba(73,121,63,.7)'});
                   }
-    else if (cSc < $('section#featureBis').offset().top){
+    else if (cSc < $('section#development').offset().top){
                     $('a').find('div').css({background: 'rgba(211,215,237,.5)'});
                     $('a').eq(2).find('div').css({background: 'rgba(73,121,63,.7)'});
                   }
@@ -32,7 +32,7 @@ function gestorScroll ()
             else {
                     $('a').find('div').css({background: 'rgba(211,215,237,.5)'});
                     $('a').eq(4).find('div').css({background: 'rgba(73,121,63,.7)'});
-                  };
+                 };
 }
 
 function posicionFondo (i)
