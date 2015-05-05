@@ -196,7 +196,7 @@ def DataFileGenerator():
                  yield row
     except:
         raise
-        return json.dumps({"Error":"No data to sent"})
+        # return json.dumps({"Error":"No data to sent"})
     else:
         # return result
         return Response(generate(result), mimetype='text/csv')
