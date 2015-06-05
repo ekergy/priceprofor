@@ -18,7 +18,8 @@ try:
     path = os.environ['OPENSHIFT_HOMEDIR']
     # openshift file path!
 except:
-    path = os.path.join('..','data')
+    # path = os.path.join('..','..','data')
+    path = os.path.join('data')
 # else:
 #     pass
 #     # set filepath
