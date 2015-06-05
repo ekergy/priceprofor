@@ -11,7 +11,7 @@ body,
 }
 
 .content-wrap-menu {
-	height: inherit;
+	height: inherits;
 }
 
 .menu-wrap a {
