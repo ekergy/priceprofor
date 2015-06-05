@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*
+# 
 
 from flask import Blueprint, Response
 from flask import request, render_template, url_for, redirect
 
-omieMercadoDiario = Blueprint('verver1', __name__,url_prefix='/omieinfosys', template_folder="plots_templates")
+omieMercadoDiario = Blueprint('omieinfosys', __name__,url_prefix='/omieinfosys', template_folder="plots_templates")
 
 import datetime
 import json
@@ -196,7 +197,7 @@ def DataFileGenerator():
                  yield row
     except:
         raise
-        return json.dumps({"Error":"No data to sent"})
+        # return json.dumps({"Error":"No data to sent"})
     else:
         # return result
         return Response(generate(result), mimetype='text/csv')

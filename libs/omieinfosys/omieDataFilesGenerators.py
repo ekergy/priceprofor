@@ -15,10 +15,11 @@ import csv
 import datetime
 from collections import OrderedDict
 try:
-    path = os.environ['OPENSHIFT_HOMEDIR']
+    path = os.environ['OPENSHIFT_DATA_DIR']
     # openshift file path!
 except:
-    path = os.path.join('..','data')
+    # path = os.path.join('..','..','data')
+    path = os.path.join('data')
 # else:
 #     pass
 #     # set filepath
