@@ -1,460 +1,470 @@
 <!doctype html>
 <html lang="en" ng-app="myApp">
-<head>
-   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Price Profor Engine: ReportDay</title>
-        <link id="data-uikit-theme" rel="stylesheet" href="/vendor/uikit/css/uikit.css">
-        <link id="data-uikit-theme" rel="stylesheet" href="/vendor/uikit/css/uikit.almost-flat.css">
-        <link id="data-uikit-theme" rel="stylesheet" href="/vendor/uikit/css/components/datepicker.css">
-        <link id="data-uikit-theme" rel="stylesheet" href="/vendor/uikit/css/components/accordion.css">
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.min.js"></script>
-        <script src="/vendor/uikit/js/uikit.min.js"></script>
-        <script src="/vendor/uikit/js/components/grid.js"></script>
-        <script src="/vendor/uikit/js/components/datepicker.js"></script>
-        <script src="/vendor/uikit/js/components/accordion.js"></script>
-        <link rel="shortcut icon" href="/images/ico/favicon.ico">
-        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
-</head>
-<body>
-<div class="uk-container uk-container-center">
-    <p>x<img src="https://ga-beacon.appspot.com/UA-56011126-3/PriceProfor/DataFileGenerator?pixel"></p>
-<form class="uk-form" ng-controller="FormController">
-    <div class="uk-width-2-3 uk-container-center">
-        <div class="uk-alert" data-uk-alert>
-            <a href="" class="uk-alert-close uk-close"></a>
-            <h3>Para descargar los datos completos por año, tienes disponible la pagina de  <a href="http://data.lab.fiware.org/dataset/omie-daily-market-hourly-results" target="_blank">CKAN opendata fiware</a> con los ficheros generados disponibles.</h3>
-        </div>
-    <fieldset data-uk-margin="">
-        <legend>Obtiene los datos del Mercado Diario de Electricidad del Operador de Mercado OMIE</legend>
-        <input class="uk-button uk-margin-small-top uk-button-success" type="button" ng-click="generatefile(datafile)" value="Generar y descargar"/>
-        <select ng-model="datafile.market" class="uk-margin-small-top">
-            <option value="MI">MIBEL</option>
-            <option value="ES">Componente Española</option>
-            <option value="PT">Componente Portuguesa</option>
-        </select>
-        <input class="uk-margin-small-top" type="text" ng-model="datafile.fechaini" data-uk-datepicker="{format:'YYYY-MM-DD'}">
-        <input class="uk-margin-small-top" type="text" ng-model="datafile.fechafin" data-uk-datepicker="{format:'YYYY-MM-DD'}">
-    </fieldset>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Price Profor Engine: ReportDay</title>
+    <link id="data-uikit-theme" rel="stylesheet" href="/vendor/uikit/css/uikit.css">
+    <link id="data-uikit-theme" rel="stylesheet" href="/vendor/uikit/css/uikit.almost-flat.css">
+    <link id="data-uikit-theme" rel="stylesheet" href="/vendor/uikit/css/components/datepicker.css">
+    <link id="data-uikit-theme" rel="stylesheet" href="/vendor/uikit/css/components/accordion.css">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.min.js"></script>
+    <script src="/vendor/uikit/js/uikit.min.js"></script>
+    <script src="/vendor/uikit/js/components/grid.js"></script>
+    <script src="/vendor/uikit/js/components/datepicker.js"></script>
+    <script src="/vendor/uikit/js/components/accordion.js"></script>
+    <link rel="shortcut icon" href="/images/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="stylesheet" type="text/css" href="../app_menu/fonts/font-awesome-4.2.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../app_menu/css/menu_topexpand.css">
+  </head>
+  <body>
+    <div class="menu-wrap">
+      <nav class="menu">
+	<div class="icon-list">
+	  <a href="http://priceprofor.ekergy.es/index.html"></i><span>Home</span></a>
+	  <a href="http://shinyrcharts-ekergydavid.rhcloud.com/samples/electric_market_analysis_exploratory/"></i><span>AnalysisExploratory</span></a>
+	  <a href="http://shinyrcharts-ekergydavid.rhcloud.com/samples/electric_market_basic_statistics/"></i><span>BasicStatistics</span></a>
+	  <a href="http://shinyrcharts-ekergydavid.rhcloud.com/samples/electric_market_correlations_technologies_vs_price/"></i><span>Correlations</span></a>
+	  <a href="http://priceprofor.ekergy.es/omieinfosysSPA/Status.html"></i><span>Status</span></a>
+	  <a href="http://priceprofor.ekergy.es/omieinfosysSPA/ReportDayTech.html"></i><span>ReportDayTech</span></a>
+	  <a href="http://priceprofor.ekergy.es/omieinfosysSPA/DataFileGenerator.html"></i><span>DataFile</span></a>
+	  <a href="http://priceprofor.ekergy.es/omieinfosysSPA/ReportDay.html"></i><span>ReportDay</span></a>
+	</div>
+      </nav>
     </div>
-    <div class="uk-width-2-3 uk-container-center">
-    <fieldset>
-        <legend>Selecciona los campos del fichero de datos</legend>
-        <div class="uk-accordion" data-uk-accordion="{showfirst:false}">
-            <h3 class="uk-accordion-title">MIBEL</h3>
-
-            <div class="uk-accordion-content">
-                <p>Si necesitas descargar todos los datos considera usar la pagina de descarga <a href="omieopendata"></a> </p>
-                <p><input type="checkbox" ng-checked="true" ng-disabled="true">Fecha</p>
-                <p><input type="checkbox" ng-model="datafile.Anho" ng-disabled="datafile.market !== 'MI'">Año</p>
-                <p><input type="checkbox" ng-model="datafile.MMI" ng-disabled="datafile.market !== 'MI'">MMI</p>
-                <p><input type="checkbox" ng-model="datafile.Dia" ng-disabled="datafile.market !== 'MI'">Dia</p>
-                <p><input type="checkbox" ng-model="datafile.Semana" ng-disabled="datafile.market !== 'MI'">Semana</p>
-                <p><input type="checkbox" ng-model="datafile.DiaSemana" ng-disabled="datafile.market !== 'MI'">DiaSemana</p>
-                <p><input type="checkbox" ng-checked="true" ng-disabled="true">Hora</p>
-                <p><input type="checkbox" ng-checked="true" ng-disabled="true"> Precio</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_VENTAS" ng-disabled="datafile.market !== 'MI'"> TOTAL_VENTAS</p>
-                <p>PRODUCCION_MIBEL</p>
-                <p><input type="checkbox" ng-model="datafile.HIDRAULICA_CONVENCIONAL" ng-disabled="datafile.market !== 'MI'"> HIDRAULICA_CONVENCIONAL</p>
-                <p><input type="checkbox" ng-model="datafile.HIDRAULICA_BOMBEO_PURO" ng-disabled="datafile.market !== 'MI'"> HIDRAULICA_BOMBEO_PURO</p>
-                <p><input type="checkbox" ng-model="datafile.NUCLEAR" ng-disabled="datafile.market !== 'MI'"> NUCLEAR</p>
-                <p><input type="checkbox" ng-model="datafile.CARBON_NACIONAL" ng-disabled="datafile.market !== 'MI'"> CARBON_NACIONAL </p>
-                <p><input type="checkbox" ng-model="datafile.CARBON_IMPORTACION" ng-disabled="datafile.market !== 'MI'"> CARBON_IMPORTACION </p>
-                <p><input type="checkbox" ng-model="datafile.CICLO_COMBINADO" ng-disabled="datafile.market !== 'MI'"> CICLO_COMBINADO </p>
-                <p><input type="checkbox" ng-model="datafile.FUEL_GAS_REGIMEN_ORDINARIO_SIN_PRIMA" ng-disabled="datafile.market !== 'MI'"> FUEL_+_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA) </p>
-                <p><input type="checkbox" ng-model="datafile.FUEL_GAS_REGIMEN_ORDINARIO_CON_PRIMA" ng-disabled="datafile.market !== 'MI'"> FUEL_+_GAS_REGIMEN_ORDINARIO_(CON_PRIMA) </p>
-                <p><input type="checkbox" ng-model="datafile.REGIMEN_ESPECIAL_A_MERCADO" ng-disabled="datafile.market !== 'MI'"> REGIMEN_ESPECIAL_A_MERCADO </p>
-                <p><input type="checkbox" ng-model="datafile.REGIMEN_ESPECIAL_A_DISTRIBUCION" ng-disabled="datafile.market !== 'MI'"> REGIMEN_ESPECIAL_A_DISTRIBUCION </p>
-                <p><input type="checkbox" ng-model="datafile.IMPORTACION_CONTRATO_LARGO_PLAZO" ng-disabled="datafile.market !== 'MI'"> IMPORTACION_CONTRATO_LARGO_PLAZO </p>
-                <p><input type="checkbox" ng-model="datafile.IMPORTACION_FRANCIA" ng-disabled="datafile.market !== 'MI'"> IMPORTACION_FRANCIA </p>
-                <p><input type="checkbox" ng-model="datafile.IMPORTACION_MARRUECOS" ng-disabled="datafile.market !== 'MI'"> IMPORTACION_MARRUECOS </p>
-                <p><input type="checkbox" ng-model="datafile.IMPORTACION_ANDORRA" ng-disabled="datafile.market !== 'MI'"> IMPORTACION_ANDORRA </p>
-                <p><input type="checkbox" ng-model="datafile.UNIDADES_GENERICAS" ng-disabled="datafile.market !== 'MI'"> UNIDADES_GENERICAS </p>
-                <p><input type="checkbox" ng-model="datafile.UNIDADES_SUBASTAS_DISTRIBUCION_AJUSTE_A_PREVISION_DEMANDA" ng-disabled="datafile.market !== 'MI'"> UNIDADES_SUBASTAS_DISTRIBUCION_AJUSTE_A_PREVISION_DEMANDA </p>
-                <p>'DEMANDA_MIBEL'</p>
-                <p><input type="checkbox" ng-model="datafile.COMERCIALIZACION_MIBEL" ng-disabled="datafile.market !== 'MI'"> COMERCIALIZACION_MIBEL </p>
-                <p><input type="checkbox" ng-model="datafile.COMERCIALIZACION_ULTIMO_RECURSO" ng-disabled="datafile.market !== 'MI'"> COMERCIALIZACION_ULTIMO_RECURSO </p>
-                <p><input type="checkbox" ng-model="datafile.CONSUMIDOR_DIRECTO" ng-disabled="datafile.market !== 'MI'"> CONSUMIDOR_DIRECTO </p>
-                <p><input type="checkbox" ng-model="datafile.CONSUMO_DE_BOMBEO" ng-disabled="datafile.market !== 'MI'"> CONSUMO_DE_BOMBEO </p>
-                <p><input type="checkbox" ng-model="datafile.EXPORTACION_CONTRATO_A_LARGO_PLAZO" ng-disabled="datafile.market !== 'MI'"> EXPORTACION_CONTRATO_A_LARGO_PLAZO </p>
-                <p><input type="checkbox" ng-model="datafile.EXPORTACION_A_FRANCIA" ng-disabled="datafile.market !== 'MI'"> EXPORTACION_A_FRANCIA </p>
-                <p><input type="checkbox" ng-model="datafile.EXPORTACION_A_MARRUECOS" ng-disabled="datafile.market !== 'MI'"> EXPORTACION_A_MARRUECOS </p>
-                <p><input type="checkbox" ng-model="datafile.EXPORTACION_A_ANDORRA" ng-disabled="datafile.market !== 'MI'"> EXPORTACION_A_ANDORRA </p>
-                <p><input type="checkbox" ng-model="datafile.UNIDADES_GENERICAS" ng-disabled="datafile.market !== 'MI'"> UNIDADES_GENERICAS </p>
-                <p><input type="checkbox" ng-model="datafile.UNIDADES_GENERICAS_DE_DISTRIBUCION" ng-disabled="datafile.market !== 'MI'"> UNIDADES_GENERICAS_DE_DISTRIBUCION </p>
-                <p><input type="checkbox" ng-model="datafile.UNIDADES_GENERICAS_DE_DISTRIBUCION" ng-disabled="datafile.market !== 'MI'"> UNIDADES_GENERICAS_DE_DISTRIBUCION </p>
-                <p>RESUMEN_DE_PRODUCCION_MIBEL</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_HIDRAULICA_901_902" ng-disabled="datafile.market !== 'MI'"> TOTAL_HIDRAULICA_(901+902) </p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_TERMICA_903_904_905_906_907_908" ng-disabled="datafile.market !== 'MI'"> TOTAL_TERMICA_(903+904+905+906+907+908) </p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_REGIMEN_ESPECIAL_909_910" ng-disabled="datafile.market !== 'MI'"> TOTAL_REGIMEN_ESPECIAL_(909+910) </p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_GENERICAS_916_917" ng-disabled="datafile.market !== 'MI'"> TOTAL_GENERICAS_(916+917) </p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_PRODUCCION_MIBEL" ng-disabled="datafile.market !== 'MI'"> TOTAL_PRODUCCION_MIBEL </p>
-                <p>RESUMEN_DE_DEMANDA_MIBEL</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_DEMANDA_NACIONAL_CLIENTES_921_922_923" ng-disabled="datafile.market !== 'MI'"> TOTAL_DEMANDA_NACIONAL_CLIENTES_(921+922+923) </p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_CONSUMO_BOMBEO_924" ng-disabled="datafile.market !== 'MI'"> TOTAL_CONSUMO_BOMBEO_(924) </p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_EXPORTACIONES_925_926_928_929" ng-disabled="datafile.market !== 'MI'"> TOTAL_EXPORTACIONES_(925+926+928+929) </p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_GENERICAS_930_931" ng-disabled="datafile.market !== 'MI'"> TOTAL_GENERICAS_(930+931) </p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_DEMANDA_MIBEL" ng-disabled="datafile.market !== 'MI'"> TOTAL_DEMANDA_MIBEL </p>
-                <p>OTROS_TOTALES_MIBEL</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO" ng-disabled="datafile.market !== 'MI'"> TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO </p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_VENTAS_INTERNACIONALES_COMERCIALIZACION_A_MERCADO" ng-disabled="datafile.market !== 'MI'"> TOTAL_VENTAS_INTERNACIONALES_COMERCIALIZACION_A_MERCADO </p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_REGIMEN_ORDINARIO_CON_PRIMA" ng-disabled="datafile.market !== 'MI'"> TOTAL_REGIMEN_ORDINARIO_CON_PRIMA </p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_POTENCIA_INDISPONIBLE" ng-disabled="datafile.market !== 'MI'"> TOTAL_POTENCIA_INDISPONIBLE </p>
-            </div>
-            <h3 class="uk-accordion-title">Componente Española</h3>
-            <div class="uk-accordion-content">
-                <p><input type="checkbox" ng-checked="true" ng-disabled="true">Fecha</p>
-                <p><input type="checkbox" ng-model="datafile.Anho" ng-disabled="datafile.market !== 'ES'">Año</p>
-                <p><input type="checkbox" ng-model="datafile.Mes" ng-disabled="datafile.market !== 'ES'">Mes</p>
-                <p><input type="checkbox" ng-model="datafile.Dia" ng-disabled="datafile.market !== 'ES'">Dia</p>
-                <p><input type="checkbox" ng-model="datafile.Semana" ng-disabled="datafile.market !== 'ES'">Semana</p>
-                <p><input type="checkbox" ng-model="datafile.DiaSemana" ng-disabled="datafile.market !== 'ES'">DiaSemana</p>
-                <p><input type="checkbox" ng-checked="true" ng-disabled="true">Hora</p>
-                <p><input type="checkbox" ng-checked="true" ng-disabled="true"> Precio</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_VENTAS" ng-disabled="datafile.market !== 'ES'">TOTAL_VENTAS</p>
-                <p>PRODUCCION_ESPAÑA</p>
-                <p><input type="checkbox" ng-model="datafile.HIDRAULICA_CONVENCIONAL" ng-disabled="datafile.market !== 'ES'">HIDRAULICA_CONVENCIONAL</p>
-                <p><input type="checkbox" ng-model="datafile.HIDRAULICA_BOMBEO_PURO" ng-disabled="datafile.market !== 'ES'">HIDRAULICA_BOMBEO_PURO</p>
-                <p><input type="checkbox" ng-model="datafile.HIDRAULICA_BOMBEO_PURO" ng-disabled="datafile.market !== 'ES'">NUCLEAR</p>
-                <p><input type="checkbox" ng-model="datafile.CARBON_NACIONAL" ng-disabled="datafile.market !== 'ES'">CARBON_NACIONAL</p>
-                <p><input type="checkbox" ng-model="datafile.CARBON_IMPORTACION" ng-disabled="datafile.market !== 'ES'">CARBON_IMPORTACION</p>
-                <p><input type="checkbox" ng-model="datafile.CICLO_COMBINADO" ng-disabled="datafile.market !== 'ES'">CICLO_COMBINADO</p>
-                <p><input type="checkbox" ng-model="datafile.FUEL_GAS_REGIMEN_ORDINARIO_SIN_PRIMA" ng-disabled="datafile.market !== 'ES'">FUEL_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA)</p>
-                <p><input type="checkbox" ng-model="datafile.FUEL_GAS_REGIMEN_ORDINARIO_CON_PRIMA" ng-disabled="datafile.market !== 'ES'">FUEL_GAS_REGIMEN_ORDINARIO_(CON_PRIMA)</p>
-                <p><input type="checkbox" ng-model="datafile.REGIMEN_ESPECIAL_A_MERCADO" ng-disabled="datafile.market !== 'ES'">REGIMEN_ESPECIAL_A_MERCADO</p>
-                <p><input type="checkbox" ng-model="datafile.REGIMEN_ESPECIAL_A_DISTRIBUCION" ng-disabled="datafile.market !== 'ES'">REGIMEN_ESPECIAL_A_DISTRIBUCION</p>
-                <p><input type="checkbox" ng-model="datafile.IMPORTACION_CONTRATO_LARGO_PLAZO" ng-disabled="datafile.market !== 'ES'">IMPORTACION_CONTRATO_LARGO_PLAZO</p>
-                <p><input type="checkbox" ng-model="datafile.IMPORTACION_FRANCIA" ng-disabled="datafile.market !== 'ES'">IMPORTACION_FRANCIA</p>
-                <p><input type="checkbox" ng-model="datafile.IMPORTACION_PORTUGAL" ng-disabled="datafile.market !== 'ES'">IMPORTACION_PORTUGAL</p>
-                <p><input type="checkbox" ng-model="datafile.IMPORTACION_MARRUECOS" ng-disabled="datafile.market !== 'ES'">IMPORTACION_MARRUECOS</p>
-                <p><input type="checkbox" ng-model="datafile.IMPORTACION_ANDORRA" ng-disabled="datafile.market !== 'ES'">IMPORTACION_ANDORRA</p>
-                <p><input type="checkbox" ng-model="datafile.UNIDADES_GENERICAS" ng-disabled="datafile.market !== 'ES'">UNIDADES_GENERICAS</p>
-                <p><input type="checkbox" ng-model="datafile.UNIDADES_AJUSTE_DE_DISTRIBUIDORAS_A_PREVISION_DEMANDA" ng-disabled="datafile.market !== 'ES'">UNIDADES_AJUSTE_DE_DISTRIBUIDORAS_A_PREVISION_DEMANDA</p>
-                <p>DEMANDA_ESPAÑA<p>
-                <p><input type="checkbox" ng-model="datafile.COMERCIALIZACION_NACIONAL" ng-disabled="datafile.market !== 'ES'">COMERCIALIZACION_NACIONAL</p>
-                <p><input type="checkbox" ng-model="datafile.COMERCIALIZACION_ULTIMO_RECURSO" ng-disabled="datafile.market !== 'ES'">COMERCIALIZACION_ULTIMO_RECURSO</p>
-                <p><input type="checkbox" ng-model="datafile.CONSUMIDOR_DIRECTO" ng-disabled="datafile.market !== 'ES'">CONSUMIDOR_DIRECTO</p>
-                <p><input type="checkbox" ng-model="datafile.CONSUMO_DE_BOMBEO" ng-disabled="datafile.market !== 'ES'">CONSUMO_DE_BOMBEO</p>
-                <p><input type="checkbox" ng-model="datafile.EXPORTACION_CONTRATO_A_LARGO_PLAZO" ng-disabled="datafile.market !== 'ES'">EXPORTACION_CONTRATO_A_LARGO_PLAZO</p>
-                <p><input type="checkbox" ng-model="datafile.EXPORTACION_A_FRANCIA" ng-disabled="datafile.market !== 'ES'">EXPORTACION_A_FRANCIA</p>
-                <p><input type="checkbox" ng-model="datafile.EXPORTACION_A_PORTUGAL" ng-disabled="datafile.market !== 'ES'">EXPORTACION_A_PORTUGAL</p>
-                <p><input type="checkbox" ng-model="datafile.EXPORTACION_A_MARRUECOS" ng-disabled="datafile.market !== 'ES'">EXPORTACION_A_MARRUECOS</p>
-                <p><input type="checkbox" ng-model="datafile.EXPORTACION_A_ANDORRA" ng-disabled="datafile.market !== 'ES'">EXPORTACION_A_ANDORRA</p>
-                <p><input type="checkbox" ng-model="datafile.UNIDADES_GENERICAS" ng-disabled="datafile.market !== 'ES'">UNIDADES_GENERICAS</p>
-                <p><input type="checkbox" ng-model="datafile.UNIDADES_GENERICAS_SUBASTAS_DISTRIBUCION" ng-disabled="datafile.market !== 'ES'">UNIDADES_GENERICAS_SUBASTAS_DISTRIBUCION</p>
-                <p>RESUMEN_DE_PRODUCCION_ESPAÑA<p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_HIDRAULICA_1_2" ng-disabled="datafile.market !== 'ES'">TOTAL_HIDRAULICA_(1+2)</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_TERMICA_3_4_5_6_7_8" ng-disabled="datafile.market !== 'ES'">TOTAL_TERMICA_(3+4+5+6+7+8)</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_REGIMEN_ESPECIAL_9_10" ng-disabled="datafile.market !== 'ES'">TOTAL_REGIMEN_ESPECIAL_(9+10)</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_IMPORTACION_11_12_13_14_15" ng-disabled="datafile.market !== 'ES'">TOTAL_IMPORTACION_(11+12+13+14+15)</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_GENERICAS_16_17" ng-disabled="datafile.market !== 'ES'">TOTAL_GENERICAS_(16+17)</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_PRODUCCION" ng-disabled="datafile.market !== 'ES'">TOTAL_PRODUCCION</p>
-                <p>RESUMEN_DE_DEMANDA_ESPAÑA<p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_DEMANDA_NACIONAL_CLIENTES_21_22_23" ng-disabled="datafile.market !== 'ES'">TOTAL_DEMANDA_NACIONAL_CLIENTES_(21+22+23)</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_CONSUMO_BOMBEO_24" ng-disabled="datafile.market !== 'ES'">TOTAL_CONSUMO_BOMBEO_(24)</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_EXPORTACIONES_25_26_27_28_29" ng-disabled="datafile.market !== 'ES'">TOTAL_EXPORTACIONES_(25+26+27+28+29)</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_GENERICAS_30_31" ng-disabled="datafile.market !== 'ES'">TOTAL_GENERICAS_(30+31)</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_DEMANDA" ng-disabled="datafile.market !== 'ES'">TOTAL_DEMANDA</p>
-                <p>OTROS_TOTALES_ESPAÑA<p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO" ng-disabled="datafile.market !== 'ES'">TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_VENTAS_INTERNACIONALES_COMERCIALIZACION_A_MERCADO" ng-disabled="datafile.market !== 'ES'">TOTAL_VENTAS_INTERNACIONALES_COMERCIALIZACION_A_MERCADO</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_REGIMEN_ORDINARIO_CON_PRIMA" ng-disabled="datafile.market !== 'ES'">TOTAL_REGIMEN_ORDINARIO_CON_PRIMA</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_POTENCIA_INDISPONIBLE" ng-disabled="datafile.market !== 'ES'">TOTAL_POTENCIA_INDISPONIBLE</p>
-            </div>
-            <h3 class="uk-accordion-title">Componente Portuguesa</h3>
-            <div class="uk-accordion-content">
-                <p><input type="checkbox" ng-checked="true" ng-disabled="true">Fecha</p>
-                <p><input type="checkbox" ng-model="datafile.Anho" ng-disabled="datafile.market !== 'PT'">Año</p>
-                <p><input type="checkbox" ng-model="datafile.Mes" ng-disabled="datafile.market !== 'PT'">Mes</p>
-                <p><input type="checkbox" ng-model="datafile.Dia" ng-disabled="datafile.market !== 'PT'">Dia</p>
-                <p><input type="checkbox" ng-model="datafile.Semana" ng-disabled="datafile.market !== 'PT'">Semana</p>
-                <p><input type="checkbox" ng-model="datafile.DiaSemana" ng-disabled="datafile.market !== 'PT'">DiaSemana</p>
-                <p><input type="checkbox" ng-checked="true" ng-disabled="true">Hora</p>
-                <p><input type="checkbox" ng-checked="true" ng-disabled="true"> Precio</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_VENTAS" ng-disabled="datafile.market !== 'PT'">TOTAL_VENTAS</p>
-                <p>PRODUCCION_PORTUGAL</p>
-                <p><input type="checkbox" ng-model="datafile.HIDRAULICA_CONVENCIONAL" ng-disabled="datafile.market !== 'PT'">HIDRAULICA_CONVENCIONAL</p>
-                <p><input type="checkbox" ng-model="datafile.HIDRAULICA_BOMBEO_PURO" ng-disabled="datafile.market !== 'PT'">HIDRAULICA_BOMBEO_PURO</p>
-                <p><input type="checkbox" ng-model="datafile.NUCLEAR" ng-disabled="datafile.market !== 'PT'">NUCLEAR</p>
-                <p><input type="checkbox" ng-model="datafile.CARBON_NACIONAL" ng-disabled="datafile.market !== 'PT'">CARBON_NACIONAL</p>
-                <p><input type="checkbox" ng-model="datafile.CARBON_IMPORTACION" ng-disabled="datafile.market !== 'PT'">CARBON_IMPORTACION</p>
-                <p><input type="checkbox" ng-model="datafile.CICLO_COMBINADO" ng-disabled="datafile.market !== 'PT'">CICLO_COMBINADO</p>
-                <p><input type="checkbox" ng-model="datafile.FUEL_GAS" ng-disabled="datafile.market !== 'PT'">FUEL_+_GAS</p>
-                <p><input type="checkbox" ng-model="datafile.REGIMEN_ESPECIAL_A_MERCADO" ng-disabled="datafile.market !== 'PT'">REGIMEN_ESPECIAL_A_MERCADO</p>
-                <p><input type="checkbox" ng-model="datafile.IMPORTACION_DE_ESPANHA" ng-disabled="datafile.market !== 'PT'">IMPORTACION_DE_ESPAÑA</p>
-                <p><input type="checkbox" ng-model="datafile.UNIDADES_GENERICAS" ng-disabled="datafile.market !== 'PT'">UNIDADES_GENERICAS</p>
-                <p>DEMANDA_PORTUGAL</p>
-                <p><input type="checkbox" ng-model="datafile.COMERCIALIZACION_NACIONAL" ng-disabled="datafile.market !== 'PT'">COMERCIALIZACION_NACIONAL</p>
-                <p><input type="checkbox" ng-model="datafile.COMERCIALIZACION_DE_ULTIMO_RECURSO" ng-disabled="datafile.market !== 'PT'">COMERCIALIZACION_DE_ULTIMO_RECURSO</p>
-                <p><input type="checkbox" ng-model="datafile.CONSUMIDOR_DIRECTO" ng-disabled="datafile.market !== 'PT'">CONSUMIDOR_DIRECTO</p>
-                <p><input type="checkbox" ng-model="datafile.CONSUMO_DE_BOMBEO" ng-disabled="datafile.market !== 'PT'">CONSUMO_DE_BOMBEO</p>
-                <p><input type="checkbox" ng-model="datafile.EXPORTACION_A_ESPANHA" ng-disabled="datafile.market !== 'PT'">EXPORTACION_A_ESPAÑA</p>
-                <p><input type="checkbox" ng-model="datafile.UNIDADES_GENERICAS" ng-disabled="datafile.market !== 'PT'">UNIDADES_GENERICAS</p>
-                <p>RESUMEN_DE_PRODUCCION_PORTUGAL</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_HIDRAULICA_201_202" ng-disabled="datafile.market !== 'PT'">TOTAL_HIDRAULICA_(201+202)</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_TERMICA_203_204_205_206_207" ng-disabled="datafile.market !== 'PT'">TOTAL_TERMICA_(203+204+205+206+207)</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_IMPORTACION_213" ng-disabled="datafile.market !== 'PT'">TOTAL_IMPORTACION_(213)</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_GENERICAS_216" ng-disabled="datafile.market !== 'PT'">TOTAL_GENERICAS_(216)</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_PRODUCCION" ng-disabled="datafile.market !== 'PT'">TOTAL_PRODUCCION</p>
-                <p>RESUMEN_DE_DEMANDA_PORTUGAL</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_DEMANDA_PORTUGAL_CLIENTES_221_222_223" ng-disabled="datafile.market !== 'PT'">TOTAL_DEMANDA_PORTUGAL_CLIENTES_(221+222+223)</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_CONSUMO_BOMBEO_224" ng-disabled="datafile.market !== 'PT'">TOTAL_CONSUMO_BOMBEO_(224)</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_EXPORTACIONES_227" ng-disabled="datafile.market !== 'PT'">TOTAL_EXPORTACIONES_(227)</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_GENERICAS_230" ng-disabled="datafile.market !== 'PT'">TOTAL_GENERICAS_(230)</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_DEMANDA" ng-disabled="datafile.market !== 'PT'">TOTAL_DEMANDA</p>
-                <p>OTROS_TOTALES_PORTUGAL</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO" ng-disabled="datafile.market !== 'PT'">TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO</p>
-                <p><input type="checkbox" ng-model="datafile.TOTAL_POTENCIA_INDISPONIBLE" ng-disabled="datafile.market !== 'PT'">TOTAL_POTENCIA_INDISPONIBLE</p>
-            </div>
-        </div>
-    </fieldset>
+    <button class="menu-button" id="open-button">Open Menu</button>
+    <div class="content-wrap-menu">
+      <div class="uk-container uk-container-center">
+	<p><img src="https://ga-beacon.appspot.com/UA-56011126-3/PriceProfor/DataFileGenerator?pixel"></p>
+	<form class="uk-form" ng-controller="FormController">
+	  <div class="uk-width-2-3 uk-container-center">
+	    <div class="uk-alert" data-uk-alert>
+	      <a href="" class="uk-alert-close uk-close"></a>
+	      <h3>Para descargar los datos completos por año, tienes disponible la pagina de  <a href="http://data.lab.fiware.org/dataset/omie-daily-market-hourly-results" target="_blank">CKAN opendata fiware</a> con los ficheros generados disponibles.</h3>
+	    </div>
+	    <fieldset data-uk-margin="">
+	      <legend>Obtiene los datos del Mercado Diario de Electricidad del Operador de Mercado OMIE</legend>
+	      <input class="uk-button uk-margin-small-top uk-button-success" type="button" ng-click="generatefile(datafile)" value="Generar y descargar"/>
+		<select ng-model="datafile.market" class="uk-margin-small-top">
+		<option value="MI">MIBEL</option>
+		<option value="ES">Componente Española</option>
+		<option value="PT">Componente Portuguesa</option>
+		</select>
+	      <input class="uk-margin-small-top" type="text" ng-model="datafile.fechaini" data-uk-datepicker="{format:'YYYY-MM-DD'}">
+	      <input class="uk-margin-small-top" type="text" ng-model="datafile.fechafin" data-uk-datepicker="{format:'YYYY-MM-DD'}">
+	    </fieldset>
+	  </div>
+	  <div class="uk-width-2-3 uk-container-center">
+	    <fieldset>
+	      <legend>Selecciona los campos del fichero de datos</legend>
+	      <div class="uk-accordion" data-uk-accordion="{showfirst:false}">
+		<h3 class="uk-accordion-title">MIBEL</h3>
+		<div class="uk-accordion-content">
+		  <p>Si necesitas descargar todos los datos considera usar la pagina de descarga <a href="omieopendata"></a> </p>
+		  <p><input type="checkbox" ng-checked="true" ng-disabled="true">Fecha</p>
+		  <p><input type="checkbox" ng-model="datafile.Anho" ng-disabled="datafile.market !== 'MI'">Año</p>
+		  <p><input type="checkbox" ng-model="datafile.MMI" ng-disabled="datafile.market !== 'MI'">MMI</p>
+		  <p><input type="checkbox" ng-model="datafile.Dia" ng-disabled="datafile.market !== 'MI'">Dia</p>
+		  <p><input type="checkbox" ng-model="datafile.Semana" ng-disabled="datafile.market !== 'MI'">Semana</p>
+		  <p><input type="checkbox" ng-model="datafile.DiaSemana" ng-disabled="datafile.market !== 'MI'">DiaSemana</p>
+		  <p><input type="checkbox" ng-checked="true" ng-disabled="true">Hora</p>
+		  <p><input type="checkbox" ng-checked="true" ng-disabled="true"> Precio</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_VENTAS" ng-disabled="datafile.market !== 'MI'"> TOTAL_VENTAS</p>
+		  <p>PRODUCCION_MIBEL</p>
+		  <p><input type="checkbox" ng-model="datafile.HIDRAULICA_CONVENCIONAL" ng-disabled="datafile.market !== 'MI'"> HIDRAULICA_CONVENCIONAL</p>
+		  <p><input type="checkbox" ng-model="datafile.HIDRAULICA_BOMBEO_PURO" ng-disabled="datafile.market !== 'MI'"> HIDRAULICA_BOMBEO_PURO</p>
+		  <p><input type="checkbox" ng-model="datafile.NUCLEAR" ng-disabled="datafile.market !== 'MI'"> NUCLEAR</p>
+		  <p><input type="checkbox" ng-model="datafile.CARBON_NACIONAL" ng-disabled="datafile.market !== 'MI'"> CARBON_NACIONAL </p>
+		  <p><input type="checkbox" ng-model="datafile.CARBON_IMPORTACION" ng-disabled="datafile.market !== 'MI'"> CARBON_IMPORTACION </p>
+		  <p><input type="checkbox" ng-model="datafile.CICLO_COMBINADO" ng-disabled="datafile.market !== 'MI'"> CICLO_COMBINADO </p>
+		  <p><input type="checkbox" ng-model="datafile.FUEL_GAS_REGIMEN_ORDINARIO_SIN_PRIMA" ng-disabled="datafile.market !== 'MI'"> FUEL_+_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA) </p>
+		  <p><input type="checkbox" ng-model="datafile.FUEL_GAS_REGIMEN_ORDINARIO_CON_PRIMA" ng-disabled="datafile.market !== 'MI'"> FUEL_+_GAS_REGIMEN_ORDINARIO_(CON_PRIMA) </p>
+		  <p><input type="checkbox" ng-model="datafile.REGIMEN_ESPECIAL_A_MERCADO" ng-disabled="datafile.market !== 'MI'"> REGIMEN_ESPECIAL_A_MERCADO </p>
+		  <p><input type="checkbox" ng-model="datafile.REGIMEN_ESPECIAL_A_DISTRIBUCION" ng-disabled="datafile.market !== 'MI'"> REGIMEN_ESPECIAL_A_DISTRIBUCION </p>
+		  <p><input type="checkbox" ng-model="datafile.IMPORTACION_CONTRATO_LARGO_PLAZO" ng-disabled="datafile.market !== 'MI'"> IMPORTACION_CONTRATO_LARGO_PLAZO </p>
+		  <p><input type="checkbox" ng-model="datafile.IMPORTACION_FRANCIA" ng-disabled="datafile.market !== 'MI'"> IMPORTACION_FRANCIA </p>
+		  <p><input type="checkbox" ng-model="datafile.IMPORTACION_MARRUECOS" ng-disabled="datafile.market !== 'MI'"> IMPORTACION_MARRUECOS </p>
+		  <p><input type="checkbox" ng-model="datafile.IMPORTACION_ANDORRA" ng-disabled="datafile.market !== 'MI'"> IMPORTACION_ANDORRA </p>
+		  <p><input type="checkbox" ng-model="datafile.UNIDADES_GENERICAS" ng-disabled="datafile.market !== 'MI'"> UNIDADES_GENERICAS </p>
+		  <p><input type="checkbox" ng-model="datafile.UNIDADES_SUBASTAS_DISTRIBUCION_AJUSTE_A_PREVISION_DEMANDA" ng-disabled="datafile.market !== 'MI'"> UNIDADES_SUBASTAS_DISTRIBUCION_AJUSTE_A_PREVISION_DEMANDA </p>
+		  <p>'DEMANDA_MIBEL'</p>
+		  <p><input type="checkbox" ng-model="datafile.COMERCIALIZACION_MIBEL" ng-disabled="datafile.market !== 'MI'"> COMERCIALIZACION_MIBEL </p>
+		  <p><input type="checkbox" ng-model="datafile.COMERCIALIZACION_ULTIMO_RECURSO" ng-disabled="datafile.market !== 'MI'"> COMERCIALIZACION_ULTIMO_RECURSO </p>
+		  <p><input type="checkbox" ng-model="datafile.CONSUMIDOR_DIRECTO" ng-disabled="datafile.market !== 'MI'"> CONSUMIDOR_DIRECTO </p>
+		  <p><input type="checkbox" ng-model="datafile.CONSUMO_DE_BOMBEO" ng-disabled="datafile.market !== 'MI'"> CONSUMO_DE_BOMBEO </p>
+		  <p><input type="checkbox" ng-model="datafile.EXPORTACION_CONTRATO_A_LARGO_PLAZO" ng-disabled="datafile.market !== 'MI'"> EXPORTACION_CONTRATO_A_LARGO_PLAZO </p>
+		  <p><input type="checkbox" ng-model="datafile.EXPORTACION_A_FRANCIA" ng-disabled="datafile.market !== 'MI'"> EXPORTACION_A_FRANCIA </p>
+		  <p><input type="checkbox" ng-model="datafile.EXPORTACION_A_MARRUECOS" ng-disabled="datafile.market !== 'MI'"> EXPORTACION_A_MARRUECOS </p>
+		  <p><input type="checkbox" ng-model="datafile.EXPORTACION_A_ANDORRA" ng-disabled="datafile.market !== 'MI'"> EXPORTACION_A_ANDORRA </p>
+		  <p><input type="checkbox" ng-model="datafile.UNIDADES_GENERICAS" ng-disabled="datafile.market !== 'MI'"> UNIDADES_GENERICAS </p>
+		  <p><input type="checkbox" ng-model="datafile.UNIDADES_GENERICAS_DE_DISTRIBUCION" ng-disabled="datafile.market !== 'MI'"> UNIDADES_GENERICAS_DE_DISTRIBUCION </p>
+		  <p><input type="checkbox" ng-model="datafile.UNIDADES_GENERICAS_DE_DISTRIBUCION" ng-disabled="datafile.market !== 'MI'"> UNIDADES_GENERICAS_DE_DISTRIBUCION </p>
+		  <p>RESUMEN_DE_PRODUCCION_MIBEL</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_HIDRAULICA_901_902" ng-disabled="datafile.market !== 'MI'"> TOTAL_HIDRAULICA_(901+902) </p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_TERMICA_903_904_905_906_907_908" ng-disabled="datafile.market !== 'MI'"> TOTAL_TERMICA_(903+904+905+906+907+908) </p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_REGIMEN_ESPECIAL_909_910" ng-disabled="datafile.market !== 'MI'"> TOTAL_REGIMEN_ESPECIAL_(909+910) </p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_GENERICAS_916_917" ng-disabled="datafile.market !== 'MI'"> TOTAL_GENERICAS_(916+917) </p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_PRODUCCION_MIBEL" ng-disabled="datafile.market !== 'MI'"> TOTAL_PRODUCCION_MIBEL </p>
+		  <p>RESUMEN_DE_DEMANDA_MIBEL</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_DEMANDA_NACIONAL_CLIENTES_921_922_923" ng-disabled="datafile.market !== 'MI'"> TOTAL_DEMANDA_NACIONAL_CLIENTES_(921+922+923) </p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_CONSUMO_BOMBEO_924" ng-disabled="datafile.market !== 'MI'"> TOTAL_CONSUMO_BOMBEO_(924) </p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_EXPORTACIONES_925_926_928_929" ng-disabled="datafile.market !== 'MI'"> TOTAL_EXPORTACIONES_(925+926+928+929) </p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_GENERICAS_930_931" ng-disabled="datafile.market !== 'MI'"> TOTAL_GENERICAS_(930+931) </p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_DEMANDA_MIBEL" ng-disabled="datafile.market !== 'MI'"> TOTAL_DEMANDA_MIBEL </p>
+		  <p>OTROS_TOTALES_MIBEL</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO" ng-disabled="datafile.market !== 'MI'"> TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO </p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_VENTAS_INTERNACIONALES_COMERCIALIZACION_A_MERCADO" ng-disabled="datafile.market !== 'MI'"> TOTAL_VENTAS_INTERNACIONALES_COMERCIALIZACION_A_MERCADO </p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_REGIMEN_ORDINARIO_CON_PRIMA" ng-disabled="datafile.market !== 'MI'"> TOTAL_REGIMEN_ORDINARIO_CON_PRIMA </p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_POTENCIA_INDISPONIBLE" ng-disabled="datafile.market !== 'MI'"> TOTAL_POTENCIA_INDISPONIBLE </p>
+		</div>
+		<h3 class="uk-accordion-title">Componente Española</h3>
+		<div class="uk-accordion-content">
+		  <p><input type="checkbox" ng-checked="true" ng-disabled="true">Fecha</p>
+		  <p><input type="checkbox" ng-model="datafile.Anho" ng-disabled="datafile.market !== 'ES'">Año</p>
+		  <p><input type="checkbox" ng-model="datafile.Mes" ng-disabled="datafile.market !== 'ES'">Mes</p>
+		  <p><input type="checkbox" ng-model="datafile.Dia" ng-disabled="datafile.market !== 'ES'">Dia</p>
+		  <p><input type="checkbox" ng-model="datafile.Semana" ng-disabled="datafile.market !== 'ES'">Semana</p>
+		  <p><input type="checkbox" ng-model="datafile.DiaSemana" ng-disabled="datafile.market !== 'ES'">DiaSemana</p>
+		  <p><input type="checkbox" ng-checked="true" ng-disabled="true">Hora</p>
+		  <p><input type="checkbox" ng-checked="true" ng-disabled="true"> Precio</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_VENTAS" ng-disabled="datafile.market !== 'ES'">TOTAL_VENTAS</p>
+		  <p>PRODUCCION_ESPAÑA</p>
+		  <p><input type="checkbox" ng-model="datafile.HIDRAULICA_CONVENCIONAL" ng-disabled="datafile.market !== 'ES'">HIDRAULICA_CONVENCIONAL</p>
+		  <p><input type="checkbox" ng-model="datafile.HIDRAULICA_BOMBEO_PURO" ng-disabled="datafile.market !== 'ES'">HIDRAULICA_BOMBEO_PURO</p>
+		  <p><input type="checkbox" ng-model="datafile.HIDRAULICA_BOMBEO_PURO" ng-disabled="datafile.market !== 'ES'">NUCLEAR</p>
+		  <p><input type="checkbox" ng-model="datafile.CARBON_NACIONAL" ng-disabled="datafile.market !== 'ES'">CARBON_NACIONAL</p>
+		  <p><input type="checkbox" ng-model="datafile.CARBON_IMPORTACION" ng-disabled="datafile.market !== 'ES'">CARBON_IMPORTACION</p>
+		  <p><input type="checkbox" ng-model="datafile.CICLO_COMBINADO" ng-disabled="datafile.market !== 'ES'">CICLO_COMBINADO</p>
+		  <p><input type="checkbox" ng-model="datafile.FUEL_GAS_REGIMEN_ORDINARIO_SIN_PRIMA" ng-disabled="datafile.market !== 'ES'">FUEL_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA)</p>
+		  <p><input type="checkbox" ng-model="datafile.FUEL_GAS_REGIMEN_ORDINARIO_CON_PRIMA" ng-disabled="datafile.market !== 'ES'">FUEL_GAS_REGIMEN_ORDINARIO_(CON_PRIMA)</p>
+		  <p><input type="checkbox" ng-model="datafile.REGIMEN_ESPECIAL_A_MERCADO" ng-disabled="datafile.market !== 'ES'">REGIMEN_ESPECIAL_A_MERCADO</p>
+		  <p><input type="checkbox" ng-model="datafile.REGIMEN_ESPECIAL_A_DISTRIBUCION" ng-disabled="datafile.market !== 'ES'">REGIMEN_ESPECIAL_A_DISTRIBUCION</p>
+		  <p><input type="checkbox" ng-model="datafile.IMPORTACION_CONTRATO_LARGO_PLAZO" ng-disabled="datafile.market !== 'ES'">IMPORTACION_CONTRATO_LARGO_PLAZO</p>
+		  <p><input type="checkbox" ng-model="datafile.IMPORTACION_FRANCIA" ng-disabled="datafile.market !== 'ES'">IMPORTACION_FRANCIA</p>
+		  <p><input type="checkbox" ng-model="datafile.IMPORTACION_PORTUGAL" ng-disabled="datafile.market !== 'ES'">IMPORTACION_PORTUGAL</p>
+		  <p><input type="checkbox" ng-model="datafile.IMPORTACION_MARRUECOS" ng-disabled="datafile.market !== 'ES'">IMPORTACION_MARRUECOS</p>
+		  <p><input type="checkbox" ng-model="datafile.IMPORTACION_ANDORRA" ng-disabled="datafile.market !== 'ES'">IMPORTACION_ANDORRA</p>
+		  <p><input type="checkbox" ng-model="datafile.UNIDADES_GENERICAS" ng-disabled="datafile.market !== 'ES'">UNIDADES_GENERICAS</p>
+		  <p><input type="checkbox" ng-model="datafile.UNIDADES_AJUSTE_DE_DISTRIBUIDORAS_A_PREVISION_DEMANDA" ng-disabled="datafile.market !== 'ES'">UNIDADES_AJUSTE_DE_DISTRIBUIDORAS_A_PREVISION_DEMANDA</p>
+		  <p>DEMANDA_ESPAÑA<p>
+		  <p><input type="checkbox" ng-model="datafile.COMERCIALIZACION_NACIONAL" ng-disabled="datafile.market !== 'ES'">COMERCIALIZACION_NACIONAL</p>
+		  <p><input type="checkbox" ng-model="datafile.COMERCIALIZACION_ULTIMO_RECURSO" ng-disabled="datafile.market !== 'ES'">COMERCIALIZACION_ULTIMO_RECURSO</p>
+		  <p><input type="checkbox" ng-model="datafile.CONSUMIDOR_DIRECTO" ng-disabled="datafile.market !== 'ES'">CONSUMIDOR_DIRECTO</p>
+		  <p><input type="checkbox" ng-model="datafile.CONSUMO_DE_BOMBEO" ng-disabled="datafile.market !== 'ES'">CONSUMO_DE_BOMBEO</p>
+		  <p><input type="checkbox" ng-model="datafile.EXPORTACION_CONTRATO_A_LARGO_PLAZO" ng-disabled="datafile.market !== 'ES'">EXPORTACION_CONTRATO_A_LARGO_PLAZO</p>
+		  <p><input type="checkbox" ng-model="datafile.EXPORTACION_A_FRANCIA" ng-disabled="datafile.market !== 'ES'">EXPORTACION_A_FRANCIA</p>
+		  <p><input type="checkbox" ng-model="datafile.EXPORTACION_A_PORTUGAL" ng-disabled="datafile.market !== 'ES'">EXPORTACION_A_PORTUGAL</p>
+		  <p><input type="checkbox" ng-model="datafile.EXPORTACION_A_MARRUECOS" ng-disabled="datafile.market !== 'ES'">EXPORTACION_A_MARRUECOS</p>
+		  <p><input type="checkbox" ng-model="datafile.EXPORTACION_A_ANDORRA" ng-disabled="datafile.market !== 'ES'">EXPORTACION_A_ANDORRA</p>
+		  <p><input type="checkbox" ng-model="datafile.UNIDADES_GENERICAS" ng-disabled="datafile.market !== 'ES'">UNIDADES_GENERICAS</p>
+		  <p><input type="checkbox" ng-model="datafile.UNIDADES_GENERICAS_SUBASTAS_DISTRIBUCION" ng-disabled="datafile.market !== 'ES'">UNIDADES_GENERICAS_SUBASTAS_DISTRIBUCION</p>
+		  <p>RESUMEN_DE_PRODUCCION_ESPAÑA<p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_HIDRAULICA_1_2" ng-disabled="datafile.market !== 'ES'">TOTAL_HIDRAULICA_(1+2)</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_TERMICA_3_4_5_6_7_8" ng-disabled="datafile.market !== 'ES'">TOTAL_TERMICA_(3+4+5+6+7+8)</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_REGIMEN_ESPECIAL_9_10" ng-disabled="datafile.market !== 'ES'">TOTAL_REGIMEN_ESPECIAL_(9+10)</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_IMPORTACION_11_12_13_14_15" ng-disabled="datafile.market !== 'ES'">TOTAL_IMPORTACION_(11+12+13+14+15)</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_GENERICAS_16_17" ng-disabled="datafile.market !== 'ES'">TOTAL_GENERICAS_(16+17)</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_PRODUCCION" ng-disabled="datafile.market !== 'ES'">TOTAL_PRODUCCION</p>
+		  <p>RESUMEN_DE_DEMANDA_ESPAÑA<p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_DEMANDA_NACIONAL_CLIENTES_21_22_23" ng-disabled="datafile.market !== 'ES'">TOTAL_DEMANDA_NACIONAL_CLIENTES_(21+22+23)</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_CONSUMO_BOMBEO_24" ng-disabled="datafile.market !== 'ES'">TOTAL_CONSUMO_BOMBEO_(24)</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_EXPORTACIONES_25_26_27_28_29" ng-disabled="datafile.market !== 'ES'">TOTAL_EXPORTACIONES_(25+26+27+28+29)</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_GENERICAS_30_31" ng-disabled="datafile.market !== 'ES'">TOTAL_GENERICAS_(30+31)</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_DEMANDA" ng-disabled="datafile.market !== 'ES'">TOTAL_DEMANDA</p>
+		  <p>OTROS_TOTALES_ESPAÑA<p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO" ng-disabled="datafile.market !== 'ES'">TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_VENTAS_INTERNACIONALES_COMERCIALIZACION_A_MERCADO" ng-disabled="datafile.market !== 'ES'">TOTAL_VENTAS_INTERNACIONALES_COMERCIALIZACION_A_MERCADO</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_REGIMEN_ORDINARIO_CON_PRIMA" ng-disabled="datafile.market !== 'ES'">TOTAL_REGIMEN_ORDINARIO_CON_PRIMA</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_POTENCIA_INDISPONIBLE" ng-disabled="datafile.market !== 'ES'">TOTAL_POTENCIA_INDISPONIBLE</p>
+		</div>
+	        <h3 class="uk-accordion-title">Componente Portuguesa</h3>
+		<div class="uk-accordion-content">
+		  <p><input type="checkbox" ng-checked="true" ng-disabled="true">Fecha</p>
+		  <p><input type="checkbox" ng-model="datafile.Anho" ng-disabled="datafile.market !== 'PT'">Año</p>
+		  <p><input type="checkbox" ng-model="datafile.Mes" ng-disabled="datafile.market !== 'PT'">Mes</p>
+		  <p><input type="checkbox" ng-model="datafile.Dia" ng-disabled="datafile.market !== 'PT'">Dia</p>
+		  <p><input type="checkbox" ng-model="datafile.Semana" ng-disabled="datafile.market !== 'PT'">Semana</p>
+		  <p><input type="checkbox" ng-model="datafile.DiaSemana" ng-disabled="datafile.market !== 'PT'">DiaSemana</p>
+		  <p><input type="checkbox" ng-checked="true" ng-disabled="true">Hora</p>
+		  <p><input type="checkbox" ng-checked="true" ng-disabled="true"> Precio</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_VENTAS" ng-disabled="datafile.market !== 'PT'">TOTAL_VENTAS</p>
+		  <p>PRODUCCION_PORTUGAL</p>
+		  <p><input type="checkbox" ng-model="datafile.HIDRAULICA_CONVENCIONAL" ng-disabled="datafile.market !== 'PT'">HIDRAULICA_CONVENCIONAL</p>
+		  <p><input type="checkbox" ng-model="datafile.HIDRAULICA_BOMBEO_PURO" ng-disabled="datafile.market !== 'PT'">HIDRAULICA_BOMBEO_PURO</p>
+		  <p><input type="checkbox" ng-model="datafile.NUCLEAR" ng-disabled="datafile.market !== 'PT'">NUCLEAR</p>
+		  <p><input type="checkbox" ng-model="datafile.CARBON_NACIONAL" ng-disabled="datafile.market !== 'PT'">CARBON_NACIONAL</p>
+		  <p><input type="checkbox" ng-model="datafile.CARBON_IMPORTACION" ng-disabled="datafile.market !== 'PT'">CARBON_IMPORTACION</p>
+		  <p><input type="checkbox" ng-model="datafile.CICLO_COMBINADO" ng-disabled="datafile.market !== 'PT'">CICLO_COMBINADO</p>
+		  <p><input type="checkbox" ng-model="datafile.FUEL_GAS" ng-disabled="datafile.market !== 'PT'">FUEL_+_GAS</p>
+		  <p><input type="checkbox" ng-model="datafile.REGIMEN_ESPECIAL_A_MERCADO" ng-disabled="datafile.market !== 'PT'">REGIMEN_ESPECIAL_A_MERCADO</p>
+		  <p><input type="checkbox" ng-model="datafile.IMPORTACION_DE_ESPANHA" ng-disabled="datafile.market !== 'PT'">IMPORTACION_DE_ESPAÑA</p>
+		  <p><input type="checkbox" ng-model="datafile.UNIDADES_GENERICAS" ng-disabled="datafile.market !== 'PT'">UNIDADES_GENERICAS</p>
+		  <p>DEMANDA_PORTUGAL</p>
+		  <p><input type="checkbox" ng-model="datafile.COMERCIALIZACION_NACIONAL" ng-disabled="datafile.market !== 'PT'">COMERCIALIZACION_NACIONAL</p>
+		  <p><input type="checkbox" ng-model="datafile.COMERCIALIZACION_DE_ULTIMO_RECURSO" ng-disabled="datafile.market !== 'PT'">COMERCIALIZACION_DE_ULTIMO_RECURSO</p>
+		  <p><input type="checkbox" ng-model="datafile.CONSUMIDOR_DIRECTO" ng-disabled="datafile.market !== 'PT'">CONSUMIDOR_DIRECTO</p>
+		  <p><input type="checkbox" ng-model="datafile.CONSUMO_DE_BOMBEO" ng-disabled="datafile.market !== 'PT'">CONSUMO_DE_BOMBEO</p>
+		  <p><input type="checkbox" ng-model="datafile.EXPORTACION_A_ESPANHA" ng-disabled="datafile.market !== 'PT'">EXPORTACION_A_ESPAÑA</p>
+		  <p><input type="checkbox" ng-model="datafile.UNIDADES_GENERICAS" ng-disabled="datafile.market !== 'PT'">UNIDADES_GENERICAS</p>
+		  <p>RESUMEN_DE_PRODUCCION_PORTUGAL</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_HIDRAULICA_201_202" ng-disabled="datafile.market !== 'PT'">TOTAL_HIDRAULICA_(201+202)</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_TERMICA_203_204_205_206_207" ng-disabled="datafile.market !== 'PT'">TOTAL_TERMICA_(203+204+205+206+207)</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_IMPORTACION_213" ng-disabled="datafile.market !== 'PT'">TOTAL_IMPORTACION_(213)</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_GENERICAS_216" ng-disabled="datafile.market !== 'PT'">TOTAL_GENERICAS_(216)</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_PRODUCCION" ng-disabled="datafile.market !== 'PT'">TOTAL_PRODUCCION</p>
+		  <p>RESUMEN_DE_DEMANDA_PORTUGAL</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_DEMANDA_PORTUGAL_CLIENTES_221_222_223" ng-disabled="datafile.market !== 'PT'">TOTAL_DEMANDA_PORTUGAL_CLIENTES_(221+222+223)</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_CONSUMO_BOMBEO_224" ng-disabled="datafile.market !== 'PT'">TOTAL_CONSUMO_BOMBEO_(224)</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_EXPORTACIONES_227" ng-disabled="datafile.market !== 'PT'">TOTAL_EXPORTACIONES_(227)</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_GENERICAS_230" ng-disabled="datafile.market !== 'PT'">TOTAL_GENERICAS_(230)</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_DEMANDA" ng-disabled="datafile.market !== 'PT'">TOTAL_DEMANDA</p>
+		  <p>OTROS_TOTALES_PORTUGAL</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO" ng-disabled="datafile.market !== 'PT'">TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO</p>
+		  <p><input type="checkbox" ng-model="datafile.TOTAL_POTENCIA_INDISPONIBLE" ng-disabled="datafile.market !== 'PT'">TOTAL_POTENCIA_INDISPONIBLE</p>
+		</div>
+	      </div>
+	    </fieldset>
+	  </div>
+	</form>
+      </div>
     </div>
-</form>
-</div>
-
-</body>
-<script>
+  </body>
+    <script>
     var app = angular.module('myApp', []);
     // DataFileGenerator FormController!
     app.controller('FormController',
-        
-        function ($scope, $http) {
-            // The predefined data:
-            $scope.datafile = {'fechaini' : "2014-1-1"};
-            $scope.datafile.fechafin = "2014-12-31";
-            $scope.datafile.market = "MI";
-            $scope.datafile.Fecha = true;
-            $scope.datafile.Anho = false;
-            $scope.datafile.Mes = false;
-            $scope.datafile.Dia = false;
-            $scope.datafile.Semana = false;
-            $scope.datafile.DiaSemana = false;
-            $scope.datafile.Hora = true;
-            $scope.datafile.Precio = true;
-            
-            // PRODUCCION_MIBEL
-
-            $scope.datafile.TOTAL_VENTAS = false;
-            $scope.datafile.HIDRAULICA_CONVENCIONAL = false;
-            $scope.datafile.HIDRAULICA_BOMBEO_PURO = false;
-            $scope.datafile.NUCLEAR = false;
-            $scope.datafile.CARBON_NACIONAL = false;
-            $scope.datafile.CARBON_IMPORTACION = false;
-            $scope.datafile.CICLO_COMBINADO = false;
-            $scope.datafile.FUEL_GAS_REGIMEN_ORDINARIO_SIN_PRIMA = false;
-            $scope.datafile.FUEL_GAS_REGIMEN_ORDINARIO_CON_PRIMA = false;
-            $scope.datafile.REGIMEN_ESPECIAL_A_MERCADO = false;
-            $scope.datafile.REGIMEN_ESPECIAL_A_DISTRIBUCION = false;
-            $scope.datafile.IMPORTACION_CONTRATO_LARGO_PLAZO = false;
-            $scope.datafile.IMPORTACION_FRANCIA = false;
-            $scope.datafile.IMPORTACION_MARRUECOS = false;
-            $scope.datafile.IMPORTACION_ANDORRA = false;
-            $scope.datafile.UNIDADES_GENERICAS = false;
-            $scope.datafile.UNIDADES_SUBASTAS_DISTRIBUCION_AJUSTE_A_PREVISION_DEMANDA = false;
-            // DEMANDA_MIBEL
-            $scope.datafile.COMERCIALIZACION_MIBEL = false;
-            $scope.datafile.COMERCIALIZACION_ULTIMO_RECURSO = false;
-            $scope.datafile.CONSUMIDOR_DIRECTO = false;
-            $scope.datafile.CONSUMO_DE_BOMBEO = false;
-            $scope.datafile.EXPORTACION_CONTRATO_A_LARGO_PLAZO = false;
-            $scope.datafile.EXPORTACION_A_FRANCIA = false;
-            $scope.datafile.EXPORTACION_A_MARRUECOS = false;
-            $scope.datafile.EXPORTACION_A_ANDORRA = false;
-            $scope.datafile.UNIDADES_GENERICAS = false;
-            $scope.datafile.UNIDADES_GENERICAS_DE_DISTRIBUCION = false;
-            // RESUMEN_DE_PRODUCCION_MIBEL
-            $scope.datafile.TOTAL_HIDRAULICA_901_902 = false;
-            $scope.datafile.TOTAL_TERMICA_903_904_905_906_907_908 = false;
-            $scope.datafile.TOTAL_REGIMEN_ESPECIAL_909_910 = false;
-            $scope.datafile.TOTAL_IMPORTACION_911_912_914_915 = false;
-            $scope.datafile.TOTAL_GENERICAS_916_917 = false;
-            $scope.datafile.TOTAL_PRODUCCION_MIBEL = false;
-            // RESUMEN_DE_DEMANDA_MIBEL
-            $scope.datafile.TOTAL_DEMANDA_NACIONAL_CLIENTES_921_922_923 = false;
-            $scope.datafile.TOTAL_CONSUMO_BOMBEO_924 = false;
-            $scope.datafile.TOTAL_EXPORTACIONES_925_926_928_929 = false;
-            $scope.datafile.TOTAL_GENERICAS_930_931 = false;
-            $scope.datafile.TOTAL_DEMANDA_MIBEL = false;
-            // OTROS_TOTALES_MIBEL
-            $scope.datafile.TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO = false;
-            $scope.datafile.TOTAL_VENTAS_INTERNACIONALES_COMERCIALIZACION_A_MERCADO = false;
-            $scope.datafile.TOTAL_REGIMEN_ORDINARIO_CON_PRIMA = false;
-            $scope.datafile.TOTAL_POTENCIA_INDISPONIBLE = false;
-            // COMPONENTE ESPAÑOLA ######################################################
-            // PRODUCCION_ESPAÑA
-            $scope.datafile.HIDRAULICA_CONVENCIONAL = false;
-            $scope.datafile.HIDRAULICA_BOMBEO_PURO = false;
-            $scope.datafile.NUCLEAR = false;
-            $scope.datafile.CARBON_NACIONAL = false;
-            $scope.datafile.CARBON_IMPORTACION = false;
-            $scope.datafile.CICLO_COMBINADO = false;
-            $scope.datafile.FUEL_GAS_REGIMEN_ORDINARIO_SIN_PRIMA = false;
-            $scope.datafile.FUEL_GAS_REGIMEN_ORDINARIO_CON_PRIMA = false;
-            $scope.datafile.REGIMEN_ESPECIAL_A_MERCADO = false;
-            $scope.datafile.REGIMEN_ESPECIAL_A_DISTRIBUCION = false;
-            $scope.datafile.IMPORTACION_CONTRATO_LARGO_PLAZO = false;
-            $scope.datafile.IMPORTACION_FRANCIA = false;
-            $scope.datafile.IMPORTACION_PORTUGAL = false;
-            $scope.datafile.IMPORTACION_MARRUECOS = false;
-            $scope.datafile.IMPORTACION_ANDORRA = false;
-            $scope.datafile.UNIDADES_GENERICAS = false;
-            $scope.datafile.UNIDADES_AJUSTE_DE_DISTRIBUIDORAS_A_PREVISION_DEMANDA = false;
-            // DEMANDA_ESPAÑA = false;
-            $scope.datafile.COMERCIALIZACION_NACIONAL = false;
-            $scope.datafile.COMERCIALIZACION_ULTIMO_RECURSO = false;
-            $scope.datafile.CONSUMIDOR_DIRECTO = false;
-            $scope.datafile.CONSUMO_DE_BOMBEO = false;
-            $scope.datafile.EXPORTACION_CONTRATO_A_LARGO_PLAZO = false;
-            $scope.datafile.EXPORTACION_A_FRANCIA = false;
-            $scope.datafile.EXPORTACION_A_PORTUGAL = false;
-            $scope.datafile.EXPORTACION_A_MARRUECOS = false;
-            $scope.datafile.EXPORTACION_A_ANDORRA = false;
-            $scope.datafile.UNIDADES_GENERICAS = false;
-            $scope.datafile.UNIDADES_GENERICAS_SUBASTAS_DISTRIBUCION = false;
-            // RESUMEN_DE_PRODUCCION_ESPAÑA = false;
-            $scope.datafile.TOTAL_HIDRAULICA_1_2 = false;
-            $scope.datafile.TOTAL_TERMICA_3_4_5_6_7_8 = false;
-            $scope.datafile.TOTAL_REGIMEN_ESPECIAL_9_10 = false;
-            $scope.datafile.TOTAL_IMPORTACION_11_12_13_14_15 = false;
-            $scope.datafile.TOTAL_GENERICAS_16_17 = false;
-            $scope.datafile.TOTAL_PRODUCCION = false;
-            // RESUMEN_DE_DEMANDA_ESPAÑA = false;
-            $scope.datafile.TOTAL_DEMANDA_NACIONAL_CLIENTES_21_22_23 = false;
-            $scope.datafile.TOTAL_CONSUMO_BOMBEO_24 = false;
-            $scope.datafile.TOTAL_EXPORTACIONES_25_26_27_28_29 = false;
-            $scope.datafile.TOTAL_GENERICAS_30_31 = false;
-            $scope.datafile.TOTAL_DEMANDA = false;
-            // OTROS_TOTALES_ESPAÑA = false;
-            $scope.datafile.TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO = false;
-            $scope.datafile.TOTAL_VENTAS_INTERNACIONALES_COMERCIALIZACION_A_MERCADO = false;
-            $scope.datafile.TOTAL_REGIMEN_ORDINARIO_CON_PRIMA = false;
-            $scope.datafile.TOTAL_POTENCIA_INDISPONIBLE = false;
-            // COMPONENTE PÔRUGUESA #####################################################
-            $scope.datafile.TOTAL_VENTAS = false;
-            // PRODUCCION_PORTUGAL
-            $scope.datafile.HIDRAULICA_CONVENCIONAL = false;
-            $scope.datafile.HIDRAULICA_BOMBEO_PURO = false;
-            $scope.datafile.NUCLEAR = false;
-            $scope.datafile.CARBON_NACIONAL = false;
-            $scope.datafile.CARBON_IMPORTACION = false;
-            $scope.datafile.CICLO_COMBINADO = false;
-            $scope.datafile.FUEL_GAS = false;
-            $scope.datafile.REGIMEN_ESPECIAL_A_MERCADO = false;
-            $scope.datafile.IMPORTACION_DE_ESPANHA = false;
-            $scope.datafile.UNIDADES_GENERICAS = false;
-            // DEMANDA_PORTUGAL
-            $scope.datafile.COMERCIALIZACION_NACIONAL = false;
-            $scope.datafile.COMERCIALIZACION_DE_ULTIMO_RECURSO = false;
-            $scope.datafile.CONSUMIDOR_DIRECTO = false;
-            $scope.datafile.CONSUMO_DE_BOMBEO = false;
-            $scope.datafile.EXPORTACION_A_ESPANHA = false;
-            $scope.datafile.UNIDADES_GENERICAS = false;
-            // RESUMEN_DE_PRODUCCION_PORTUGAL
-            $scope.datafile.TOTAL_HIDRAULICA_201_202 = false;
-            $scope.datafile.TOTAL_TERMICA_203_204_205_206_207 = false;
-            $scope.datafile.TOTAL_IMPORTACION_213 = false;
-            $scope.datafile.TOTAL_GENERICAS_216 = false;
-            $scope.datafile.TOTAL_PRODUCCION = false;
-            // RESUMEN_DE_DEMANDA_PORTUGAL
-            $scope.datafile.TOTAL_DEMANDA_PORTUGAL_CLIENTES_221_222_223 = false;
-            $scope.datafile.TOTAL_CONSUMO_BOMBEO_224 = false;
-            $scope.datafile.TOTAL_EXPORTACIONES_227 = false;
-            $scope.datafile.TOTAL_GENERICAS_230 = false;
-            $scope.datafile.TOTAL_DEMANDA = false;
-            // OTROS_TOTALES_PORTUGAL
-            $scope.datafile.TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO = false;
-            $scope.datafile.TOTAL_POTENCIA_INDISPONIBLE = false;
-            $scope.datafile.NO_UTILIZADO = false;
+      function ($scope, $http) {
+        // The predefined data:
+	$scope.datafile = {'fechaini' : "2014-1-1"};
+	$scope.datafile.fechafin = "2014-12-31";
+	$scope.datafile.market = "MI";
+	$scope.datafile.Fecha = true;
+	$scope.datafile.Anho = false;
+	$scope.datafile.Mes = false;
+	$scope.datafile.Dia = false;
+	$scope.datafile.Semana = false;
+	$scope.datafile.DiaSemana = false;
+	$scope.datafile.Hora = true;
+	$scope.datafile.Precio = true;
+	// PRODUCCION_MIBEL
+	$scope.datafile.TOTAL_VENTAS = false;
+	$scope.datafile.HIDRAULICA_CONVENCIONAL = false;
+	$scope.datafile.HIDRAULICA_BOMBEO_PURO = false;
+	$scope.datafile.NUCLEAR = false;
+	$scope.datafile.CARBON_NACIONAL = false;
+	$scope.datafile.CARBON_IMPORTACION = false;
+	$scope.datafile.CICLO_COMBINADO = false;
+	$scope.datafile.FUEL_GAS_REGIMEN_ORDINARIO_SIN_PRIMA = false;
+	$scope.datafile.FUEL_GAS_REGIMEN_ORDINARIO_CON_PRIMA = false;
+	$scope.datafile.REGIMEN_ESPECIAL_A_MERCADO = false;
+	$scope.datafile.REGIMEN_ESPECIAL_A_DISTRIBUCION = false;
+	$scope.datafile.IMPORTACION_CONTRATO_LARGO_PLAZO = false;
+	$scope.datafile.IMPORTACION_FRANCIA = false;
+	$scope.datafile.IMPORTACION_MARRUECOS = false;
+	$scope.datafile.IMPORTACION_ANDORRA = false;
+	$scope.datafile.UNIDADES_GENERICAS = false;
+	$scope.datafile.UNIDADES_SUBASTAS_DISTRIBUCION_AJUSTE_A_PREVISION_DEMANDA = false;
+	// DEMANDA_MIBEL
+	$scope.datafile.COMERCIALIZACION_MIBEL = false;
+	$scope.datafile.COMERCIALIZACION_ULTIMO_RECURSO = false;
+	$scope.datafile.CONSUMIDOR_DIRECTO = false;
+	$scope.datafile.CONSUMO_DE_BOMBEO = false;
+	$scope.datafile.EXPORTACION_CONTRATO_A_LARGO_PLAZO = false;
+	$scope.datafile.EXPORTACION_A_FRANCIA = false;
+	$scope.datafile.EXPORTACION_A_MARRUECOS = false;
+	$scope.datafile.EXPORTACION_A_ANDORRA = false;
+	$scope.datafile.UNIDADES_GENERICAS = false;
+	$scope.datafile.UNIDADES_GENERICAS_DE_DISTRIBUCION = false;
+	// RESUMEN_DE_PRODUCCION_MIBEL
+	$scope.datafile.TOTAL_HIDRAULICA_901_902 = false;
+	$scope.datafile.TOTAL_TERMICA_903_904_905_906_907_908 = false;
+	$scope.datafile.TOTAL_REGIMEN_ESPECIAL_909_910 = false;
+	$scope.datafile.TOTAL_IMPORTACION_911_912_914_915 = false;
+	$scope.datafile.TOTAL_GENERICAS_916_917 = false;
+	$scope.datafile.TOTAL_PRODUCCION_MIBEL = false;
+	// RESUMEN_DE_DEMANDA_MIBEL
+	$scope.datafile.TOTAL_DEMANDA_NACIONAL_CLIENTES_921_922_923 = false;
+	$scope.datafile.TOTAL_CONSUMO_BOMBEO_924 = false;
+	$scope.datafile.TOTAL_EXPORTACIONES_925_926_928_929 = false;
+	$scope.datafile.TOTAL_GENERICAS_930_931 = false;
+	$scope.datafile.TOTAL_DEMANDA_MIBEL = false;
+	// OTROS_TOTALES_MIBEL
+	$scope.datafile.TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO = false;
+	$scope.datafile.TOTAL_VENTAS_INTERNACIONALES_COMERCIALIZACION_A_MERCADO = false;
+	$scope.datafile.TOTAL_REGIMEN_ORDINARIO_CON_PRIMA = false;
+	$scope.datafile.TOTAL_POTENCIA_INDISPONIBLE = false;
+	// COMPONENTE ESPAÑOLA ######################################################
+	// PRODUCCION_ESPAÑA
+	$scope.datafile.HIDRAULICA_CONVENCIONAL = false;
+	$scope.datafile.HIDRAULICA_BOMBEO_PURO = false;
+	$scope.datafile.NUCLEAR = false;
+	$scope.datafile.CARBON_NACIONAL = false;
+	$scope.datafile.CARBON_IMPORTACION = false;
+	$scope.datafile.CICLO_COMBINADO = false;
+	$scope.datafile.FUEL_GAS_REGIMEN_ORDINARIO_SIN_PRIMA = false;
+	$scope.datafile.FUEL_GAS_REGIMEN_ORDINARIO_CON_PRIMA = false;
+	$scope.datafile.REGIMEN_ESPECIAL_A_MERCADO = false;
+	$scope.datafile.REGIMEN_ESPECIAL_A_DISTRIBUCION = false;
+	$scope.datafile.IMPORTACION_CONTRATO_LARGO_PLAZO = false;
+	$scope.datafile.IMPORTACION_FRANCIA = false;
+	$scope.datafile.IMPORTACION_PORTUGAL = false;
+	$scope.datafile.IMPORTACION_MARRUECOS = false;
+	$scope.datafile.IMPORTACION_ANDORRA = false;
+	$scope.datafile.UNIDADES_GENERICAS = false;
+	$scope.datafile.UNIDADES_AJUSTE_DE_DISTRIBUIDORAS_A_PREVISION_DEMANDA = false;
+	// DEMANDA_ESPAÑA = false;
+	$scope.datafile.COMERCIALIZACION_NACIONAL = false;
+	$scope.datafile.COMERCIALIZACION_ULTIMO_RECURSO = false;
+	$scope.datafile.CONSUMIDOR_DIRECTO = false;
+	$scope.datafile.CONSUMO_DE_BOMBEO = false;
+	$scope.datafile.EXPORTACION_CONTRATO_A_LARGO_PLAZO = false;
+	$scope.datafile.EXPORTACION_A_FRANCIA = false;
+	$scope.datafile.EXPORTACION_A_PORTUGAL = false;
+	$scope.datafile.EXPORTACION_A_MARRUECOS = false;
+	$scope.datafile.EXPORTACION_A_ANDORRA = false;
+	$scope.datafile.UNIDADES_GENERICAS = false;
+	$scope.datafile.UNIDADES_GENERICAS_SUBASTAS_DISTRIBUCION = false;
+	// RESUMEN_DE_PRODUCCION_ESPAÑA = false;
+	$scope.datafile.TOTAL_HIDRAULICA_1_2 = false;
+	$scope.datafile.TOTAL_TERMICA_3_4_5_6_7_8 = false;
+	$scope.datafile.TOTAL_REGIMEN_ESPECIAL_9_10 = false;
+	$scope.datafile.TOTAL_IMPORTACION_11_12_13_14_15 = false;
+	$scope.datafile.TOTAL_GENERICAS_16_17 = false;
+	$scope.datafile.TOTAL_PRODUCCION = false;
+	// RESUMEN_DE_DEMANDA_ESPAÑA = false;
+	$scope.datafile.TOTAL_DEMANDA_NACIONAL_CLIENTES_21_22_23 = false;
+	$scope.datafile.TOTAL_CONSUMO_BOMBEO_24 = false;
+	$scope.datafile.TOTAL_EXPORTACIONES_25_26_27_28_29 = false;
+	$scope.datafile.TOTAL_GENERICAS_30_31 = false;
+	$scope.datafile.TOTAL_DEMANDA = false;
+	// OTROS_TOTALES_ESPAÑA = false;
+	$scope.datafile.TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO = false;
+	$scope.datafile.TOTAL_VENTAS_INTERNACIONALES_COMERCIALIZACION_A_MERCADO = false;
+	$scope.datafile.TOTAL_REGIMEN_ORDINARIO_CON_PRIMA = false;
+	$scope.datafile.TOTAL_POTENCIA_INDISPONIBLE = false;
+	// COMPONENTE PÔRUGUESA #####################################################
+	$scope.datafile.TOTAL_VENTAS = false;
+	// PRODUCCION_PORTUGAL
+	$scope.datafile.HIDRAULICA_CONVENCIONAL = false;
+	$scope.datafile.HIDRAULICA_BOMBEO_PURO = false;
+	$scope.datafile.NUCLEAR = false;
+	$scope.datafile.CARBON_NACIONAL = false;
+	$scope.datafile.CARBON_IMPORTACION = false;
+	$scope.datafile.CICLO_COMBINADO = false;
+	$scope.datafile.FUEL_GAS = false;
+	$scope.datafile.REGIMEN_ESPECIAL_A_MERCADO = false;
+	$scope.datafile.IMPORTACION_DE_ESPANHA = false;
+	$scope.datafile.UNIDADES_GENERICAS = false;
+	// DEMANDA_PORTUGAL
+	$scope.datafile.COMERCIALIZACION_NACIONAL = false;
+	$scope.datafile.COMERCIALIZACION_DE_ULTIMO_RECURSO = false;
+	$scope.datafile.CONSUMIDOR_DIRECTO = false;
+	$scope.datafile.CONSUMO_DE_BOMBEO = false;
+	$scope.datafile.EXPORTACION_A_ESPANHA = false;
+	$scope.datafile.UNIDADES_GENERICAS = false;
+	// RESUMEN_DE_PRODUCCION_PORTUGAL
+	$scope.datafile.TOTAL_HIDRAULICA_201_202 = false;
+	$scope.datafile.TOTAL_TERMICA_203_204_205_206_207 = false;
+	$scope.datafile.TOTAL_IMPORTACION_213 = false;
+	$scope.datafile.TOTAL_GENERICAS_216 = false;
+	$scope.datafile.TOTAL_PRODUCCION = false;
+	// RESUMEN_DE_DEMANDA_PORTUGAL
+	$scope.datafile.TOTAL_DEMANDA_PORTUGAL_CLIENTES_221_222_223 = false;
+	$scope.datafile.TOTAL_CONSUMO_BOMBEO_224 = false;
+	$scope.datafile.TOTAL_EXPORTACIONES_227 = false;
+	$scope.datafile.TOTAL_GENERICAS_230 = false;
+	$scope.datafile.TOTAL_DEMANDA = false;
+	// OTROS_TOTALES_PORTUGAL
+	$scope.datafile.TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO = false;
+	$scope.datafile.TOTAL_POTENCIA_INDISPONIBLE = false;
+	$scope.datafile.NO_UTILIZADO = false;
         // $scope.verver.fechaini = "2014-01-01";
+
         $scope.generatefile = function(datafile) {
-        // setting proper headers to the API:
-        datafile = JSON.stringify(datafile)
-        .replace('FUEL_GAS_REGIMEN_ORDINARIO_CON_PRIMA','FUEL_+_GAS_REGIMEN_ORDINARIO_(CON_PRIMA)')
-        .replace('FUEL_GAS_REGIMEN_ORDINARIO_SIN_PRIMA','FUEL_+_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA)')
-        .replace('TOTAL_HIDRAULICA_901_902','TOTAL_HIDRAULICA_(901+902)')
-        .replace('TOTAL_TERMICA_903_904_905_906_907_908','TOTAL_TERMICA_(903+904+905+906+907+908)')
-        .replace('TOTAL_REGIMEN_ESPECIAL_909_910','TOTAL_REGIMEN_ESPECIAL_(909+910)')
-        .replace('TOTAL_IMPORTACION_911_912_914_915','TOTAL_IMPORTACION_(911+912+914+915)')
-        .replace('TOTAL_GENERICAS_916_917','TOTAL_GENERICAS_(916+917)')
-        .replace('TOTAL_DEMANDA_NACIONAL_CLIENTES_921_922_923','TOTAL_DEMANDA_NACIONAL_CLIENTES_(921+922+923)')
-        .replace('TOTAL_CONSUMO_BOMBEO_924','TOTAL_CONSUMO_BOMBEO_(924)')
-        .replace('TOTAL_EXPORTACIONES_925_926_928_929','TOTAL_EXPORTACIONES_(925+926+928+929)')
-        .replace('TOTAL_GENERICAS_930_931','TOTAL_GENERICAS_(930+931)')
-        // RESUMEN_DE_PRODUCCION_ESPAÑA
-        .replace('TOTAL_HIDRAULICA_1_2','TOTAL_HIDRAULICA_(1+2)')
-        .replace('TOTAL_TERMICA_3_4_5_6_7_8','TOTAL_TERMICA_(3+4+5+6+7+8)')
-        .replace('TOTAL_REGIMEN_ESPECIAL_9_10','TOTAL_REGIMEN_ESPECIAL_(9+10)')
-        .replace('TOTAL_IMPORTACION_11_12_13_14_15','TOTAL_IMPORTACION_(11+12+13+14+15)')
-        .replace('TOTAL_GENERICAS_16_17','TOTAL_GENERICAS_(16+17)')
-        // RESUMEN_DE_DEMANDA_ESPAÑA
-        .replace('TOTAL_DEMANDA_NACIONAL_CLIENTES_21_22_23','TOTAL_DEMANDA_NACIONAL_CLIENTES_(21+22+23)')
-        .replace('TOTAL_CONSUMO_BOMBEO_24','TOTAL_CONSUMO_BOMBEO_(24)')
-        .replace('TOTAL_EXPORTACIONES_25_26_27_28_29','TOTAL_EXPORTACIONES_(25+26+27+28+29)')
-        .replace('TOTAL_GENERICAS_30_31','TOTAL_GENERICAS_(30+31)')
-        // PRODUCCION PORTUGAL
-        .replace('FUEL_GAS','FUEL_+_GAS')
-        //.replace('REGIMEN_ESPECIAL_A_MERCADO')
-        //.replace('IMPORTACION_DE_ESPANHA',encodeURI('IMPORTACION_DE_ESPAÑA'))
-        .replace('IMPORTACION_DE_ESPANHA','IMPORTACION_DE_ESPAÑA')
-        //.replace('UNIDADES_GENERICAS)
-        // DEMANDA_PORTUGAL
-        // .replace('COMERCIALIZACION_DE_ULTIMO_RECURSO')
-        // .replace('CONSUMIDOR_DIRECTO')
-        // .replace('CONSUMO_DE_BOMBEO')
-        //.replace('EXPORTACION_A_ESPANHA',encodeURI('EXPORTACION_A_ESPAÑA'))
-        .replace('EXPORTACION_A_ESPANHA','EXPORTACION_A_ESPAÑA')
-        // .replace('UNIDADES_GENERICAS')
-        // RESUMEN_DE_PRODUCCION_PORTUGAL
-        .replace('TOTAL_HIDRAULICA_201_202','TOTAL_HIDRAULICA_(201+202)')
-        .replace('TOTAL_TERMICA_203_204_205_206_207','TOTAL_TERMICA_(203+204+205+206+207)')
-        .replace('TOTAL_IMPORTACION_213','TOTAL_IMPORTACION_(213)')
-        .replace('TOTAL_GENERICAS_216','TOTAL_GENERICAS_(216)')
-        //.replace('TOTAL_PRODUCCION)
-        // RESUMEN_DE_DEMANDA_PORTUGAL
-        .replace('TOTAL_DEMANDA_PORTUGAL_CLIENTES_221_222_223','TOTAL_DEMANDA_PORTUGAL_CLIENTES_(221+222+223)')
-        .replace('TOTAL_CONSUMO_BOMBEO_224','TOTAL_CONSUMO_BOMBEO_(224)')
-        .replace('TOTAL_EXPORTACIONES_227','TOTAL_EXPORTACIONES_(227)')
-        .replace('TOTAL_GENERICAS_230','TOTAL_GENERICAS_(230)');
-
-        // alert(datafile.Fecha);
-
-
-        // datafile['FUEL_+_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA)'] = datafile['FUEL_GAS_REGIMEN_ORDINARIO_SIN_PRIMA'];
-        // delete datafile['FUEL_GAS_REGIMEN_ORDINARIO_SIN_PRIMA'];
-        datafile = JSON.parse(datafile)
-        $http.post('/omieinfosys/DataFileGenerator', datafile ,
-        {
-             headers: {'Accept': "application/json;charset=UTF-8"}
-        }
-            ).
-        success(function(data, status, headers, config) {
-            var file = new Blob([ data ], {
-                type : 'application/csv'
-            });
-            //trick to download store a file having its URL
-            var fileURL = URL.createObjectURL(file);
-            var a         = document.createElement('a');
-            a.href        = fileURL; 
-            a.target      = '_blank';
-            a.download    = 'omieinfodata.csv';
-            document.body.appendChild(a);
-            //alert(a);
-            a.click();
-        // alert(JSON.stringify(data));
-        // alert(status);
-        }).
-        error(function(data, status, headers, config) {
-        // called asynchronously if an error occurs
-        // or server returns response with an error status.
-        });
-    };
-
-  
-}
-        );
-</script>
+	  // setting proper headers to the API:
+	  datafile = JSON.stringify(datafile)
+	  .replace('FUEL_GAS_REGIMEN_ORDINARIO_CON_PRIMA','FUEL_+_GAS_REGIMEN_ORDINARIO_(CON_PRIMA)')
+	  .replace('FUEL_GAS_REGIMEN_ORDINARIO_SIN_PRIMA','FUEL_+_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA)')
+	  .replace('TOTAL_HIDRAULICA_901_902','TOTAL_HIDRAULICA_(901+902)')
+	  .replace('TOTAL_TERMICA_903_904_905_906_907_908','TOTAL_TERMICA_(903+904+905+906+907+908)')
+	  .replace('TOTAL_REGIMEN_ESPECIAL_909_910','TOTAL_REGIMEN_ESPECIAL_(909+910)')
+	  .replace('TOTAL_IMPORTACION_911_912_914_915','TOTAL_IMPORTACION_(911+912+914+915)')
+	  .replace('TOTAL_GENERICAS_916_917','TOTAL_GENERICAS_(916+917)')
+	  .replace('TOTAL_DEMANDA_NACIONAL_CLIENTES_921_922_923','TOTAL_DEMANDA_NACIONAL_CLIENTES_(921+922+923)')
+	  .replace('TOTAL_CONSUMO_BOMBEO_924','TOTAL_CONSUMO_BOMBEO_(924)')
+	  .replace('TOTAL_EXPORTACIONES_925_926_928_929','TOTAL_EXPORTACIONES_(925+926+928+929)')
+	  .replace('TOTAL_GENERICAS_930_931','TOTAL_GENERICAS_(930+931)')
+	  // RESUMEN_DE_PRODUCCION_ESPAÑA
+	  .replace('TOTAL_HIDRAULICA_1_2','TOTAL_HIDRAULICA_(1+2)')
+	  .replace('TOTAL_TERMICA_3_4_5_6_7_8','TOTAL_TERMICA_(3+4+5+6+7+8)')
+	  .replace('TOTAL_REGIMEN_ESPECIAL_9_10','TOTAL_REGIMEN_ESPECIAL_(9+10)')
+	  .replace('TOTAL_IMPORTACION_11_12_13_14_15','TOTAL_IMPORTACION_(11+12+13+14+15)')
+	  .replace('TOTAL_GENERICAS_16_17','TOTAL_GENERICAS_(16+17)')
+	  // RESUMEN_DE_DEMANDA_ESPAÑA
+	  .replace('TOTAL_DEMANDA_NACIONAL_CLIENTES_21_22_23','TOTAL_DEMANDA_NACIONAL_CLIENTES_(21+22+23)')
+	  .replace('TOTAL_CONSUMO_BOMBEO_24','TOTAL_CONSUMO_BOMBEO_(24)')
+	  .replace('TOTAL_EXPORTACIONES_25_26_27_28_29','TOTAL_EXPORTACIONES_(25+26+27+28+29)')
+	  .replace('TOTAL_GENERICAS_30_31','TOTAL_GENERICAS_(30+31)')
+	  // PRODUCCION PORTUGAL
+	  .replace('FUEL_GAS','FUEL_+_GAS')
+	  //.replace('REGIMEN_ESPECIAL_A_MERCADO')
+	  //.replace('IMPORTACION_DE_ESPANHA',encodeURI('IMPORTACION_DE_ESPAÑA'))
+	  .replace('IMPORTACION_DE_ESPANHA','IMPORTACION_DE_ESPAÑA')
+	  //.replace('UNIDADES_GENERICAS)
+	  // DEMANDA_PORTUGAL
+	  // .replace('COMERCIALIZACION_DE_ULTIMO_RECURSO')
+	  // .replace('CONSUMIDOR_DIRECTO')
+	  // .replace('CONSUMO_DE_BOMBEO')
+	  //.replace('EXPORTACION_A_ESPANHA',encodeURI('EXPORTACION_A_ESPAÑA'))
+	  .replace('EXPORTACION_A_ESPANHA','EXPORTACION_A_ESPAÑA')
+	  // .replace('UNIDADES_GENERICAS')
+	  // RESUMEN_DE_PRODUCCION_PORTUGAL
+	  .replace('TOTAL_HIDRAULICA_201_202','TOTAL_HIDRAULICA_(201+202)')
+	  .replace('TOTAL_TERMICA_203_204_205_206_207','TOTAL_TERMICA_(203+204+205+206+207)')
+	  .replace('TOTAL_IMPORTACION_213','TOTAL_IMPORTACION_(213)')
+	  .replace('TOTAL_GENERICAS_216','TOTAL_GENERICAS_(216)')
+	  //.replace('TOTAL_PRODUCCION)
+	  // RESUMEN_DE_DEMANDA_PORTUGAL
+	  .replace('TOTAL_DEMANDA_PORTUGAL_CLIENTES_221_222_223','TOTAL_DEMANDA_PORTUGAL_CLIENTES_(221+222+223)')
+	  .replace('TOTAL_CONSUMO_BOMBEO_224','TOTAL_CONSUMO_BOMBEO_(224)')
+	  .replace('TOTAL_EXPORTACIONES_227','TOTAL_EXPORTACIONES_(227)')
+	  .replace('TOTAL_GENERICAS_230','TOTAL_GENERICAS_(230)');
+	  // alert(datafile.Fecha);
+	  // datafile['FUEL_+_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA)'] = datafile['FUEL_GAS_REGIMEN_ORDINARIO_SIN_PRIMA'];
+	  // delete datafile['FUEL_GAS_REGIMEN_ORDINARIO_SIN_PRIMA'];
+	  datafile = JSON.parse(datafile)
+	  $http.post('/omieinfosys/DataFileGenerator', datafile,
+	    {
+	      headers: {'Accept': "application/json;charset=UTF-8"}
+	    }
+	  ).
+	  success(function(data, status, headers, config) {
+	    var file = new Blob([ data ], { type : 'application/csv' });
+	    //trick to download store a file having its URL
+	    var fileURL = URL.createObjectURL(file);
+	    var a       = document.createElement('a');
+	    a.href      = fileURL; 
+	    a.target    = '_blank';
+	    a.download  = 'omieinfodata.csv';
+	    document.body.appendChild(a);
+	    //alert(a);
+	    a.click();
+	    // alert(JSON.stringify(data));
+	    // alert(status);
+	  }).
+	  error(function(data, status, headers, config) {
+	    // called asynchronously if an error occurs
+	    // or server returns response with an error status.
+	  });
+	};
+      }
+    );
+  </script>
+  <script src="../app_menu/js/classie.js"></script>
+  <script src="../app_menu/js/main.js"></script>
 </html>
