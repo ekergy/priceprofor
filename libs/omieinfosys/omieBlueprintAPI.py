@@ -176,7 +176,7 @@ def DataFileGenerator():
 
     Note:
         test using curl->
-        curl -X POST -H "Content-Type: application/json" -d '{"fechafin":"2015-1-1","fechafin":"2015-1-2","market":"ES"}' http://localhost:5000/omieinfosys/DataFileGenerator
+        curl -X POST -H "Content-Type: application/json" -d '{"fechaini":"2015-1-1","fechafin":"2015-1-2","market":"ES"}' http://localhost:5000/omieinfosys/DataFileGenerator
 
     """
     try:
