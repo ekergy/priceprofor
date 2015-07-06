@@ -68,7 +68,7 @@
 		  <p>Si necesitas descargar todos los datos considera usar la pagina de descarga <a href="omieopendata"></a> </p>
 		  <p><input type="checkbox" ng-checked="true" ng-disabled="true">Fecha</p>
 		  <p><input type="checkbox" ng-model="datafile.Anho" ng-disabled="datafile.market !== 'MI'">Año</p>
-		  <p><input type="checkbox" ng-model="datafile.MMI" ng-disabled="datafile.market !== 'MI'">MMI</p>
+		  <p><input type="checkbox" ng-model="datafile.Mes" ng-disabled="datafile.market !== 'MI'">Mes</p>
 		  <p><input type="checkbox" ng-model="datafile.Dia" ng-disabled="datafile.market !== 'MI'">Dia</p>
 		  <p><input type="checkbox" ng-model="datafile.Semana" ng-disabled="datafile.market !== 'MI'">Semana</p>
 		  <p><input type="checkbox" ng-model="datafile.DiaSemana" ng-disabled="datafile.market !== 'MI'">DiaSemana</p>
@@ -383,11 +383,9 @@
 	$scope.datafile.TOTAL_VENTAS_NACIONALES_COMERCIALIZACION_A_MERCADO = false;
 	$scope.datafile.TOTAL_POTENCIA_INDISPONIBLE = false;
 	$scope.datafile.NO_UTILIZADO = false;
-        // $scope.verver.fechaini = "2014-01-01";
-
-<<<<<<< HEAD
-        $scope.generatefile = function(datafile) {
-	  // setting proper headers to the API:
+    // $scope.verver.fechaini = "2014-01-01";
+    $scope.generatefile = function(datafile) {
+  	// setting proper headers to the API:
 	  datafile = JSON.stringify(datafile)
 	  .replace('FUEL_GAS_REGIMEN_ORDINARIO_CON_PRIMA','FUEL_+_GAS_REGIMEN_ORDINARIO_(CON_PRIMA)')
 	  .replace('FUEL_GAS_REGIMEN_ORDINARIO_SIN_PRIMA','FUEL_+_GAS_REGIMEN_ORDINARIO_(SIN_PRIMA)')

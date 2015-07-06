@@ -14,18 +14,101 @@ import sys
 import csv
 import datetime
 from collections import OrderedDict
+
 try:
     path = os.environ['OPENSHIFT_DATA_DIR']
-    # openshift file path!
 except:
-    # path = os.path.join('..','..','data')
     path = os.path.join('data')
-# else:
-#     pass
-#     # set filepath
-# finally:
-    #
     
+def generateOMIEpricedata(fechaini=None,fechafin=None,market='MI',rewritetemp=False,filename=None):
+
+    """generateOMIEpricedata
+
+    This will generate a file in the file system so we can stream it.
+
+    """
+    # TODO: mongoquery to get all needed data
+    try:
+        from omieMercadoDiarioDBManager import PreciosWeb
+
+        if fechaini is None:
+            fechaini = datetime.datetime(2011,1,1)
+        if fechafin is None:
+            fechafin = min(datetime.datetime.now()
+                       ,PreciosWeb.lastdateindb
+                       ,EnergiaGestionadaWeb.lastdateindb
+                       ,TecnologiasWeb.lastdateindb)
+        if not isinstance(fechafin,datetime.datetime):
+            raise Exception("fechafin not valid")
+        if not isinstance(fechaini,datetime.datetime):
+            raise Exception("fechaini not valid")
+        if market not in ['ES','MI','PT']:
+            raise Exception("marketnotvalid not valid")
+
+        PreciosWeb.objects(fecha__gte=fechaini,fecha_lte=fechafin) 
+
+        fieldnames = ['Fecha','Anho','Mes','Dia','Semana','DiaSemana','Hora','Precio']
+        if filename is None:
+            filename = 'omie'+'_'+str(market)\
+                             +'_'+fechaini.strftime('%Y-%m-%d')\
+                             +'_'+fechafin.strftime('%Y-%m-%d')\
+                             +'_'+str(len(fieldnames))\
+                             +'.csv'
+        filepath = os.path.join(path,filename)
+        if os.path.exists(filepath) and not rewritetemp:
+            print "file already generated"
+            print "set rewritetemp to True to generate a new one"
+            raise Exception("File already exists")
+
+        numofdays = PreciosWeb.objects(fecha__gte=fechaini,fecha__lte=fechafin).count()
+
+        with open(filepath, 'w') as f:
+            # query lastday = 
+            days = [fechaini + datetime.timedelta(days=i) for i in range(numofdays)]
+            # if you want to handle exceptional day do it here!
+            writer = csv.DictWriter(f, fieldnames=fieldnames,delimiter=';')
+            writer.writeheader()
+            for day in days:
+                precios = PreciosWeb.objects.get(fecha=day)
+                # select market:
+                if market=='ES':
+                    precios = precios['PreciosES']
+                elif market=='PT':
+                    precios = precios['PreciosPT']
+                else:
+                    precios = precios['PreciosMI']
+                for h in range(len(precios)):
+                    row = dict()
+                    for key in fieldnames:
+                        if key == 'Fecha':
+                            row['Fecha'] = day.strftime('%Y-%m-%d')
+                        elif key == 'Anho':
+                            row['Anho'] = day.year
+                        elif key == 'Mes':
+                            row['Mes'] = day.month
+                        elif key == 'Dia':
+                            row['Dia'] = day.day
+                        elif key == 'Semana':
+                            row['Semana'] = day.isocalendar()[1]
+                        elif key == 'DiaSemana':
+                            row['DiaSemana'] = day.weekday()
+                        elif key == 'Hora':
+                            row['Hora'] = h
+                        elif key == 'Precio':
+                            row['Precio'] = precios[h]
+                        else:
+                            row[key]=tecnologias[key.decode('utf8')][h]
+                    writer.writerow(row)
+    
+
+    except:
+        raise
+    else:
+        return os.path.abspath(filepath)
+
+    
+    
+
 
 def generateOMIEwebdata(fechaini=None,fechafin=None,market='MI',headerstoprocess=None,rewritetemp=False,filename=None):
     """Generate OMIE 2011

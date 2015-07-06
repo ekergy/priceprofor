@@ -203,152 +203,43 @@ def DataFileGenerator():
         return Response(generate(result), mimetype='text/csv')
 
 
-@omieMercadoDiario.route('/PreciosHorariosUltimoDia',methods=['GET','POST'])
-def ReportLastAvailableDay():
-    # """ReportDay
+@omieMercadoDiario.route('/MarketPrices',methods=['POST'])
+def MarketPrices():
+    """MarketPrices
 
-    # Note:
-    #     test using curl->
-    #     curl -X POST -H "Content-Type: application/json" -d '{"day":"2014-1-1","market":"ES"}' http://localhost:5000/omieinfosys/ReportDay
-
-
+    mercado -> ["ES","PT","MI"]
+    fechaini -> string in format YYYY-MM-DD
+    fechafin -> string in format YYYY-MM-DD
+    anhos -> an array of years to be filter, default all available
+    meses -> an array of month to be filter, default all available
+    week -> an array of week number to be filter, default all available
+    weekday -> an array of weekday number to be filter, default all available
+    NOT IMPLEMENTED horas -> an array of hours to be filter, default all available
     
-    # """
-    # if request.method == 'GET':
-    #     day = 'lastavailable'
-    #     market = 'MI'
-    # elif request.method == 'POST':
-    #     day = request.json['day']
-    #     try:
-    #         day = datetime.datetime.strptime(request.json['day'],'%Y-%m-%d %H:%M:%S %Z')
-    #     except:
-    #         day = datetime.datetime.strptime(request.json['day'],'%Y-%m-%d')
-    #     market = request.json['market']
-    # try:
-    #     from omieMercadoDiarioReports import ReportDay
-    #     if day == 'lastavailable':
-    #         day = None
-    #     verver = dict(ReportDay(market=market,day=day).items())
-    # except:
-    #     return json.dumps({"Error":"No data to sent"})
-    # else:
-    #     return render_template('test.html',valores=json.dumps(verver,default=jsondefaultvalues))
-    
-    # from nvd3 import linePlusBarChart
-    # chart = linePlusBarChart(name="linePlusBarChart",
-    #                      width=500, height=400, x_axis_format="%d %b %Y",
-    #                      x_is_date=True,
-    #                      yaxis2_format="function(d) { return d3.format(',0.3f')(d) }")
-
-    # xdata = [1338501600000, 1345501600000, 1353501600000]
-    # ydata = [6, 5, 1]
-    # y2data = [0.002, 0.003, 0.004]
-
-    # extra_serie = {"tooltip": {"y_start": "There are ", "y_end": " calls"},
-    #                "date_format": "%d %b %Y %H:%S" }
-    # chart.add_serie(name="Serie 1", y=ydata, x=xdata, extra=extra_serie,
-    #                 bar=True)
-
-    # extra_serie = {"tooltip": {"y_start": "There are ", "y_end": " min"}}
-    # chart.add_serie(name="Serie 2", y=y2data, x=xdata, extra=extra_serie)
-    # # chart.buildcontent()
-    # chart.buildjschart()
-    # print type(chart)
-    # print chart.__dict__.keys()
-    # print chart.series
-    # return render_template('test.html',valores=chart.jschart)
-
-    # Now lets try oput HighCharts:
-    ## Getting necessary Data:
-    if request.method == 'GET':
-        day = 'lastavailable'
-        market = 'MI'
-    elif request.method == 'POST':
-        day = request.json['day']
-        try:
-            day = datetime.datetime.strptime(request.json['day'],'%Y-%m-%d %H:%M:%S %Z')
-        except:
-            day = datetime.datetime.strptime(request.json['day'],'%Y-%m-%d')
-        market = request.json['market']
-    try:
-        from omieMercadoDiarioReports import ReportDayTecnologies
-        if day == 'lastavailable':
-            day = None
-        result = dict(ReportDayTecnologies(market=market,day=day).items())
-    except:
-        result = {"Error":"No data to sent"}
-
-    ## Setting data to template:
-
-    ## Possibly some dump would be helpful
-
-    if result.has_key("Error"):
-        return "no data to plot"
-    else:
-        return render_template('ReportDay.html',
-            precio=result['Precios'],
-            energia=result['VolumenesMWh'],
-            preciomedio=result['PrecioMedio'],
-            mediaaritmetica=result['MediaAritmetica'],
-            totalvolumenmwh="{0:,.2f}".format(result['TotalVolumenMWh']),
-            totalvolumeneurs="{0:,.2f}".format(result['TotalVolumenEURs']),
-            sumario=result)
-
-
-@omieMercadoDiario.route('/TecnologiasDiarias',methods=['GET','POST'])
-def ReportDayTechLastAvailableDay():
-    """ReportDayTech
+    Note:
+        test using curl->
+        TODO: modificar esto -> curl -X POST -H "Content-Type: application/json" -d '{"fechaini":"2015-1-1","fechafin":"2015-1-2","market":"ES"}' http://localhost:5000/omieinfosys/MarketPrices
 
     """
-    if request.method == 'GET':
-        day = 'lastavailable'
-        market = 'MI'
-    elif request.method == 'POST':
-        day = request.json['day']
-        try:
-            day = datetime.datetime.strptime(request.json['day'],'%Y-%m-%d %H:%M:%S %Z')
-        except:
-            day = datetime.datetime.strptime(request.json['day'],'%Y-%m-%d')
-        market = request.json['market']
     try:
-        from omieMercadoDiarioReports import ReportDayTecnologies
-        if day == 'lastavailable':
-            day = None
-        result = dict(ReportDayTecnologies(market=market,day=day).items())
+        if request.method == 'POST':
+            posteddata = json.loads(request.data,object_hook=_decode_dict)
+            # posteddata = request.json
+            # print posteddata
+            fechaini = datetime.datetime.strptime(posteddata.pop('fechaini'),'%Y-%m-%d')
+            fechafin = datetime.datetime.strptime(posteddata.pop('fechafin'),'%Y-%m-%d')
+            market = posteddata.pop('market')
+            headerstoprocess = posteddata
+
+        from omieDataFilesGenerators import generateOMIEpricedata
+        result = generateOMIEpricedata(fechaini,fechafin,market,rewritetemp=True,filename=None)
+        def generate(result):
+            with open(result, 'rU') as f:
+              for row in f:
+                 yield row
     except:
-        result = {"Error":"No data to sent"}
-
-    ## Setting data to template:
-    print result
-    ## Possibly some dump would be helpful
-    series = list()
-    for key,value in result.iteritems():
-        if isinstance(value,list) and 'TOTAL' not in key and 'EUR' not in key and key!='VolumenesMWh' and key!='Precios':
-            series.append({'name':str(key).replace("Volumenes",""),'data':value})
-        else:
-            pass
-    # series = [if isinstance(value,list) {'name':key,'data':value} for key,value in result.iteritems()]
-    print series
-    # [{
-    #         'name': 'John',
-    #         'data': [5, 3, 4, 7, 2]
-    #     }, {
-    #         'name': 'Jane',
-    #         'data': [2, 2, 3, 2, 1]
-    #     }, {
-    #         'name': 'Joe',
-    #         'data': [3, 4, 4, 2, 5]
-    #     }]
-
-    if result.has_key("Error"):
-        return "no data to plot"
+        raise
+        # return json.dumps({"Error":"No data to sent"})
     else:
-        return render_template('ReportDayTech.html',
-            series = series,
-            precios=result['Precios'],
-            energia=result['VolumenesMWh'],
-            preciomedio=result['PrecioMedio'],
-            mediaaritmetica=result['MediaAritmetica'],
-            totalvolumenmwh=result['TotalVolumenMWh'],
-            totalvolumeneurs=result['TotalVolumenEURs'],
-            sumario=result)
+        # return result
+        return Response(generate(result), mimetype='text/csv')

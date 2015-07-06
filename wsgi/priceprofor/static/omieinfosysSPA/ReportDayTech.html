@@ -166,6 +166,9 @@
 	      $scope.VolumenesCARBON_NACIONAL = data['VolumenesCARBON_NACIONAL'];
 	      $scope.VolumenesCARBON_IMPORTACION = data['VolumenesCARBON_IMPORTACION'];
 	      $scope.VolumenesCICLO_COMBINADO = data['VolumenesCICLO_COMBINADO'];
+	      if (!$scope.TOTAL_REGIMEN_ORDINARIO_CON_PRIMA) 
+	      	{$scope.TOTAL_REGIMEN_ORDINARIO_CON_PRIMA = {'Volumen': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]};
+	      	};
 	      $(function () {
 		$('#tecnologias').highcharts({
 		  chart: {

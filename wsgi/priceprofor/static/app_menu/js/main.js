@@ -18,6 +18,7 @@
 
 	function init() {
 		initEvents();
+		toggleMenu();
 	}
 
 	function initEvents() {
