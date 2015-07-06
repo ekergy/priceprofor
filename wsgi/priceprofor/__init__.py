@@ -18,6 +18,8 @@ app = Flask(__name__, static_folder='static', static_url_path='')
 # importing blueprints:
 from omieinfosys.omieBlueprintAPI import omieMercadoDiario
 app.register_blueprint(omieMercadoDiario)
+from modellingsys.modeBlueprintAPI import modellingsys
+app.register_blueprint(modellingsys)
 # from reeinfosys.reeBlueprintAPI import reeMercadoDiario
 # app.register_blueprint(reeMercadoDiario)
 
