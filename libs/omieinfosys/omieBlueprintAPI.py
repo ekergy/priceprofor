@@ -161,7 +161,7 @@ def DataFileGeneratorPage():
     """
     """
 
-    return redirect(url_for('static', filename="DataFileGenerator.html"))
+    return redirect(url_for('static', filename="omieinfosysSPA/DataFileGenerator.html"))
 
 
 @omieMercadoDiario.route('/DataFileGenerator',methods=['POST'])
