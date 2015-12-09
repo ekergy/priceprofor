@@ -28,3 +28,5 @@ En nuestra [wiki](https://github.com/ekergy/priceprofor/wiki <a href=""></a>) pu
 
 ## Componente Didáctica
 
+En desarrollo
+
