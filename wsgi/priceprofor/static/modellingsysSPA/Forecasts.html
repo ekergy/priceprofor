@@ -77,9 +77,9 @@
       </div>
     </div>
   </div>
-  <script src="/vendor/highcharts/js/highcharts.js"></script>
-  <!--<script src="/vendor/highcharts/js/modules/exporting.js"></script>-->
-  <!--<script src="http://code.highcharts.com/highcharts.js"></script>-->
+<!--  <script src="/vendor/highcharts/js/highcharts.js"></script>
+  <script src="/vendor/highcharts/js/modules/exporting.js"></script> -->
+  <script src="http://code.highcharts.com/highcharts.js"></script>
   <script src="http://code.highcharts.com/highcharts-more.js"></script>
   <script src="http://code.highcharts.com/modules/exporting.js"></script>
   <script type="text/javascript">
@@ -96,6 +96,7 @@
         if ($scope.Modelo) {
           $scope.datafile.modeltypeInput = $scope.Modelo;
         };
+        console.log(JSON.stringify($scope.datafile));
         $http.post('/modellingsys/lastforecastindb', $scope.datafile, {
           headers: {
             'Accept': "application/json;charset=UTF-8"
@@ -290,7 +291,8 @@
                   tooltip: {
                     valueSuffix: ' €/MWh'
                   }
-                },
+                }
+                ,
                 {
 		          name: 'IntervaloConfianza95%',
 		          //data: ranges,
@@ -311,14 +313,14 @@
                     valueSuffix: ' €/MWh'
                   }
 	            }
-	            ,
+	            /*,
                 {
                  name: 'ErrorPrediccion',
                  //type: 'spline',
                  type: 'column',
                  data: $scope.errorpredictionsHigh,
            		 //yAxis: 1
-                }
+                }*/
               ]
             });
           });
