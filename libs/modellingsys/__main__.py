@@ -35,8 +35,11 @@ def execute_hwtes(dayaheadInput=None):
         if dayaheadInput:
             dayaheadInput = datetime.strptime(dayaheadInput,'%Y-%m-%d')
             hwtes.mainHWTES(dayaheadInput)
+            #hwtes.mainHWTES()
         else:
-            hwtes.mainHWTES()
+            currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
+            dayahead = currentDate + timedelta(1)
+            hwtes.mainHWTES(dayahead)
     except:
         raise
     else:
@@ -52,8 +55,11 @@ def execute_arnn(dayaheadInput):
         if dayaheadInput:
             dayaheadInput = datetime.strptime(dayaheadInput,'%Y-%m-%d')
             arnn.mainARNN(dayaheadInput)
+            #arnn.mainARNN()
         else:
-            arnn.mainARNN()
+            currentDate = datetime(datetime.now().year,datetime.now().month,datetime.now().day)
+            dayahead = currentDate + timedelta(1)
+            arnn.mainARNN(dayahead)
     except:
         raise
     else:
